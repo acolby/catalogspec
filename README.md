@@ -178,9 +178,28 @@ Use them to document:
 
 The JSON files define the boundary. The requirements files define what that boundary means in practice.
 
+## Validation CLI
+
+This repository includes a nested CLI package for validating catalog conformance without turning the specification root into a Node package.
+
+```bash
+cd cli
+npm install
+npm run build
+node dist/cli.js validate ../catalogs/commerce
+```
+
+Agent-friendly JSON output:
+
+```bash
+node dist/cli.js validate ../catalogs/commerce --json
+```
+
+The CLI is specification tooling. It validates structure and contracts; it does not render catalogs or provide framework bindings.
+
 ## Implementation boundary
 
-This repository defines catalogs, not implementations.
+This repository defines the catalog specification and validation tooling, not implementations.
 
 A renderer, binding, or generated application may choose how to:
 
