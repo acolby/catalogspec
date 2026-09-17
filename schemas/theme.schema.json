@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-catalogs.local/schemas/theme.schema.json",
+  "title": "AI Catalog Theme Contract",
+  "type": "object",
+  "required": ["version", "tokens"],
+  "properties": {
+    "version": { "const": 1 },
+    "description": { "type": "string" },
+    "tokens": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/tokenGroup" }
+    }
+  },
+  "$defs": {
+    "tokenGroup": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          { "$ref": "#/$defs/token" },
+          { "$ref": "#/$defs/tokenGroup" }
+        ]
+      }
+    },
+    "token": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "enum": ["string", "number", "integer", "boolean", "object", "array", "any"]
+        },
+        "description": { "type": "string" },
+        "required": { "type": "boolean" },
+        "default": true,
+        "example": true
+      }
+    }
+  }
+}

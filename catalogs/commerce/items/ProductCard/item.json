@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "title": "Product Card",
+  "description": "Displays a product summary and exposes purchase-oriented interactions.",
+  "kind": "component",
+  "props": {
+    "sku": {
+      "type": "string",
+      "description": "Stable product identifier.",
+      "required": true,
+      "example": "sku_trail_jacket"
+    },
+    "name": {
+      "type": "string",
+      "description": "Product display name.",
+      "required": true,
+      "example": "Trail Jacket"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short product description.",
+      "example": "Water-resistant shell for changing weather."
+    },
+    "price": {
+      "type": "number",
+      "description": "Product price.",
+      "required": true,
+      "example": 128
+    },
+    "currency": {
+      "type": "string",
+      "description": "ISO 4217 currency code.",
+      "required": true,
+      "example": "USD"
+    },
+    "imageUrl": {
+      "type": "string",
+      "description": "Product image URL."
+    }
+  },
+  "state": {
+    "quantity": {
+      "type": "integer",
+      "description": "Currently selected quantity.",
+      "default": 1
+    },
+    "detailsOpen": {
+      "type": "boolean",
+      "description": "Whether product details are expanded.",
+      "default": false
+    }
+  },
+  "slots": {
+    "badge": {
+      "title": "Badge",
+      "description": "Small label rendered near the product title.",
+      "accepts": ["text", "item"],
+      "multiple": false,
+      "required": false
+    },
+    "footer": {
+      "title": "Footer",
+      "description": "Optional content rendered below the product actions.",
+      "accepts": ["text", "item"],
+      "multiple": true,
+      "required": false
+    }
+  },
+  "actions": {
+    "addToCart": {
+      "title": "Add to cart",
+      "description": "Adds this product to the active cart.",
+      "props": {
+        "sku": {
+          "type": "string",
+          "required": true,
+          "description": "Product SKU to add. Usually copied from item props.sku."
+        },
+        "quantity": {
+          "type": "integer",
+          "required": true,
+          "description": "Quantity to add.",
+          "default": 1
+        }
+      },
+      "returns": {
+        "cartId": {
+          "type": "string",
+          "description": "Identifier for the cart that received the item."
+        },
+        "lineCount": {
+          "type": "integer",
+          "description": "Number of lines in the cart after the item is added."
+        }
+      }
+    },
+    "toggleDetails": {
+      "title": "Toggle details",
+      "description": "Toggles whether product details are expanded.",
+      "props": {}
+    }
+  },
+  "events": {
+    "selected": {
+      "title": "Selected",
+      "description": "Emitted when the product card is selected.",
+      "props": {
+        "sku": {
+          "type": "string",
+          "required": true
+        }
+      }
+    },
+    "quantityChanged": {
+      "title": "Quantity changed",
+      "description": "Emitted when the selected quantity changes.",
+      "props": {
+        "sku": {
+          "type": "string",
+          "required": true
+        },
+        "quantity": {
+          "type": "integer",
+          "required": true
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "title": "Basic product card",
+      "props": {
+        "sku": "sku_trail_jacket",
+        "name": "Trail Jacket",
+        "description": "Water-resistant shell for changing weather.",
+        "price": 128,
+        "currency": "USD"
+      },
+      "state": {
+        "quantity": 1,
+        "detailsOpen": false
+      },
+      "slots": {
+        "badge": [{ "type": "text", "text": "New" }]
+      },
+      "actions": {
+        "primary": {
+          "action": "addToCart",
+          "props": { "sku": "sku_trail_jacket", "quantity": 1 }
+        }
+      }
+    }
+  ]
+}

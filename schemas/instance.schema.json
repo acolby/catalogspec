@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-catalogs.local/schemas/instance.schema.json",
+  "title": "AI Catalog Item Instance",
+  "type": "object",
+  "required": ["catalog", "item", "props"],
+  "properties": {
+    "version": { "const": 1 },
+    "catalog": { "type": "string" },
+    "item": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*$" },
+    "key": { "type": "string" },
+    "props": { "type": "object" },
+    "state": { "type": "object" },
+    "slots": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "$ref": "#/$defs/slotContent" }
+      }
+    },
+    "actions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": { "type": "string" },
+          "props": { "type": "object" },
+          "confirm": { "type": "boolean" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "slotContent": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["type", "text"],
+          "properties": {
+            "type": { "const": "text" },
+            "text": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "html"],
+          "properties": {
+            "type": { "const": "html" },
+            "html": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "catalog", "item", "props"],
+          "properties": {
+            "type": { "const": "item" },
+            "catalog": { "type": "string" },
+            "item": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*$" },
+            "props": { "type": "object" },
+            "state": { "type": "object" },
+            "slots": { "type": "object" },
+            "actions": { "type": "object" }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-catalogs.local/schemas/catalog.schema.json",
+  "title": "AI Catalog",
+  "type": "object",
+  "required": ["version", "id", "name", "items"],
+  "properties": {
+    "version": { "const": 1 },
+    "id": { "type": "string", "pattern": "^[a-zA-Z0-9_-]+$" },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "labels": { "type": "array", "items": { "type": "string" } },
+    "props": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/field" }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/field" }
+    },
+    "actions": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/action" }
+    },
+    "themes": {
+      "type": "object",
+      "properties": {
+        "default": { "type": "string" },
+        "available": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "items": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*$" }
+        },
+        {
+          "type": "object",
+          "propertyNames": { "pattern": "^[A-Z][A-Za-z0-9]*$" },
+          "additionalProperties": { "$ref": "#/$defs/item" }
+        }
+      ]
+    },
+    "examples": {
+      "type": "array",
+      "items": { "$ref": "./instance.schema.json" }
+    }
+  },
+  "$defs": {
+    "item": {
+      "type": "object",
+      "required": ["title", "props"],
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "kind": { "type": "string", "default": "component" },
+        "props": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/field" }
+        },
+        "state": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/field" }
+        },
+        "slots": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/slot" }
+        },
+        "actions": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/action" }
+        },
+        "events": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/event" }
+        }
+      }
+    },
+    "field": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "enum": ["string", "number", "integer", "boolean", "object", "array", "any"]
+        },
+        "description": { "type": "string" },
+        "required": { "type": "boolean" },
+        "default": true,
+        "enum": { "type": "array" },
+        "example": true,
+        "items": { "$ref": "#/$defs/field" },
+        "props": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/field" }
+        }
+      }
+    },
+    "slot": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "accepts": {
+          "type": "array",
+          "items": { "enum": ["text", "html", "item"] }
+        },
+        "multiple": { "type": "boolean" },
+        "required": { "type": "boolean" },
+        "allowedItems": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "action": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "props": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/field" }
+        },
+        "returns": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/field" }
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "props": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/field" }
+        }
+      }
+    }
+  }
+}

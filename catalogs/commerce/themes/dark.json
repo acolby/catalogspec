@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "name": "Dark",
+  "description": "Default dark commerce theme.",
+  "tokens": {
+    "color": {
+      "background": "#0f172a",
+      "surface": "#111827",
+      "text": "#f9fafb",
+      "textMuted": "#9ca3af",
+      "accent": "#60a5fa",
+      "border": "#374151"
+    },
+    "space": {
+      "xs": "4px",
+      "sm": "8px",
+      "md": "16px",
+      "lg": "24px"
+    },
+    "radius": {
+      "sm": "4px",
+      "md": "8px",
+      "lg": "16px"
+    }
+  }
+}

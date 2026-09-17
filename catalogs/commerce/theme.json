@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "description": "Theme token contract for commerce catalog items.",
+  "tokens": {
+    "color": {
+      "background": {
+        "type": "string",
+        "description": "Primary page or scene background color."
+      },
+      "surface": {
+        "type": "string",
+        "description": "Card, panel, or elevated surface background color."
+      },
+      "text": {
+        "type": "string",
+        "description": "Primary text color."
+      },
+      "textMuted": {
+        "type": "string",
+        "description": "Secondary or subdued text color."
+      },
+      "accent": {
+        "type": "string",
+        "description": "Primary brand or action color."
+      },
+      "border": {
+        "type": "string",
+        "description": "Default border color."
+      }
+    },
+    "space": {
+      "xs": {
+        "type": "string",
+        "description": "Extra-small spacing token."
+      },
+      "sm": {
+        "type": "string",
+        "description": "Small spacing token."
+      },
+      "md": {
+        "type": "string",
+        "description": "Medium spacing token."
+      },
+      "lg": {
+        "type": "string",
+        "description": "Large spacing token."
+      }
+    },
+    "radius": {
+      "sm": {
+        "type": "string",
+        "description": "Small border radius."
+      },
+      "md": {
+        "type": "string",
+        "description": "Default border radius."
+      },
+      "lg": {
+        "type": "string",
+        "description": "Large border radius."
+      }
+    }
+  }
+}

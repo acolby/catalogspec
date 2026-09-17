@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-catalogs.local/schemas/theme-instance.schema.json",
+  "title": "AI Catalog Theme Instance",
+  "type": "object",
+  "required": ["version", "name", "tokens"],
+  "properties": {
+    "version": { "const": 1 },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "tokens": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

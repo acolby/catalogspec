@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "id": "commerce",
+  "name": "Commerce",
+  "description": "A catalog for product discovery and cart-oriented commerce UI.",
+  "props": {
+    "locale": {
+      "type": "string",
+      "description": "Current locale for formatting copy, dates, and numbers.",
+      "default": "en-US"
+    },
+    "market": {
+      "type": "string",
+      "description": "Commerce market or region used for merchandising and availability.",
+      "example": "US"
+    }
+  },
+  "state": {
+    "currentUser": {
+      "type": "object",
+      "description": "The currently authenticated user, if one exists. Available as shared read-only catalog state to catalog items."
+    },
+    "isLoggedIn": {
+      "type": "boolean",
+      "description": "Whether there is an authenticated user.",
+      "default": false
+    },
+    "isB2B": {
+      "type": "boolean",
+      "description": "Whether the current shopping context is business-to-business.",
+      "default": false
+    },
+    "featureFlags": {
+      "type": "object",
+      "description": "Feature flags available to commerce items."
+    }
+  },
+  "actions": {
+    "signIn": {
+      "title": "Sign in",
+      "description": "Starts the sign-in flow for the current user.",
+      "props": {}
+    },
+    "addToCart": {
+      "title": "Add to cart",
+      "description": "Adds an item to the active cart.",
+      "props": {
+        "sku": {
+          "type": "string",
+          "required": true,
+          "description": "Product SKU to add."
+        },
+        "quantity": {
+          "type": "integer",
+          "required": true,
+          "description": "Quantity to add.",
+          "default": 1
+        }
+      },
+      "returns": {
+        "cartId": {
+          "type": "string",
+          "description": "Identifier for the cart that received the item."
+        },
+        "lineCount": {
+          "type": "integer",
+          "description": "Number of lines in the cart after the item is added."
+        }
+      }
+    }
+  },
+  "themes": {
+    "default": "light",
+    "available": ["light", "dark"]
+  },
+  "items": ["ProductCard"]
+}
