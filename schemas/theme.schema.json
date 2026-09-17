@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://ai-catalogs.local/schemas/theme.schema.json",
-  "title": "AI Catalog Theme Contract",
+  "$id": "https://catalogspec.local/schemas/theme.schema.json",
+  "title": "CatalogSpec Theme Contract",
   "type": "object",
   "required": ["version", "tokens"],
   "properties": {

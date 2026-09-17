@@ -1,6 +1,6 @@
-# AI Catalogs CLI
+# CatalogSpec CLI
 
-Validation tooling for AI Catalog contracts.
+Validation tooling for CatalogSpec contracts.
 
 The CLI is intentionally scoped to specification conformance. It validates catalog directory structure, required files, JSON schemas, item naming, item references, theme references, and theme token conformance. It does not render catalogs or implement framework bindings.
 
@@ -15,7 +15,7 @@ node dist/cli.js validate ../catalogs/commerce
 After publishing:
 
 ```bash
-ai-catalog validate ./catalogs/commerce
+catalogspec validate ./catalogs/commerce
 ```
 
 ## Commands
@@ -25,20 +25,20 @@ ai-catalog validate ./catalogs/commerce
 Validate a catalog directory or a directory containing catalog directories.
 
 ```bash
-ai-catalog validate ./catalogs/commerce
-ai-catalog validate ./catalogs
+catalogspec validate ./catalogs/commerce
+catalogspec validate ./catalogs
 ```
 
 Machine-readable output for agents:
 
 ```bash
-ai-catalog validate ./catalogs/commerce --json
+catalogspec validate ./catalogs/commerce --json
 ```
 
 Quiet mode:
 
 ```bash
-ai-catalog validate ./catalogs/commerce --quiet
+catalogspec validate ./catalogs/commerce --quiet
 ```
 
 ## Validation scope

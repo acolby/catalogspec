@@ -31,13 +31,13 @@ export async function createSchemaValidators(): Promise<SchemaValidators> {
   ajv.addSchema(themeSchema);
   ajv.addSchema(themeInstanceSchema);
 
-  const catalog = ajv.getSchema("https://ai-catalogs.local/schemas/catalog.schema.json");
-  const item = ajv.getSchema("https://ai-catalogs.local/schemas/catalog.schema.json#/$defs/item");
-  const themeContract = ajv.getSchema("https://ai-catalogs.local/schemas/theme.schema.json");
-  const themeInstance = ajv.getSchema("https://ai-catalogs.local/schemas/theme-instance.schema.json");
+  const catalog = ajv.getSchema("https://catalogspec.local/schemas/catalog.schema.json");
+  const item = ajv.getSchema("https://catalogspec.local/schemas/catalog.schema.json#/$defs/item");
+  const themeContract = ajv.getSchema("https://catalogspec.local/schemas/theme.schema.json");
+  const themeInstance = ajv.getSchema("https://catalogspec.local/schemas/theme-instance.schema.json");
 
   if (!catalog || !item || !themeContract || !themeInstance) {
-    throw new Error("Failed to load one or more AI Catalog schemas.");
+    throw new Error("Failed to load one or more CatalogSpec schemas.");
   }
 
   return { catalog, item, themeContract, themeInstance };

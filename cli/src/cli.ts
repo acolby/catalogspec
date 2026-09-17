@@ -14,8 +14,8 @@ function formatFinding(finding: Finding): string {
 const program = new Command();
 
 program
-  .name("ai-catalog")
-  .description("Validate AI Catalog contract structure and JSON files.")
+  .name("catalogspec")
+  .description("Validate CatalogSpec contract structure and JSON files.")
   .version("0.1.0");
 
 program
@@ -49,11 +49,11 @@ program
 
       if (result.ok) {
         const warningText = warnings.length === 1 ? "1 warning" : `${warnings.length} warnings`;
-        console.log(pc.green(`\nValid AI Catalog contract (${warningText}).`));
+        console.log(pc.green(`\nValid CatalogSpec contract (${warningText}).`));
       } else {
         const errorText = errors.length === 1 ? "1 error" : `${errors.length} errors`;
         const warningText = warnings.length === 1 ? "1 warning" : `${warnings.length} warnings`;
-        console.log(pc.red(`\nInvalid AI Catalog contract (${errorText}, ${warningText}).`));
+        console.log(pc.red(`\nInvalid CatalogSpec contract (${errorText}, ${warningText}).`));
       }
 
       process.exit(result.ok ? 0 : 1);

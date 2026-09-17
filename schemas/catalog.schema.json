@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://ai-catalogs.local/schemas/catalog.schema.json",
-  "title": "AI Catalog",
+  "$id": "https://catalogspec.local/schemas/catalog.schema.json",
+  "title": "CatalogSpec",
   "type": "object",
   "required": ["version", "id", "name", "items"],
   "properties": {

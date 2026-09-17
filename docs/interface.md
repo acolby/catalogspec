@@ -1,6 +1,6 @@
 # Interface Contract
 
-This is the canonical interface contract for AI Catalogs. It defines two related interface layers:
+This is the canonical interface contract for CatalogSpec. It defines two related interface layers:
 
 - catalog interfaces, which describe shared domain context and domain-level actions
 - item interfaces, which describe the boundary of a renderable item

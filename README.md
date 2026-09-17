@@ -1,6 +1,6 @@
-# AI Catalogs
+# CatalogSpec
 
-AI Catalogs is a specification for structuring implementation-independent UI catalog contracts.
+CatalogSpec is a specification for structuring implementation-independent UI catalog contracts.
 
 It defines a directory structure, JSON contract shape, requirements-document convention, and theme convention that humans, applications, and LLMs can use to author catalogs for dynamic scene composition.
 
@@ -10,9 +10,11 @@ A catalog is not a component library implementation. A catalog is the durable do
 
 Implementations are downstream instantiations. They may be React, Vue, Svelte, SwiftUI, Flutter, server-rendered HTML, native UI, generated UI, or something else entirely.
 
+CatalogSpec defines what a catalog makes possible. A future SceneSpec can define concrete scene instances composed from a catalog.
+
 ## Core position
 
-The important maintained artifact in any AI Catalog-compatible project is this:
+The important maintained artifact in any CatalogSpec-compatible project is this:
 
 ```txt
 /catalogs/[catalogId]/
@@ -38,7 +40,7 @@ The catalog captures the information the business, product, design system, and A
 
 ## Locked conventions
 
-These conventions define the AI Catalogs shape. Use them when creating or maintaining a catalog in this repository or any downstream repository:
+These conventions define the CatalogSpec shape. Use them when creating or maintaining a catalog in this repository or any downstream repository:
 
 - Catalogs live under `/catalogs/[catalogId]/`.
 - Each catalog is a domain contract, not an implementation package.

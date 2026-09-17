@@ -1,14 +1,14 @@
 # Agent Guidance
 
-This repository defines the AI Catalogs specification.
+This repository defines the CatalogSpec specification.
 
 Use it as the reference for creating and maintaining implementation-independent catalog contracts in this repository or in downstream repositories. Do not treat this repository as the central registry or required home for all catalogs.
 
 ## Purpose
 
-AI Catalogs specifies how to structure domain/UI catalog contracts so they can be consumed by humans, LLMs, renderers, tests, and downstream application implementations.
+CatalogSpec specifies how to structure domain/UI catalog contracts so they can be consumed by humans, LLMs, renderers, tests, and downstream application implementations.
 
-The durable artifacts in an AI Catalog are:
+The durable artifacts in a CatalogSpec catalog are:
 
 - catalog interfaces
 - item interfaces
