@@ -2,9 +2,9 @@
 
 Status: Planned
 
-SceneSpec is the planned companion to CatalogSpec for describing concrete scene instances composed from catalog items.
+SceneSpec is the planned companion to CatalogSpec for describing concrete, session-persistent UI scenes composed from catalog items.
 
-CatalogSpec defines what a catalog makes possible. SceneSpec will define what exists in one scene.
+CatalogSpec defines the trusted vocabulary an agent may use. SceneSpec will define what the agent has created for a particular conversation or session.
 
 ```txt
 CatalogSpec -> SceneSpec -> runtime -> mounted scene
@@ -13,6 +13,8 @@ CatalogSpec -> SceneSpec -> runtime -> mounted scene
 ## Purpose
 
 A scene should be a JSON document that an agent, application, test fixture, or runtime can use to describe a concrete composition of catalog items.
+
+The motivating use case is an ancillary UI that lives alongside an agent conversation. The scene should persist across turns and evolve as the agent updates it, rather than appearing as a one-off embedded response.
 
 A scene may answer:
 
@@ -35,8 +37,8 @@ Working model:
 
 ```txt
 CatalogSpec defines item and catalog interfaces.
-SceneSpec provides concrete values and composition.
-Runtime validates and mounts the scene.
+SceneSpec provides concrete session values and composition.
+Runtime validates, mounts, updates, and operates the scene.
 ```
 
 ## Possible shape

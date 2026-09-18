@@ -2,9 +2,11 @@
 
 This document defines the vocabulary used across CatalogSpec, planned SceneSpec work, implementations, runtimes, and harnesses.
 
+The motivating use case is session-persistent agent UI: an AI agent should be able to create, update, and operate a structured UI scene alongside a conversation without generating framework-specific code.
+
 ## CatalogSpec
 
-CatalogSpec is the implementation-independent catalog contract.
+CatalogSpec is the implementation-independent catalog contract. It defines the trusted vocabulary of UI/domain elements an agent may use when creating or updating a scene.
 
 A catalog defines a coherent domain of shared props, shared state, domain actions, themes, items, and requirements.
 
@@ -76,13 +78,15 @@ The catalog defines token shape. Implementations decide how tokens are consumed,
 
 SceneSpec is planned.
 
-A scene is expected to be a concrete composition of catalog items and values. It may specify selected theme, catalog state values, item instances, props, item-local state, slots, and action/controller wiring.
+A scene is expected to be a concrete, session-persistent composition of catalog items and values. It may specify selected theme, catalog state values, item instances, props, item-local state, slots, and action/controller wiring.
+
+A scene is not a one-off embedded chat artifact. It is intended to live alongside the conversation and evolve as the session evolves.
 
 Short version:
 
 ```txt
-CatalogSpec defines what can exist.
-SceneSpec defines what does exist in one scene.
+CatalogSpec defines what an agent is allowed to use.
+SceneSpec defines what the agent has created for this session.
 ```
 
 See [SceneSpec](./scene-spec.md).

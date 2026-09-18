@@ -1,18 +1,20 @@
 # CatalogSpec
 
-CatalogSpec is a specification family for describing domain UI catalogs, composing scenes from those catalogs, and mounting those scenes in implementation-specific runtimes.
+CatalogSpec is a contract model for agent-created UI scenes: persistent, structured interfaces that live alongside a conversation and evolve as the session evolves.
+
+It lets an AI agent create and update a durable UI scene by speaking structured JSON instead of generating framework-specific code. Catalogs define the trusted vocabulary of available domain UI items, state, themes, actions, and events. Scenes instantiate that vocabulary for a particular session. Runtimes mount scenes using framework-specific implementations.
 
 The active core today is the catalog contract: an implementation-independent description of a domain, its shared context, theme contract, renderable items, actions, events, and requirements.
 
-This repository is not a central catalog registry. It defines the structure that catalogs, scenes, implementations, runtimes, and harnesses should follow so humans and agents can work from stable contracts.
+This repository is not a central catalog registry. It defines the structure that catalogs, scenes, implementations, runtimes, and harnesses should follow so humans and agents can create session-persistent UI from stable contracts.
 
 ## Conceptual stack
 
 ```txt
-CatalogSpec      defines what a domain catalog makes possible
-SceneSpec        defines a concrete scene composed from a catalog
+CatalogSpec      defines the trusted UI/domain vocabulary an agent may use
+SceneSpec        defines a concrete session scene composed from a catalog
 Implementation  fulfills catalog items for a specific platform/framework
-Runtime         mounts and orchestrates scenes using implementations
+Runtime         mounts, updates, and orchestrates scenes using implementations
 Harness         provides development, test, preview, and agent feedback loops
 ```
 
@@ -30,7 +32,7 @@ The current repository intentionally favors specification and guidance over fram
 
 ## CatalogSpec
 
-A catalog is a durable domain contract, not a component library implementation. It defines:
+A catalog is a durable domain contract, not a component library implementation. It gives agents a bounded language for creating UI without inventing arbitrary components or code. It defines:
 
 - shared domain props/configuration
 - shared domain/session state shape
@@ -56,7 +58,7 @@ This spec repo stores its reference catalog under `/examples` to avoid implying 
 
 ## SceneSpec
 
-SceneSpec is planned. It will describe concrete scene instances composed from a CatalogSpec catalog.
+SceneSpec is planned. It will describe concrete, session-persistent scene instances composed from a CatalogSpec catalog.
 
 A future scene may define:
 
@@ -72,8 +74,9 @@ A future scene may define:
 Short version:
 
 ```txt
-CatalogSpec defines what can exist.
-SceneSpec defines what does exist in one scene.
+CatalogSpec defines what an agent is allowed to use.
+SceneSpec defines what the agent has created for this session.
+Runtime keeps that scene mounted, updated, and interactive.
 ```
 
 See [SceneSpec](./docs/scene-spec.md).
