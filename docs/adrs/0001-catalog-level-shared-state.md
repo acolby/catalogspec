@@ -4,6 +4,12 @@
 
 Accepted
 
+## Decision summary
+
+Catalogs may define a top-level `state` object in `catalog.json` to describe shared domain/session context available to catalog items.
+
+This state is a contract shape. It is not a requirement that all application state live in the catalog, and it does not prescribe storage, ownership, update mechanics, or runtime implementation.
+
 ## Context
 
 CatalogSpec catalogs represent domains, not just component suites. Items in a catalog often need access to shared ambient context such as:
@@ -32,7 +38,9 @@ Catalogs may define a top-level `state` object in `catalog.json`.
 
 Catalog-level state defines the shape of shared domain/session context available to items in the catalog.
 
-Catalog-level state does not prescribe:
+Catalog-level state centralizes the shared context shape, not implementation mechanics.
+
+It does not prescribe:
 
 - where state is stored
 - who owns state updates
@@ -40,8 +48,6 @@ Catalog-level state does not prescribe:
 - whether state is client-side, server-side, or both
 - which state-management library is used
 - whether state is injected at runtime, loaded from an API, derived from a session, or supplied by a scene
-
-Catalog state centralizes the shared context shape, not the implementation mechanics.
 
 ## Consequences
 

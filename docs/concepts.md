@@ -43,7 +43,7 @@ A catalog may expose:
 - `themes`: concrete theme instances that conform to the catalog `theme.json` contract
 - `items`: PascalCase item names available in the catalog
 
-Catalog state is shared context. Items may rely on it without requiring every item instance to receive the same values through item props. See [ADR 0001](./adrs/0001-catalog-level-shared-state.md).
+Catalog state is shared context. Items may rely on it without requiring every item instance to receive the same values through item props. See [Architecture decision records](./adrs/README.md).
 
 ## Catalog item
 

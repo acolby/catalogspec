@@ -67,7 +67,7 @@ This specification repository keeps reference catalogs under `/examples` instead
 | `themes` | Available theme instances conforming to `theme.json` |
 | `items` | PascalCase item names available in the catalog |
 
-Catalog state defines shared context shape, not storage or state-management mechanics. See [ADR 0001](./adrs/0001-catalog-level-shared-state.md).
+Catalog state defines shared context shape, not storage or state-management mechanics. See [Architecture decision records](./adrs/README.md).
 
 ## Item contract
 

@@ -113,4 +113,4 @@ node dist/cli.js validate ../examples/commerce --json
 - [SceneSpec](./docs/scene-spec.md)
 - [Runtime model](./docs/runtime-model.md)
 - [Concepts](./docs/concepts.md)
-- [ADR 0001: Catalog-level shared state](./docs/adrs/0001-catalog-level-shared-state.md)
+- [Architecture decision records](./docs/adrs/README.md)
