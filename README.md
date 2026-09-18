@@ -23,28 +23,33 @@ GitHub supports Mermaid diagrams in Markdown, so the architecture can be shown d
 ```mermaid
 flowchart TD
   Agent[Agent session<br/>conversation, user intent, tool calls]
-  Scene[SceneSpec<br/>current persistent UI scene for the session]
-  Catalog[CatalogSpec<br/>trusted vocabulary of items, state, themes, actions, and events]
-  Implementation[Implementation<br/>framework/platform-specific fulfillment of catalog items]
-  Runtime[Runtime<br/>composes and maintains the live UI]
+  Scene[Scene<br/>concrete persistent UI instance for this session]
+  SceneSpec[SceneSpec<br/>protocol for scene documents]
+  CatalogSpec[CatalogSpec<br/>trusted catalog vocabulary and contracts]
+  Implementation[Implementation<br/>framework/platform-specific fulfillment of the catalog]
+  Runtime[Runtime<br/>renders and updates the scene using the implementation]
+  LiveUI[Live UI<br/>mounted, interactive interface]
 
-  Agent --> Scene
-  Scene -->|speaks| Catalog
-  Implementation -->|fulfills| Catalog
-  Runtime -->|validates and mounts| Scene
-  Runtime -->|uses contract| Catalog
-  Runtime -->|uses implementation| Implementation
+  Agent -->|creates and updates| Scene
+  Scene -->|conforms to| SceneSpec
+  Scene -->|references| CatalogSpec
+  Implementation -->|implements| CatalogSpec
+  Runtime -->|loads| Scene
+  Runtime -->|uses| Implementation
+  Runtime -->|produces| LiveUI
 ```
 
 Short version:
 
 ```txt
-SceneSpec speaks CatalogSpec.
-Implementation fulfills CatalogSpec.
-Runtime composes the live UI from SceneSpec + CatalogSpec + Implementation.
+CatalogSpec defines what a scene may reference.
+SceneSpec defines the protocol for scene documents.
+A scene is the concrete session instance an agent creates and updates.
+Implementation fulfills the catalog for a platform/framework.
+Runtime renders and updates the scene using that implementation.
 ```
 
-The runtime is not the contract and not the implementation. It is the layer that reconciles the scene with the catalog contract and the available implementation to produce a live, updateable UI.
+The runtime is not the contract, the scene, or the implementation. It is the layer that takes a concrete scene and an available implementation, then produces a live, updateable UI.
 
 ## Layers
 
@@ -62,7 +67,7 @@ See [CatalogSpec](./docs/catalog-spec.md).
 
 Status: Planned
 
-SceneSpec will define concrete scene instances composed from catalogs. A scene represents the UI an agent has created for a particular conversation or session.
+SceneSpec will define the protocol for concrete scene documents. A scene is the UI instance an agent has created for a particular conversation or session.
 
 See [SceneSpec](./docs/scene-spec.md).
 
@@ -76,7 +81,7 @@ An implementation fulfills a catalog for a specific framework or platform. For e
 
 Status: Draft
 
-A runtime composes and maintains the live UI from a scene, a catalog contract, and an available implementation. It validates scene data, provides state/theme/actions, mounts rendered items, applies updates, and routes events.
+A runtime renders and maintains a concrete scene using an available implementation of the referenced catalog. It validates scene data, provides state/theme/actions, mounts rendered items, applies updates, and routes events.
 
 See [Runtime model](./docs/runtime-model.md).
 
