@@ -76,9 +76,9 @@ The runtime is allowed to be opinionated. CatalogSpec does not require one runti
 
 This repository should remain specification-first.
 
-It may include abstract documentation, schemas, validators, ADRs, and examples. Framework/runtime code should normally live in downstream repositories or implementation-specific packages.
+It may include abstract documentation, schemas, validators, ADRs, examples, and explicitly non-normative experiments. Framework/runtime code should normally live in downstream repositories or implementation-specific packages.
 
-If experimental runtime code is included here, it should live under an explicitly non-normative examples path such as `/examples/runtimes/...`. It must not be treated as CatalogSpec or SceneSpec conformance behavior.
+If experimental runtime code is included here, it should live under an explicitly non-normative path such as `/experiments/...`. It must not be treated as CatalogSpec or SceneSpec conformance behavior.
 
 ## Open questions
 

@@ -8,11 +8,13 @@ The goal is to let an AI agent create and update UI by speaking JSON, without ge
 
 Agents should be able to create a scene for a conversation, keep that scene alive across turns, and update it as the conversation changes.
 
-That requires a shared language between three things:
+That requires a shared language between related layers:
 
 - the **agent**, which creates and updates the scene
+- the **scene**, which captures the concrete session UI
 - the **catalog**, which defines what the agent is allowed to use
-- the **implementation**, which renders and executes the scene in a real runtime
+- the **implementation**, which fulfills catalog items for a target platform
+- the **runtime**, which renders and orchestrates the scene using an implementation
 
 CatalogSpec is the contract layer that keeps those pieces coherent.
 
@@ -97,7 +99,7 @@ See [Runtime model](./docs/runtime-model.md).
 /docs                  specification and design docs
 /schemas               JSON Schemas for the active CatalogSpec layer
 /examples/commerce     reference catalog example
-/examples/runtimes     non-normative experimental runtime examples
+/experiments/web       non-normative web runtime/implementation playground
 /cli                   validation CLI for catalog conformance
 ```
 
@@ -105,7 +107,7 @@ The schemas currently support CatalogSpec catalog validation. They do not includ
 
 This repository is not a central catalog registry. Reference catalogs live under `/examples`; downstream projects commonly keep their own catalogs under `/catalogs/[catalogId]/`.
 
-Framework/runtime code should normally live downstream. If experimental runtime code is included here, it should live under an explicitly non-normative examples path such as `/examples/runtimes/...` and should not define conformance behavior.
+Framework/runtime code should normally live downstream. The `/experiments` tree is explicitly non-normative playground code and should not define conformance behavior.
 
 ## Validation CLI
 

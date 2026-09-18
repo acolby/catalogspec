@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "id": "product-waitlist",
+  "catalog": {
+    "id": "splash",
+    "version": 1
+  },
+  "theme": "light",
+  "state": {},
+  "root": {
+    "id": "product-waitlist-stack",
+    "item": "Stack",
+    "props": {
+      "direction": "vertical",
+      "gap": "lg",
+      "align": "stretch"
+    },
+    "state": {},
+    "slots": {
+      "children": [
+        {
+          "id": "product-waitlist-hero",
+          "item": "Hero",
+          "props": {
+            "eyebrow": "Design preview",
+            "headline": "A focused splash page for early customer discovery.",
+            "subheadline": "Use this scene as a lightweight landing surface with clear messaging, calm visuals, and a single primary conversion path.",
+            "align": "start",
+            "size": "regular"
+          },
+          "state": {},
+          "slots": {
+            "background": [
+              {
+                "id": "product-waitlist-background",
+                "item": "Background",
+                "props": {
+                  "kind": "solid",
+                  "color": "#f8fafc",
+                  "overlay": "none"
+                },
+                "state": {},
+                "slots": {}
+              }
+            ],
+            "actions": [
+              {
+                "id": "product-waitlist-primary-cta",
+                "item": "CallToAction",
+                "props": {
+                  "label": "Join the waitlist",
+                  "url": "/waitlist",
+                  "target": "self",
+                  "variant": "primary"
+                },
+                "state": {},
+                "slots": {}
+              },
+              {
+                "id": "product-waitlist-ghost-cta",
+                "item": "CallToAction",
+                "props": {
+                  "label": "View examples",
+                  "url": "/examples",
+                  "target": "self",
+                  "variant": "ghost"
+                },
+                "state": {},
+                "slots": {}
+              }
+            ],
+            "content": []
+          }
+        }
+      ]
+    }
+  }
+}

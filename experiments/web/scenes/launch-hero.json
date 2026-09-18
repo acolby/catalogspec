@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "id": "launch-hero",
+  "catalog": {
+    "id": "splash",
+    "version": 1
+  },
+  "theme": "dark",
+  "state": {},
+  "root": {
+    "id": "launch-hero-root",
+    "item": "Hero",
+    "props": {
+      "eyebrow": "Now in private beta",
+      "headline": "Build persistent AI-native interfaces from structured catalogs.",
+      "subheadline": "Compose durable scenes from a bounded vocabulary of reusable items, then render them in any compatible runtime.",
+      "align": "center",
+      "size": "full"
+    },
+    "state": {},
+    "slots": {
+      "background": [
+        {
+          "id": "launch-hero-background",
+          "item": "Background",
+          "props": {
+            "kind": "gradient",
+            "color": "#0f172a",
+            "accentColor": "#7c3aed",
+            "overlay": "dark"
+          },
+          "state": {},
+          "slots": {}
+        }
+      ],
+      "actions": [
+        {
+          "id": "launch-hero-primary-cta",
+          "item": "CallToAction",
+          "props": {
+            "label": "Explore the catalog",
+            "url": "/catalogs/splash",
+            "target": "self",
+            "variant": "primary"
+          },
+          "state": {},
+          "slots": {}
+        },
+        {
+          "id": "launch-hero-secondary-cta",
+          "item": "CallToAction",
+          "props": {
+            "label": "Read the docs",
+            "url": "/docs",
+            "target": "self",
+            "variant": "secondary"
+          },
+          "state": {},
+          "slots": {}
+        }
+      ],
+      "content": []
+    }
+  }
+}
