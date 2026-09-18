@@ -84,6 +84,23 @@ code {
   min-height: 32rem;
   overflow: hidden;
   padding: 0;
+  position: relative;
+}
+
+.runtime-frame::before {
+  background: #172033;
+  border-radius: 999px;
+  color: white;
+  content: "runtime iframe";
+  font-size: 0.7rem;
+  font-weight: 800;
+  left: 1rem;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.6rem;
+  position: absolute;
+  text-transform: uppercase;
+  top: 1rem;
+  z-index: 1;
 }
 
 .runtime-frame iframe {
