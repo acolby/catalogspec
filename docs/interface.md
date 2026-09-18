@@ -1,4 +1,6 @@
-# Interface Contract
+# Catalog interface contract
+
+Status: Active
 
 This is the canonical interface contract for CatalogSpec. It defines two related interface layers:
 
@@ -328,9 +330,9 @@ Events are typed signals emitted by the item.
 }
 ```
 
-## Instance document
+## Item instance document
 
-This is the document an LLM should be able to emit.
+This early item instance shape shows the kind of JSON an LLM or app should eventually be able to emit. Future SceneSpec work will define concrete scene-level composition more completely.
 
 ```json
 {
@@ -373,13 +375,8 @@ Catalog instances can embed other catalog item instances.
 }
 ```
 
-## Runtime responsibilities
+## Runtime relationship
 
-A runtime should:
+A runtime should read catalog and item interfaces, validate scene or item instance data against them, expose declared actions, route events, and preserve enough trace data for debugging agent-produced UIs.
 
-1. Read item interfaces.
-2. Render props, state, and slots.
-3. Expose declared actions as callable functions.
-4. Route action calls according to host/runtime policy.
-5. Surface events back to the host/agent.
-6. Preserve enough trace data for debugging LLM-produced UIs.
+CatalogSpec does not prescribe a runtime architecture. See [Runtime model](./runtime-model.md).

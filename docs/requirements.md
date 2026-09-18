@@ -18,17 +18,19 @@ The JSON contract describes the interface. The requirements document describes t
 
 ## Placement
 
-Catalog-level requirements:
+In a downstream catalog repository, catalog-level requirements commonly live at:
 
 ```txt
 /catalogs/commerce/requirements.md
 ```
 
-Item-level requirements:
+Item-level requirements commonly live at:
 
 ```txt
 /catalogs/commerce/items/ProductCard/requirements.md
 ```
+
+In this specification repository, the reference commerce catalog lives under `/examples/commerce`.
 
 ## Style
 

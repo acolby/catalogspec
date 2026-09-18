@@ -1,12 +1,12 @@
 # Agent Guidance
 
-This repository defines the CatalogSpec specification.
+This repository defines CatalogSpec and related abstract guidance for future SceneSpec, implementation, runtime, and harness layers.
 
-Use it as the reference for creating and maintaining implementation-independent catalog contracts in this repository or in downstream repositories. Do not treat this repository as the central registry or required home for all catalogs.
+Use it as the reference for creating and maintaining implementation-independent catalog contracts in downstream repositories. Do not treat this repository as the central registry or required home for all catalogs.
 
 ## Purpose
 
-CatalogSpec specifies how to structure domain/UI catalog contracts so they can be consumed by humans, LLMs, renderers, tests, and downstream application implementations.
+CatalogSpec specifies how to structure domain/UI catalog contracts so they can be consumed by humans, LLMs, renderers, tests, downstream application implementations, and future scene runtimes.
 
 The durable artifacts in a CatalogSpec catalog are:
 
@@ -17,7 +17,7 @@ The durable artifacts in a CatalogSpec catalog are:
 - concrete theme instances
 - JSON schemas for those contracts
 
-Implementations are downstream instantiations. They may live in separate repositories, application repositories, or implementation-specific packages.
+Implementations, runtimes, and harnesses are downstream instantiations. They may live in separate repositories, application repositories, or implementation-specific packages.
 
 ## Canonical catalog structure
 
@@ -94,6 +94,7 @@ When working on a catalog:
 5. Use `theme.json` for theme token shape and `/themes/*.json` for concrete theme values.
 6. Keep item names PascalCase and derived from directory names.
 7. Treat examples in this repo as reference examples, not as the only place catalogs may live.
+8. Keep SceneSpec, runtime, implementation, and harness docs clearly marked as planned or draft until they have schemas/tooling.
 
 ## Bias
 

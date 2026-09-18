@@ -1,20 +1,46 @@
 # CatalogSpec
 
-CatalogSpec is a specification for structuring implementation-independent UI catalog contracts.
+CatalogSpec is a specification family for describing domain UI catalogs, composing scenes from those catalogs, and mounting those scenes in implementation-specific runtimes.
 
-It defines a directory structure, JSON contract shape, requirements-document convention, and theme convention that humans, applications, and LLMs can use to author catalogs for dynamic scene composition.
+The active core today is the catalog contract: an implementation-independent description of a domain, its shared context, theme contract, renderable items, actions, events, and requirements.
 
-This repository is not intended to be the central home for every catalog. A catalog may live in an application repo, design-system repo, domain repo, standalone catalog repo, or implementation repo. This repository defines how those catalogs should be structured.
+This repository is not a central catalog registry. It defines the structure that catalogs, scenes, implementations, runtimes, and harnesses should follow so humans and agents can work from stable contracts.
 
-A catalog is not a component library implementation. A catalog is the durable domain contract that sits above implementation. It defines shared domain context, theme contracts, renderable item interfaces, and functional requirements that every implementation must respect.
+## Conceptual stack
 
-Implementations are downstream instantiations. They may be React, Vue, Svelte, SwiftUI, Flutter, server-rendered HTML, native UI, generated UI, or something else entirely.
+```txt
+CatalogSpec      defines what a domain catalog makes possible
+SceneSpec        defines a concrete scene composed from a catalog
+Implementation  fulfills catalog items for a specific platform/framework
+Runtime         mounts and orchestrates scenes using implementations
+Harness         provides development, test, preview, and agent feedback loops
+```
 
-CatalogSpec defines what a catalog makes possible. A future SceneSpec can define concrete scene instances composed from a catalog.
+## Status
 
-## Core position
+| Area | Status | Description |
+|---|---|---|
+| CatalogSpec | Active | Catalog directory structure, JSON schemas, reference example, and validation CLI exist. |
+| SceneSpec | Planned | Future JSON shape for concrete scene instances composed from catalogs. |
+| Implementation model | Draft | Vocabulary and guidance for framework-specific fulfillment of catalogs. |
+| Runtime model | Draft | Vocabulary and guidance for environments that mount scenes. |
+| Harness model | Draft | Vocabulary and guidance for dev/test/preview shells around runtimes. |
 
-The important maintained artifact in any CatalogSpec-compatible project is this:
+The current repository intentionally favors specification and guidance over framework-specific implementation code.
+
+## CatalogSpec
+
+A catalog is a durable domain contract, not a component library implementation. It defines:
+
+- shared domain props/configuration
+- shared domain/session state shape
+- domain-level actions
+- theme token contracts and concrete themes
+- renderable item interfaces
+- item props, state, slots, actions, and events
+- human-readable behavioral requirements
+
+A CatalogSpec-compatible catalog commonly uses this structure in downstream repos:
 
 ```txt
 /catalogs/[catalogId]/
@@ -26,163 +52,62 @@ The important maintained artifact in any CatalogSpec-compatible project is this:
   /items/[ItemName]/requirements.md
 ```
 
-The implementation is a technical detail.
+This spec repo stores its reference catalog under `/examples` to avoid implying that this repository is where all catalogs should live.
 
-The catalog captures the information the business, product, design system, and AI generation layer care about:
+## SceneSpec
 
-- what domain this catalog represents
-- what shared props/configuration are available
-- what shared state exists across the domain
-- what domain-level actions exist
-- what themes and design tokens are available
-- what items can be rendered
-- what each item accepts, manages, exposes, emits, and requires
+SceneSpec is planned. It will describe concrete scene instances composed from a CatalogSpec catalog.
 
-## Locked conventions
+A future scene may define:
 
-These conventions define the CatalogSpec shape. Use them when creating or maintaining a catalog in this repository or any downstream repository:
+- which catalog it uses
+- which theme is selected
+- concrete catalog state values
+- item instances and composition
+- item props and initial item state
+- slot contents
+- action/controller wiring
+- metadata useful to agents and runtimes
 
-- Catalogs live under `/catalogs/[catalogId]/`.
-- Each catalog is a domain contract, not an implementation package.
-- Each catalog owns `catalog.json`, `requirements.md`, `theme.json`, `/themes`, and `/items`.
-- Item names are PascalCase directory names, e.g. `ProductCard`.
-- Item documents do not repeat their own ID.
-- Item contracts stay inline in `item.json`.
-- Behavioral detail belongs in `requirements.md`.
-- Theme token shape belongs in `theme.json`.
-- Concrete themes live in `/themes/*.json`.
-- Implementation code is downstream and must not become the source of truth.
-
-## Reference repository structure
-
-This repository includes a small commerce catalog under `/examples` as a reference example of the specification. Downstream CatalogSpec-compatible projects commonly use `/catalogs/[catalogId]/` for their own catalogs.
+Short version:
 
 ```txt
-/examples/
-  /commerce/
-    catalog.json          # catalog/domain interface
-    requirements.md       # catalog/domain behavioral requirements
-    theme.json            # theme token contract
+CatalogSpec defines what can exist.
+SceneSpec defines what does exist in one scene.
+```
 
-    /themes/
-      light.json          # concrete theme instance
-      dark.json           # concrete theme instance
+See [SceneSpec](./docs/scene-spec.md).
 
-    /items/
-      /ProductCard/
-        item.json         # item interface contract
-        requirements.md   # item behavioral requirements
+## Implementations, runtimes, and harnesses
 
-/docs/
-  concepts.md
-  interface.md
+CatalogSpec does not prescribe React, Vue, SwiftUI, Flutter, server-rendered HTML, native UI, generated UI, or any other implementation target.
+
+The working distinction is:
+
+- **Implementation**: framework/platform-specific code that fulfills catalog items.
+- **Runtime**: an environment that loads catalogs/scenes, provides state/theme/actions, maps items to implementations, and mounts the scene.
+- **Harness**: a dev/test/preview/agent shell around a runtime.
+
+These boundaries are still being refined. See [Runtime model](./docs/runtime-model.md).
+
+## Reference example
+
+This repository includes a small commerce catalog as a reference example:
+
+```txt
+/examples/commerce/
+  catalog.json
   requirements.md
-
-/schemas/
-  catalog.schema.json
-  instance.schema.json
-  theme.schema.json
-  theme-instance.schema.json
+  theme.json
+  /themes/light.json
+  /themes/dark.json
+  /items/ProductCard/item.json
+  /items/ProductCard/requirements.md
 ```
-
-## Catalog contract
-
-A catalog represents a domain. It moves forward as a unit.
-
-`catalog.json` defines:
-
-```json
-{
-  "version": 1,
-  "id": "commerce",
-  "name": "Commerce",
-  "description": "A catalog for product discovery and cart-oriented commerce UI.",
-  "props": {},
-  "state": {},
-  "actions": {},
-  "themes": {
-    "default": "light",
-    "available": ["light", "dark"]
-  },
-  "items": ["ProductCard"]
-}
-```
-
-Catalog-level surfaces:
-
-| Surface | Meaning |
-|---|---|
-| `props` | Shared configuration/environment values supplied to the catalog |
-| `state` | Shared domain/session state available to catalog items |
-| `actions` | Domain-level functions available across the catalog |
-| `themes` | Available theme instances conforming to `theme.json` |
-| `items` | PascalCase item names available in the catalog |
-
-Catalog state is shared context. Items may rely on it without requiring every instance to repeat the same values through item props.
-
-## Theme contract
-
-`theme.json` defines the shape of the theme token object. Concrete themes in `/themes/*.json` conform to that shape.
-
-```txt
-/examples/commerce/theme.json
-/examples/commerce/themes/light.json
-/examples/commerce/themes/dark.json
-```
-
-Themes may be injected at runtime, compiled at build time, transformed into CSS variables, mapped to native styles, or consumed directly. The catalog does not prescribe the implementation.
-
-## Item contract
-
-Items are named by their PascalCase directory name. The item document does not repeat an `id`.
-
-```txt
-/examples/commerce/items/ProductCard/item.json
-```
-
-An item defines five interface surfaces:
-
-```json
-{
-  "version": 1,
-  "title": "Product Card",
-  "description": "Displays a product summary and exposes purchase-oriented interactions.",
-  "kind": "component",
-  "props": {},
-  "state": {},
-  "slots": {},
-  "actions": {},
-  "events": {}
-}
-```
-
-| Surface | Meaning |
-|---|---|
-| `props` | External data/configuration given to the item |
-| `state` | Internal mutable JSON state the item may manage |
-| `slots` | Named composition points for child content/items |
-| `actions` | Callable functions exposed by the item |
-| `events` | Signals emitted by the item |
-
-## Requirements documents
-
-`requirements.md` files are human- and LLM-readable behavioral contracts. They are intentionally not the primary machine-readable interface.
-
-Use them to document:
-
-- required behavior
-- accessibility expectations
-- edge cases
-- state semantics
-- action semantics
-- event semantics
-- non-goals
-
-The JSON files define the boundary. The requirements files define what that boundary means in practice.
 
 ## Validation CLI
 
-This repository includes a nested CLI package for validating catalog conformance without turning the specification root into a Node package.
+The nested CLI validates CatalogSpec conformance without turning the spec root into a Node package.
 
 ```bash
 cd cli
@@ -197,31 +122,19 @@ Agent-friendly JSON output:
 node dist/cli.js validate ../examples/commerce --json
 ```
 
-The CLI is specification tooling. It validates structure and contracts; it does not render catalogs or provide framework bindings.
+The CLI validates structure and contracts. It does not render catalogs or provide framework bindings.
 
-## Implementation boundary
-
-This repository defines the catalog specification and validation tooling, not implementations.
-
-A renderer, binding, or generated application may choose how to:
-
-- render items
-- manage state
-- dispatch actions
-- listen to events
-- inject catalog state
-- compile or apply themes
-- validate examples
-- persist data
-
-Those choices belong to an implementation layer. They must conform to the catalog, but they are not the catalog.
-
-## Start here
+## Documentation
 
 - [Concepts](./docs/concepts.md)
-- [Interface contract](./docs/interface.md)
+- [Catalog interface contract](./docs/interface.md)
 - [Requirements documents](./docs/requirements.md)
+- [SceneSpec](./docs/scene-spec.md)
+- [Runtime model](./docs/runtime-model.md)
 - [ADR 0001: Catalog-level shared state](./docs/adrs/0001-catalog-level-shared-state.md)
+
+## Reference files
+
 - [Commerce catalog](./examples/commerce/catalog.json)
 - [Commerce requirements](./examples/commerce/requirements.md)
 - [ProductCard item](./examples/commerce/items/ProductCard/item.json)
