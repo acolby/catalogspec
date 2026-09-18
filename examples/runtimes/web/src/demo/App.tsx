@@ -1,32 +1,31 @@
-import { useEffect, useMemo, useState } from "preact/hooks";
-import type { RuntimeOutboundMessage } from "../shell/messages";
-import { InMemoryHostAdapter } from "../shell/host-adapters/inMemory";
-import { RuntimeShell } from "../shell/RuntimeShell";
-import { RenderScene } from "../renderer/renderScene";
-import { commerceImplementation } from "../implementations/commerce";
+import { useEffect, useRef, useState } from "preact/hooks";
+import type { RuntimeInboundMessage, RuntimeOutboundMessage } from "../shell/messages";
 import { alternateScene, sampleScene } from "./sampleScene";
 
 export function DemoApp() {
-  const adapter = useMemo(() => new InMemoryHostAdapter(), []);
-  const shell = useMemo(() => new RuntimeShell(adapter, [commerceImplementation]), [adapter]);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const [messages, setMessages] = useState<RuntimeOutboundMessage[]>([]);
 
   useEffect(() => {
-    const unsubscribeMessages = adapter.onRuntimeMessage((message) => {
-      setMessages((current) => [message, ...current].slice(0, 12));
-    });
+    const listener = (event: MessageEvent) => {
+      if (!isRuntimeOutboundMessage(event.data)) {
+        return;
+      }
 
-    shell.start();
-    adapter.postToRuntime({ type: "catalogspec.scene.replace", scene: sampleScene });
+      setMessages((current) => [event.data, ...current].slice(0, 12));
 
-    return () => {
-      unsubscribeMessages();
-      shell.stop();
+      if (event.data.type === "catalogspec.runtime.ready") {
+        postToRuntime({ type: "catalogspec.scene.replace", scene: sampleScene });
+      }
     };
-  }, [adapter, shell]);
 
-  const scene = shell.scene.value;
-  const implementation = scene ? shell.getImplementation(scene) : undefined;
+    window.addEventListener("message", listener);
+    return () => window.removeEventListener("message", listener);
+  }, []);
+
+  function postToRuntime(message: RuntimeInboundMessage): void {
+    iframeRef.current?.contentWindow?.postMessage(message, window.location.origin);
+  }
 
   return (
     <main class="demo-shell">
@@ -34,30 +33,21 @@ export function DemoApp() {
         <p class="demo-kicker">Experimental / non-normative</p>
         <h1>CatalogSpec Web Runtime</h1>
         <p>
-          This wrapper is demo-only. It talks to the runtime shell through an in-memory host adapter,
-          mirroring the boundary an iframe <code>postMessage</code> adapter would use.
+          This wrapper is demo-only. The scene renders inside an iframe runtime shell. The wrapper and
+          iframe communicate through <code>postMessage</code>, which keeps demo controls separate from the rendered scene.
         </p>
         <div class="demo-actions">
-          <button type="button" onClick={() => adapter.postToRuntime({ type: "catalogspec.scene.replace", scene: sampleScene })}>
+          <button type="button" onClick={() => postToRuntime({ type: "catalogspec.scene.replace", scene: sampleScene })}>
             Load product scene
           </button>
-          <button type="button" onClick={() => adapter.postToRuntime({ type: "catalogspec.scene.replace", scene: alternateScene })}>
+          <button type="button" onClick={() => postToRuntime({ type: "catalogspec.scene.replace", scene: alternateScene })}>
             Load alternate scene
           </button>
         </div>
       </section>
 
-      <section class="runtime-frame" aria-label="Rendered scene">
-        {scene && implementation ? (
-          <RenderScene
-            scene={scene}
-            implementation={implementation}
-            emitEvent={(instanceId, event, props) => shell.emitInstanceEvent(instanceId, event, props)}
-            requestAction={(instanceId, action, props) => shell.requestAction(instanceId, action, props)}
-          />
-        ) : (
-          <div class="runtime-empty">No scene loaded.</div>
-        )}
+      <section class="runtime-frame" aria-label="Rendered scene iframe">
+        <iframe ref={iframeRef} title="CatalogSpec runtime shell" src="/runtime.html" />
       </section>
 
       <aside class="message-log" aria-label="Runtime messages">
@@ -73,4 +63,8 @@ export function DemoApp() {
       </aside>
     </main>
   );
+}
+
+function isRuntimeOutboundMessage(value: unknown): value is RuntimeOutboundMessage {
+  return !!value && typeof value === "object" && typeof (value as { type?: unknown }).type === "string";
 }

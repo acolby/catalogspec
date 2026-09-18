@@ -25,18 +25,20 @@ Implementation
   framework-specific fulfillment of catalog item definitions
 ```
 
-For iframe-style embedding, the demo or host app can communicate with the runtime shell through a host adapter.
+The demo wrapper embeds the runtime shell in an iframe. The rendered scene lives inside that iframe; demo controls and logs live outside it.
 
 ```txt
 Host app / demo wrapper
         │
-        │ postMessage or another transport
+        │ postMessage
         ▼
-Host adapter
+Runtime iframe
         │
         ▼
 Runtime shell
 ```
+
+The iframe boundary is intentional: it helps separate demo tooling from the scene runtime and gives us a starting point for technology-agnostic host communication.
 
 ## Included experiment
 
@@ -50,7 +52,7 @@ It includes:
 - an in-memory adapter for demos/tests
 - a simple SceneSpec snapshot renderer
 - an experimental commerce catalog implementation for `ProductCard`
-- a demo wrapper that sends a scene snapshot into the shell
+- a demo wrapper that embeds `/runtime.html` and sends scene snapshots into the shell with `postMessage`
 
 ## Run
 

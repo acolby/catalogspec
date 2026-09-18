@@ -1,12 +1,12 @@
-import { signal } from "@preact/signals";
 import type { CatalogImplementation, SceneSnapshot } from "../scene";
 import type { HostAdapter, RuntimeOutboundMessage } from "./messages";
 
-export class RuntimeShell {
-  readonly scene = signal<SceneSnapshot | null>(null);
-  readonly errors = signal<string[]>([]);
+type SceneListener = (scene: SceneSnapshot | null) => void;
 
+export class RuntimeShell {
+  private currentScene: SceneSnapshot | null = null;
   private unsubscribe?: () => void;
+  private sceneListeners = new Set<SceneListener>();
 
   constructor(
     private readonly adapter: HostAdapter,
@@ -26,6 +26,17 @@ export class RuntimeShell {
   stop(): void {
     this.unsubscribe?.();
     this.unsubscribe = undefined;
+    this.sceneListeners.clear();
+  }
+
+  getScene(): SceneSnapshot | null {
+    return this.currentScene;
+  }
+
+  onSceneChange(listener: SceneListener): () => void {
+    this.sceneListeners.add(listener);
+    listener(this.currentScene);
+    return () => this.sceneListeners.delete(listener);
   }
 
   replaceScene(scene: SceneSnapshot): void {
@@ -35,7 +46,8 @@ export class RuntimeShell {
       return;
     }
 
-    this.scene.value = scene;
+    this.currentScene = scene;
+    this.notifySceneListeners();
     this.send({ type: "catalogspec.scene.rendered", sceneId: scene.id });
   }
 
@@ -44,7 +56,7 @@ export class RuntimeShell {
   }
 
   emitInstanceEvent(instanceId: string, event: string, props?: Record<string, unknown>): void {
-    const scene = this.scene.value;
+    const scene = this.currentScene;
     if (!scene) return;
 
     this.send({
@@ -57,7 +69,7 @@ export class RuntimeShell {
   }
 
   requestAction(instanceId: string, action: string, props?: Record<string, unknown>): void {
-    const scene = this.scene.value;
+    const scene = this.currentScene;
     if (!scene) return;
 
     this.send({
@@ -78,8 +90,13 @@ export class RuntimeShell {
   }
 
   private reportError(message: string, details?: unknown): void {
-    this.errors.value = [...this.errors.value, message];
     this.send({ type: "catalogspec.runtime.error", message, details });
+  }
+
+  private notifySceneListeners(): void {
+    for (const listener of this.sceneListeners) {
+      listener(this.currentScene);
+    }
   }
 
   private send(message: RuntimeOutboundMessage): void {
