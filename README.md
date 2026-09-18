@@ -2,115 +2,107 @@
 
 CatalogSpec is a contract model for agent-created UI scenes: persistent, structured interfaces that live alongside a conversation and evolve as the session evolves.
 
-It lets an AI agent create and update a durable UI scene by speaking structured JSON instead of generating framework-specific code. Catalogs define the trusted vocabulary of available domain UI items, state, themes, actions, and events. Scenes instantiate that vocabulary for a particular session. Runtimes mount scenes using framework-specific implementations.
+The goal is to let an AI agent create and update UI by speaking JSON, without generating framework-specific code. The JSON stays bounded by strict contracts. Implementations stay decoupled and trusted.
 
-The active core today is the catalog contract: an implementation-independent description of a domain, its shared context, theme contract, renderable items, actions, events, and requirements.
+## Vision
 
-This repository is not a central catalog registry. It defines the structure that catalogs, scenes, implementations, runtimes, and harnesses should follow so humans and agents can create session-persistent UI from stable contracts.
+Agents should be able to create a scene for a conversation, keep that scene alive across turns, and update it as the conversation changes.
 
-## Conceptual stack
+That requires a shared language between three things:
 
-```txt
-CatalogSpec      defines the trusted UI/domain vocabulary an agent may use
-SceneSpec        defines a concrete session scene composed from a catalog
-Implementation  fulfills catalog items for a specific platform/framework
-Runtime         mounts, updates, and orchestrates scenes using implementations
-Harness         provides development, test, preview, and agent feedback loops
-```
+- the **agent**, which creates and updates the scene
+- the **catalog**, which defines what the agent is allowed to use
+- the **implementation**, which renders and executes the scene in a real runtime
 
-## Status
+CatalogSpec is the contract layer that keeps those pieces coherent.
 
-| Area | Status | Description |
-|---|---|---|
-| CatalogSpec | Active | Catalog directory structure, JSON schemas, reference example, and validation CLI exist. |
-| SceneSpec | Planned | Future JSON shape for concrete scene instances composed from catalogs. |
-| Implementation model | Draft | Vocabulary and guidance for framework-specific fulfillment of catalogs. |
-| Runtime model | Draft | Vocabulary and guidance for environments that mount scenes. |
-| Harness model | Draft | Vocabulary and guidance for dev/test/preview shells around runtimes. |
-
-The current repository intentionally favors specification and guidance over framework-specific implementation code.
-
-## CatalogSpec
-
-A catalog is a durable domain contract, not a component library implementation. It gives agents a bounded language for creating UI without inventing arbitrary components or code. It defines:
-
-- shared domain props/configuration
-- shared domain/session state shape
-- domain-level actions
-- theme token contracts and concrete themes
-- renderable item interfaces
-- item props, state, slots, actions, and events
-- human-readable behavioral requirements
-
-A CatalogSpec-compatible catalog commonly uses this structure in downstream repos:
+## Architecture
 
 ```txt
-/catalogs/[catalogId]/
-  catalog.json
-  requirements.md
-  theme.json
-  /themes/*.json
-  /items/[ItemName]/item.json
-  /items/[ItemName]/requirements.md
+Agent session
+  conversation, user intent, tool calls
+        │
+        ▼
+SceneSpec
+  the current persistent UI scene for the session
+        │ speaks
+        ▼
+CatalogSpec
+  the trusted vocabulary of items, state, themes, actions, and events
+        ▲ fulfilled by
+        │
+Implementation
+  framework/platform-specific item code
+        │ mounted by
+        ▼
+Runtime
+  validates, renders, updates, dispatches actions, routes events
+        │ supported by
+        ▼
+Harness
+  development, preview, test, and agent feedback environment
 ```
-
-This spec repo stores its reference catalog under `/examples` to avoid implying that this repository is where all catalogs should live.
-
-## SceneSpec
-
-SceneSpec is planned. It will describe concrete, session-persistent scene instances composed from a CatalogSpec catalog.
-
-A future scene may define:
-
-- which catalog it uses
-- which theme is selected
-- concrete catalog state values
-- item instances and composition
-- item props and initial item state
-- slot contents
-- action/controller wiring
-- metadata useful to agents and runtimes
 
 Short version:
 
 ```txt
-CatalogSpec defines what an agent is allowed to use.
-SceneSpec defines what the agent has created for this session.
-Runtime keeps that scene mounted, updated, and interactive.
+SceneSpec speaks CatalogSpec.
+Implementation fulfills CatalogSpec.
+Runtime reconciles both into a live UI.
 ```
+
+## Layers
+
+### CatalogSpec
+
+Status: Active
+
+CatalogSpec defines the language bridge between agent-authored scenes and framework-specific implementations.
+
+A catalog describes a domain's available UI items, shared state shape, theme contract, actions, events, and behavioral requirements. It does not prescribe React, SwiftUI, Flutter, HTML, or any other target.
+
+See [CatalogSpec](./docs/catalog-spec.md).
+
+### SceneSpec
+
+Status: Planned
+
+SceneSpec will define concrete scene instances composed from catalogs. A scene represents the UI an agent has created for a particular conversation or session.
 
 See [SceneSpec](./docs/scene-spec.md).
 
-## Implementations, runtimes, and harnesses
+### Implementations
 
-CatalogSpec does not prescribe React, Vue, SwiftUI, Flutter, server-rendered HTML, native UI, generated UI, or any other implementation target.
+Status: Draft
 
-The working distinction is:
+An implementation fulfills a catalog for a specific framework or platform. For example, a React implementation of a commerce catalog would provide React components for the catalog's items.
 
-- **Implementation**: framework/platform-specific code that fulfills catalog items.
-- **Runtime**: an environment that loads catalogs/scenes, provides state/theme/actions, maps items to implementations, and mounts the scene.
-- **Harness**: a dev/test/preview/agent shell around a runtime.
+### Runtime
 
-These boundaries are still being refined. See [Runtime model](./docs/runtime-model.md).
+Status: Draft
 
-## Reference example
+A runtime mounts scenes using a catalog and an implementation. It validates scene data, provides state/theme/actions, renders items, applies updates, and routes events.
 
-This repository includes a small commerce catalog as a reference example:
+See [Runtime model](./docs/runtime-model.md).
+
+### Harness
+
+Status: Draft
+
+A harness is a development, preview, test, or agent-feedback environment around a runtime.
+
+## Current repository contents
 
 ```txt
-/examples/commerce/
-  catalog.json
-  requirements.md
-  theme.json
-  /themes/light.json
-  /themes/dark.json
-  /items/ProductCard/item.json
-  /items/ProductCard/requirements.md
+/docs                  specification and design docs
+/schemas               JSON Schemas for the active CatalogSpec layer
+/examples/commerce     reference catalog example
+/cli                   validation CLI for catalog conformance
 ```
 
-## Validation CLI
+This repository is not a central catalog registry. Reference catalogs live under `/examples`; downstream projects commonly keep their own catalogs under `/catalogs/[catalogId]/`.
 
-The nested CLI validates CatalogSpec conformance without turning the spec root into a Node package.
+## Validation CLI
 
 ```bash
 cd cli
@@ -125,19 +117,10 @@ Agent-friendly JSON output:
 node dist/cli.js validate ../examples/commerce --json
 ```
 
-The CLI validates structure and contracts. It does not render catalogs or provide framework bindings.
+## Start here
 
-## Documentation
-
-- [Concepts](./docs/concepts.md)
-- [Catalog interface contract](./docs/interface.md)
-- [Requirements documents](./docs/requirements.md)
+- [CatalogSpec](./docs/catalog-spec.md)
 - [SceneSpec](./docs/scene-spec.md)
 - [Runtime model](./docs/runtime-model.md)
+- [Concepts](./docs/concepts.md)
 - [ADR 0001: Catalog-level shared state](./docs/adrs/0001-catalog-level-shared-state.md)
-
-## Reference files
-
-- [Commerce catalog](./examples/commerce/catalog.json)
-- [Commerce requirements](./examples/commerce/requirements.md)
-- [ProductCard item](./examples/commerce/items/ProductCard/item.json)
