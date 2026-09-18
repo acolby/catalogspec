@@ -1,6 +1,6 @@
 # Concepts
 
-This document defines the vocabulary used across CatalogSpec, planned SceneSpec work, implementations, runtimes, and harnesses.
+This document defines the vocabulary used across CatalogSpec, planned SceneSpec work, implementations, and runtimes.
 
 The motivating use case is session-persistent agent UI: an AI agent should be able to create, update, and operate a structured UI scene alongside a conversation without generating framework-specific code.
 
@@ -110,12 +110,6 @@ A runtime mounts and orchestrates scenes using a catalog and an implementation.
 A runtime may load catalogs, validate scenes, provide state/theme/actions, dispatch events, and map catalog items to implementation code.
 
 See [Runtime model](./runtime-model.md).
-
-## Harness
-
-A harness is a development, test, preview, or agent-feedback environment around a runtime.
-
-Harnesses are useful for fixture loading, validation feedback, visual testing, accessibility checks, and iterative agent workflows.
 
 ## Meta-catalog
 

@@ -37,10 +37,6 @@ Implementation
         ▼
 Runtime
   validates, renders, updates, dispatches actions, routes events
-        │ supported by
-        ▼
-Harness
-  development, preview, test, and agent feedback environment
 ```
 
 Short version:
@@ -84,12 +80,6 @@ Status: Draft
 A runtime mounts scenes using a catalog and an implementation. It validates scene data, provides state/theme/actions, renders items, applies updates, and routes events.
 
 See [Runtime model](./docs/runtime-model.md).
-
-### Harness
-
-Status: Draft
-
-A harness is a development, preview, test, or agent-feedback environment around a runtime.
 
 ## Current repository contents
 

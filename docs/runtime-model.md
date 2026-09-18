@@ -13,7 +13,6 @@ CatalogSpec      implementation-independent domain contract
 SceneSpec        concrete scene composition and values
 Implementation  framework/platform-specific item fulfillment
 Runtime         scene mounting and orchestration environment
-Harness         dev/test/preview/agent environment around a runtime
 ```
 
 ## Implementation
@@ -73,31 +72,13 @@ A runtime may be responsible for:
 
 The runtime is allowed to be opinionated. CatalogSpec does not require one runtime architecture.
 
-## Harness
-
-A harness is a development, test, preview, or agent-feedback shell around a runtime.
-
-A harness may provide:
-
-- local preview UI
-- fixture loading
-- hot reloading
-- validation feedback
-- visual regression entry points
-- accessibility checks
-- agent-edit loops
-- screenshots or DOM/native tree inspection
-- scenario controls for catalog state and actions
-
-A harness can be disposable or productized. It is not the catalog contract.
-
 ## Relationship to this repository
 
 This repository should remain specification-first.
 
 It may include abstract documentation, schemas, validators, ADRs, and examples. It should avoid framework-specific runtime code unless explicitly introduced as a separate example or package.
 
-Framework-specific runtimes and harnesses are expected to live in downstream repositories or implementation-specific packages.
+Framework-specific runtimes are expected to live in downstream repositories or implementation-specific packages.
 
 ## Open questions
 

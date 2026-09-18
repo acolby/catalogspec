@@ -1,6 +1,6 @@
 # Agent Guidance
 
-This repository defines CatalogSpec and related abstract guidance for future SceneSpec, implementation, runtime, and harness layers.
+This repository defines CatalogSpec and related abstract guidance for future SceneSpec, implementation, and runtime layers.
 
 Use it as the reference for creating and maintaining implementation-independent catalog contracts in downstream repositories. Do not treat this repository as the central registry or required home for all catalogs.
 
@@ -17,7 +17,7 @@ The durable artifacts in a CatalogSpec catalog are:
 - concrete theme instances
 - JSON schemas for those contracts
 
-Implementations, runtimes, and harnesses are downstream instantiations. They may live in separate repositories, application repositories, or implementation-specific packages.
+Implementations and runtimes are downstream instantiations. They may live in separate repositories, application repositories, or implementation-specific packages.
 
 ## Canonical catalog structure
 
@@ -94,7 +94,7 @@ When working on a catalog:
 5. Use `theme.json` for theme token shape and `/themes/*.json` for concrete theme values.
 6. Keep item names PascalCase and derived from directory names.
 7. Treat examples in this repo as reference examples, not as the only place catalogs may live.
-8. Keep SceneSpec, runtime, implementation, and harness docs clearly marked as planned or draft until they have schemas/tooling.
+8. Keep SceneSpec, runtime, and implementation docs clearly marked as planned or draft until they have schemas/tooling.
 
 ## Bias
 
