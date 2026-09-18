@@ -112,5 +112,5 @@ node dist/cli.js validate ../examples/commerce --json
 - [CatalogSpec](./docs/catalog-spec.md)
 - [SceneSpec](./docs/scene-spec.md)
 - [Runtime model](./docs/runtime-model.md)
-- [Concepts](./docs/concepts.md)
+- [Glossary](./docs/glossary.md)
 - [Architecture decision records](./docs/adrs/README.md)
