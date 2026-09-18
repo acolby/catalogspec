@@ -117,6 +117,22 @@ code {
   justify-content: center;
   min-height: 32rem;
   padding: 2rem;
+  position: relative;
+}
+
+.runtime-frame-marker {
+  background: #265df2;
+  border-radius: 999px;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 800;
+  left: 1rem;
+  letter-spacing: 0.08em;
+  margin: 0;
+  padding: 0.35rem 0.6rem;
+  position: absolute;
+  text-transform: uppercase;
+  top: 1rem;
 }
 
 .message-log {

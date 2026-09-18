@@ -26,6 +26,7 @@ function RuntimeFrame() {
 
   return (
     <main class="runtime-shell-root">
+      <p class="runtime-frame-marker">Runtime iframe payload</p>
       {scene && implementation ? (
         <RenderScene
           scene={scene}
