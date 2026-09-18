@@ -2,7 +2,7 @@
 
 Validation tooling for CatalogSpec contracts.
 
-The CLI is intentionally scoped to specification conformance. It validates catalog directory structure, required files, JSON schemas, item naming, item references, theme references, and theme token conformance. It does not render catalogs or implement framework bindings.
+The CLI is intentionally scoped to CatalogSpec conformance. It validates catalog directory structure, required files, CatalogSpec JSON schemas, item naming, item references, theme references, and theme token conformance. It does not validate SceneSpec scene snapshots, render catalogs, or implement framework bindings.
 
 ## Usage
 

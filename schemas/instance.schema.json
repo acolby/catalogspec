@@ -1,7 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://catalogspec.local/schemas/instance.schema.json",
-  "title": "CatalogSpec Item Instance",
+  "title": "CatalogSpec Example Item Instance (Legacy)",
+  "description": "Legacy/example schema for catalog item examples. This is not the canonical SceneSpec schema. The draft SceneSpec snapshot model uses scene-level id, catalog version locking, item instance id, a single root, and item-instance-only slots.",
   "type": "object",
   "required": ["catalog", "item", "props"],
   "properties": {

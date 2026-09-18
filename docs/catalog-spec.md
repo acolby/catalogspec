@@ -168,7 +168,7 @@ CatalogSpec defines state shape. It does not prescribe where state lives or how 
 
 ## Slots
 
-Slots are named composition points for text, raw content, or other catalog item instances.
+Slots are named composition points for text, raw content, or catalog item definitions used as children in examples or future scene composition.
 
 ```json
 {
@@ -182,7 +182,7 @@ Slots are named composition points for text, raw content, or other catalog item 
 }
 ```
 
-The full scene-level composition model belongs to future SceneSpec work.
+SceneSpec currently drafts a narrower initial snapshot model where slots contain arrays of scene item instances only. CatalogSpec's broader `text`/`html` slot vocabulary remains catalog-contract vocabulary and is not yet fully represented by a canonical SceneSpec schema.
 
 ## Actions and events
 
@@ -279,7 +279,9 @@ Suggested item structure:
 
 ## Validation
 
-The CLI validates catalog structure, JSON syntax, schema conformance, item/theme references, item naming, required requirements files, and theme token conformance.
+The CLI validates CatalogSpec catalog structure, JSON syntax, schema conformance, item/theme references, item naming, required requirements files, and theme token conformance.
+
+The current schemas are for the active CatalogSpec layer. They are not a canonical SceneSpec schema.
 
 ```bash
 cd cli

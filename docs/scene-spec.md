@@ -4,6 +4,8 @@ Status: Draft
 
 SceneSpec defines the protocol for concrete, session-persistent UI scene documents.
 
+There is not yet a canonical SceneSpec JSON Schema or SceneSpec validator in this repository. In particular, `schemas/instance.schema.json` is not the SceneSpec schema.
+
 A scene is the current UI instance an agent has created for a conversation or session. It is represented as JSON, persists across turns, and can be rendered by a runtime using an implementation of the referenced catalog.
 
 SceneSpec is inspired by A2UI-style agent-to-UI protocols. Its distinction is that scenes are grounded in CatalogSpec contracts: the agent does not invent arbitrary UI code or arbitrary components. It creates a concrete scene from a bounded catalog vocabulary.
@@ -135,9 +137,9 @@ This keeps SceneSpec focused on composition while leaving layout meaning to the 
 
 ## Slots
 
-Slots compose item instances inside other item instances.
+Slots compose scene item instances inside other scene item instances.
 
-Slot values are always arrays of item instances:
+Slot values are always arrays of scene item instances:
 
 ```json
 {
@@ -155,9 +157,9 @@ Slot values are always arrays of item instances:
 }
 ```
 
-CatalogSpec slot definitions determine whether a slot is required, whether it accepts multiple instances, and which kinds of content are allowed.
+CatalogSpec slot definitions determine whether a slot is required, whether it accepts multiple scene item instances, and which kinds of content are allowed.
 
-For the initial model, SceneSpec does not define text nodes or primitive nodes. Text should be represented through catalog item props or catalog-defined items.
+CatalogSpec currently allows slot contracts to advertise `text`, `html`, and `item` content. The initial SceneSpec snapshot model only commits to item-instance slot content. Primitive slot content is deferred and should be represented through catalog item props or catalog-defined items for now.
 
 ## Validation relationship
 
@@ -208,14 +210,14 @@ Initial scenes reference one catalog. Multi-catalog scenes may be powerful later
 
 ### Primitive content
 
-Initial scenes compose catalog item instances only. Text, markdown, and other primitive content can be modeled through catalog items or item props for now.
+Initial scenes compose scene item instances only. Text, markdown, and other primitive content can be modeled through catalog item definitions or item props for now.
 
 ## Non-goals for the initial snapshot
 
 SceneSpec does not currently define:
 
-- a SceneSpec JSON schema
-- a scene validator
+- a canonical SceneSpec JSON Schema
+- a SceneSpec validator
 - a streaming update protocol
 - action/event/controller wiring
 - expression language

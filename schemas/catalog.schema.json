@@ -46,6 +46,7 @@
       ]
     },
     "examples": {
+      "description": "Legacy catalog-level item examples. This is not a SceneSpec scene snapshot.",
       "type": "array",
       "items": { "$ref": "./instance.schema.json" }
     }

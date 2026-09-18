@@ -51,6 +51,12 @@ Runtime renders and updates the scene using that implementation.
 
 The runtime is not the contract, the scene, or the implementation. It is the layer that takes a concrete scene and an available implementation, then produces a live, updateable UI.
 
+## Current status
+
+- **CatalogSpec** is active, schema-backed, and validated by the CLI. It defines catalog, domain, item, theme, action, event, and requirements contracts.
+- **SceneSpec** is draft. It currently defines a scene snapshot model for concrete persisted scenes, but there is no canonical SceneSpec JSON Schema or validator yet.
+- **Runtime and implementation** are draft vocabulary only. Runtime APIs, implementation manifests, action dispatch, event routing, and state ownership are intentionally not locked.
+
 ## Layers
 
 ### CatalogSpec
@@ -94,7 +100,11 @@ See [Runtime model](./docs/runtime-model.md).
 /cli                   validation CLI for catalog conformance
 ```
 
+The schemas currently support CatalogSpec catalog validation. They do not include a canonical SceneSpec schema yet.
+
 This repository is not a central catalog registry. Reference catalogs live under `/examples`; downstream projects commonly keep their own catalogs under `/catalogs/[catalogId]/`.
+
+Framework/runtime code should normally live downstream. If experimental runtime code is included here, it should live under an explicitly non-normative examples path such as `/examples/runtimes/...` and should not define conformance behavior.
 
 ## Validation CLI
 

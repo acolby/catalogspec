@@ -1,16 +1,16 @@
 # Runtime model
 
-Status: Draft
+Status: Draft / non-normative
 
-This document defines working vocabulary for moving from CatalogSpec contracts and future SceneSpec documents into running software.
+This document defines working vocabulary for moving from CatalogSpec contracts and SceneSpec scene snapshots into running software.
 
-The boundaries are intentionally draft. They should guide discussion without locking this repository into a specific framework or runtime architecture.
+The boundaries are intentionally draft. This document is design guidance only; it does not define conformance behavior. Runtime APIs, implementation manifests, action dispatch, event routing, and state ownership are not locked.
 
 ## Layers
 
 ```txt
 CatalogSpec      implementation-independent domain contract
-SceneSpec        concrete scene composition and values
+SceneSpec        concrete persisted scene snapshot protocol
 Implementation  framework/platform-specific item fulfillment
 Runtime         scene mounting and orchestration environment
 ```
@@ -55,7 +55,7 @@ Illustrative only:
 
 ## Runtime
 
-A runtime is the environment that mounts and orchestrates a scene using a catalog and an implementation.
+A runtime is the environment that renders and maintains a concrete scene using a catalog and an implementation.
 
 A runtime may be responsible for:
 
@@ -76,9 +76,9 @@ The runtime is allowed to be opinionated. CatalogSpec does not require one runti
 
 This repository should remain specification-first.
 
-It may include abstract documentation, schemas, validators, ADRs, and examples. It should avoid framework-specific runtime code unless explicitly introduced as a separate example or package.
+It may include abstract documentation, schemas, validators, ADRs, and examples. Framework/runtime code should normally live in downstream repositories or implementation-specific packages.
 
-Framework-specific runtimes are expected to live in downstream repositories or implementation-specific packages.
+If experimental runtime code is included here, it should live under an explicitly non-normative examples path such as `/examples/runtimes/...`. It must not be treated as CatalogSpec or SceneSpec conformance behavior.
 
 ## Open questions
 
