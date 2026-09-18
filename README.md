@@ -221,6 +221,7 @@ Those choices belong to an implementation layer. They must conform to the catalo
 - [Concepts](./docs/concepts.md)
 - [Interface contract](./docs/interface.md)
 - [Requirements documents](./docs/requirements.md)
+- [ADR 0001: Catalog-level shared state](./docs/adrs/0001-catalog-level-shared-state.md)
 - [Commerce catalog](./examples/commerce/catalog.json)
 - [Commerce requirements](./examples/commerce/requirements.md)
 - [ProductCard item](./examples/commerce/items/ProductCard/item.json)
