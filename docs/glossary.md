@@ -8,7 +8,7 @@ The conversation context in which an agent receives user intent, calls tools, an
 
 ## SceneSpec
 
-Planned. A concrete, session-persistent UI scene created from catalog items and values.
+Draft. The protocol for concrete, session-persistent UI scene documents.
 
 A scene represents what the agent has created for a particular conversation or session.
 

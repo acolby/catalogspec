@@ -65,9 +65,9 @@ See [CatalogSpec](./docs/catalog-spec.md).
 
 ### SceneSpec
 
-Status: Planned
+Status: Draft
 
-SceneSpec will define the protocol for concrete scene documents. A scene is the UI instance an agent has created for a particular conversation or session.
+SceneSpec defines the protocol for concrete scene documents. A scene is the UI instance an agent has created for a particular conversation or session.
 
 See [SceneSpec](./docs/scene-spec.md).
 
