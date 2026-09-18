@@ -55,10 +55,10 @@ These conventions define the CatalogSpec shape. Use them when creating or mainta
 
 ## Reference repository structure
 
-This repository includes a small commerce catalog as a reference example of the specification.
+This repository includes a small commerce catalog under `/examples` as a reference example of the specification. Downstream CatalogSpec-compatible projects commonly use `/catalogs/[catalogId]/` for their own catalogs.
 
 ```txt
-/catalogs/
+/examples/
   /commerce/
     catalog.json          # catalog/domain interface
     requirements.md       # catalog/domain behavioral requirements
@@ -125,9 +125,9 @@ Catalog state is shared context. Items may rely on it without requiring every in
 `theme.json` defines the shape of the theme token object. Concrete themes in `/themes/*.json` conform to that shape.
 
 ```txt
-/catalogs/commerce/theme.json
-/catalogs/commerce/themes/light.json
-/catalogs/commerce/themes/dark.json
+/examples/commerce/theme.json
+/examples/commerce/themes/light.json
+/examples/commerce/themes/dark.json
 ```
 
 Themes may be injected at runtime, compiled at build time, transformed into CSS variables, mapped to native styles, or consumed directly. The catalog does not prescribe the implementation.
@@ -137,7 +137,7 @@ Themes may be injected at runtime, compiled at build time, transformed into CSS 
 Items are named by their PascalCase directory name. The item document does not repeat an `id`.
 
 ```txt
-/catalogs/commerce/items/ProductCard/item.json
+/examples/commerce/items/ProductCard/item.json
 ```
 
 An item defines five interface surfaces:
@@ -188,13 +188,13 @@ This repository includes a nested CLI package for validating catalog conformance
 cd cli
 npm install
 npm run build
-node dist/cli.js validate ../catalogs/commerce
+node dist/cli.js validate ../examples/commerce
 ```
 
 Agent-friendly JSON output:
 
 ```bash
-node dist/cli.js validate ../catalogs/commerce --json
+node dist/cli.js validate ../examples/commerce --json
 ```
 
 The CLI is specification tooling. It validates structure and contracts; it does not render catalogs or provide framework bindings.
@@ -221,6 +221,6 @@ Those choices belong to an implementation layer. They must conform to the catalo
 - [Concepts](./docs/concepts.md)
 - [Interface contract](./docs/interface.md)
 - [Requirements documents](./docs/requirements.md)
-- [Commerce catalog](./catalogs/commerce/catalog.json)
-- [Commerce requirements](./catalogs/commerce/requirements.md)
-- [ProductCard item](./catalogs/commerce/items/ProductCard/item.json)
+- [Commerce catalog](./examples/commerce/catalog.json)
+- [Commerce requirements](./examples/commerce/requirements.md)
+- [ProductCard item](./examples/commerce/items/ProductCard/item.json)

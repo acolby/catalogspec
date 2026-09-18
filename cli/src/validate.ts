@@ -47,7 +47,7 @@ export async function validateCatalog(catalogRoot: string): Promise<ValidationRe
     return {
       ok: false,
       checked,
-      findings: [error(root, "Catalog path is not a directory.", "Pass a path like ./catalogs/commerce.")]
+      findings: [error(root, "Catalog path is not a directory.", "Pass a catalog path like ./examples/commerce or ./catalogs/commerce.")]
     };
   }
 

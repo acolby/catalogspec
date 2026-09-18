@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "validate": "npm run build && node dist/cli.js validate ../catalogs/commerce",
+    "validate": "npm run build && node dist/cli.js validate ../examples/commerce",
     "dev": "tsx src/cli.ts"
   },
   "dependencies": {

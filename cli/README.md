@@ -9,13 +9,13 @@ The CLI is intentionally scoped to specification conformance. It validates catal
 ```bash
 npm install
 npm run build
-node dist/cli.js validate ../catalogs/commerce
+node dist/cli.js validate ../examples/commerce
 ```
 
 After publishing:
 
 ```bash
-catalogspec validate ./catalogs/commerce
+catalogspec validate ./examples/commerce
 ```
 
 ## Commands
@@ -25,20 +25,20 @@ catalogspec validate ./catalogs/commerce
 Validate a catalog directory or a directory containing catalog directories.
 
 ```bash
-catalogspec validate ./catalogs/commerce
-catalogspec validate ./catalogs
+catalogspec validate ./examples/commerce
+catalogspec validate ./examples
 ```
 
 Machine-readable output for agents:
 
 ```bash
-catalogspec validate ./catalogs/commerce --json
+catalogspec validate ./examples/commerce --json
 ```
 
 Quiet mode:
 
 ```bash
-catalogspec validate ./catalogs/commerce --quiet
+catalogspec validate ./examples/commerce --quiet
 ```
 
 ## Validation scope
