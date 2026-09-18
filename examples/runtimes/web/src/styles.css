@@ -1,0 +1,181 @@
+:root {
+  color: #172033;
+  background: #f4f6fb;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  background: #265df2;
+  color: white;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: 0.7rem 1rem;
+}
+
+button.secondary {
+  background: #e7ebf7;
+  color: #26324d;
+}
+
+code {
+  white-space: pre-wrap;
+}
+
+.demo-shell {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(16rem, 22rem) minmax(20rem, 1fr);
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.demo-panel,
+.message-log,
+.runtime-frame {
+  background: white;
+  border: 1px solid #dbe1ef;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgb(20 35 70 / 8%);
+}
+
+.demo-panel,
+.message-log {
+  padding: 1rem;
+}
+
+.demo-kicker {
+  color: #6c7893;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+}
+
+.demo-panel h1,
+.message-log h2 {
+  margin-top: 0;
+}
+
+.demo-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.runtime-frame {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 32rem;
+  padding: 2rem;
+}
+
+.message-log {
+  grid-column: 1 / -1;
+}
+
+.message-log ol {
+  display: grid;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.message-log li {
+  background: #f7f9fd;
+  border: 1px solid #e3e8f4;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+}
+
+.runtime-empty,
+.runtime-error {
+  color: #9b2c2c;
+  font-weight: 700;
+}
+
+.scene-instance {
+  width: min(100%, 32rem);
+}
+
+.product-card {
+  border: 1px solid #dbe1ef;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+
+.product-card__image {
+  aspect-ratio: 16 / 9;
+  background: #e7ebf7;
+  display: block;
+  object-fit: cover;
+  width: 100%;
+}
+
+.product-card__body {
+  padding: 1.25rem;
+}
+
+.product-card__header {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.product-card__header h2 {
+  margin: 0;
+}
+
+.product-card__eyebrow {
+  color: #6c7893;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.product-card__badge:empty {
+  display: none;
+}
+
+.product-card__description,
+.product-card__details {
+  color: #4c5874;
+  line-height: 1.5;
+}
+
+.product-card__meta,
+.product-card__actions {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.product-card__actions {
+  justify-content: flex-start;
+}
+
+@media (max-width: 760px) {
+  .demo-shell {
+    grid-template-columns: 1fr;
+  }
+}

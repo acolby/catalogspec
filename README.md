@@ -97,6 +97,7 @@ See [Runtime model](./docs/runtime-model.md).
 /docs                  specification and design docs
 /schemas               JSON Schemas for the active CatalogSpec layer
 /examples/commerce     reference catalog example
+/examples/runtimes     non-normative experimental runtime examples
 /cli                   validation CLI for catalog conformance
 ```
 
