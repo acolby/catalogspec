@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "title": "Hero",
+  "description": "Primary splash section with headline, supporting copy, background, and call-to-action slots.",
+  "kind": "component",
+  "props": {
+    "eyebrow": {
+      "type": "string",
+      "description": "Optional short text displayed above the headline."
+    },
+    "headline": {
+      "type": "string",
+      "description": "Main hero headline.",
+      "required": true
+    },
+    "subheadline": {
+      "type": "string",
+      "description": "Supporting text displayed near the headline."
+    },
+    "align": {
+      "type": "string",
+      "description": "Preferred content alignment.",
+      "enum": ["start", "center", "end"],
+      "default": "center"
+    },
+    "size": {
+      "type": "string",
+      "description": "Relative hero vertical scale.",
+      "enum": ["compact", "regular", "full"],
+      "default": "regular"
+    }
+  },
+  "state": {},
+  "slots": {
+    "background": {
+      "title": "Background",
+      "description": "Optional background item for the hero area.",
+      "accepts": ["item"],
+      "multiple": false,
+      "required": false,
+      "allowedItems": ["Background"]
+    },
+    "actions": {
+      "title": "Actions",
+      "description": "Call-to-action items displayed with the hero copy.",
+      "accepts": ["item"],
+      "multiple": true,
+      "required": false,
+      "allowedItems": ["CallToAction"]
+    },
+    "content": {
+      "title": "Content",
+      "description": "Additional composed content below the primary hero copy.",
+      "accepts": ["item"],
+      "multiple": true,
+      "required": false
+    }
+  },
+  "actions": {},
+  "events": {}
+}

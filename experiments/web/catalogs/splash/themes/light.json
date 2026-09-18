@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "name": "Light",
+  "tokens": {
+    "color": {
+      "background": "#ffffff",
+      "surface": "#f7f7f8",
+      "text": "#111827",
+      "mutedText": "#4b5563",
+      "accent": "#2563eb",
+      "accentText": "#ffffff"
+    },
+    "space": {
+      "xs": "0.25rem",
+      "sm": "0.5rem",
+      "md": "1rem",
+      "lg": "2rem",
+      "xl": "4rem"
+    },
+    "radius": {
+      "sm": "0.25rem",
+      "md": "0.5rem",
+      "lg": "1rem",
+      "pill": "999px"
+    },
+    "font": {
+      "body": "system-ui, sans-serif",
+      "heading": "system-ui, sans-serif"
+    }
+  }
+}

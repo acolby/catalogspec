@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "description": "Theme token contract for experimental splash catalog surfaces.",
+  "tokens": {
+    "color": {
+      "background": { "type": "string", "description": "Default page or section background color." },
+      "surface": { "type": "string", "description": "Elevated or contained surface color." },
+      "text": { "type": "string", "description": "Primary text color." },
+      "mutedText": { "type": "string", "description": "Secondary text color." },
+      "accent": { "type": "string", "description": "Primary accent color for calls to action." },
+      "accentText": { "type": "string", "description": "Text color on accent backgrounds." }
+    },
+    "space": {
+      "xs": { "type": "string" },
+      "sm": { "type": "string" },
+      "md": { "type": "string" },
+      "lg": { "type": "string" },
+      "xl": { "type": "string" }
+    },
+    "radius": {
+      "sm": { "type": "string" },
+      "md": { "type": "string" },
+      "lg": { "type": "string" },
+      "pill": { "type": "string" }
+    },
+    "font": {
+      "body": { "type": "string" },
+      "heading": { "type": "string" }
+    }
+  }
+}

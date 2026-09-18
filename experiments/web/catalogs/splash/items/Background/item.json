@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "title": "Background",
+  "description": "Decorative background configuration for splash surfaces.",
+  "kind": "component",
+  "props": {
+    "kind": {
+      "type": "string",
+      "description": "Background rendering mode.",
+      "enum": ["solid", "gradient", "image"],
+      "default": "solid"
+    },
+    "color": {
+      "type": "string",
+      "description": "Solid color or primary gradient color."
+    },
+    "accentColor": {
+      "type": "string",
+      "description": "Secondary color for gradient-like backgrounds."
+    },
+    "imageUrl": {
+      "type": "string",
+      "description": "Image URL when kind is `image`."
+    },
+    "overlay": {
+      "type": "string",
+      "description": "Optional overlay strength for improving foreground contrast.",
+      "enum": ["none", "light", "dark"],
+      "default": "none"
+    }
+  },
+  "state": {},
+  "slots": {},
+  "actions": {},
+  "events": {}
+}

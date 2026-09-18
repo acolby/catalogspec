@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "id": "splash",
+  "name": "Splash",
+  "description": "Experimental catalog for splash and hero-style landing surfaces.",
+  "props": {
+    "locale": {
+      "type": "string",
+      "description": "Current locale for copy and formatting.",
+      "default": "en-US"
+    }
+  },
+  "state": {},
+  "actions": {
+    "openUrl": {
+      "title": "Open URL",
+      "description": "Requests navigation to a URL selected from a splash call to action.",
+      "props": {
+        "url": {
+          "type": "string",
+          "required": true,
+          "description": "Destination URL."
+        },
+        "target": {
+          "type": "string",
+          "description": "Navigation target hint.",
+          "enum": ["self", "blank"],
+          "default": "self"
+        }
+      }
+    }
+  },
+  "themes": {
+    "default": "light",
+    "available": ["light", "dark"]
+  },
+  "items": ["Hero", "CallToAction", "Background", "Stack"]
+}

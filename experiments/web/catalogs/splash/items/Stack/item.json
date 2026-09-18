@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "title": "Stack",
+  "description": "Simple layout primitive that arranges child items in a horizontal or vertical stack.",
+  "kind": "layout",
+  "props": {
+    "direction": {
+      "type": "string",
+      "description": "Stack direction.",
+      "enum": ["vertical", "horizontal"],
+      "default": "vertical"
+    },
+    "gap": {
+      "type": "string",
+      "description": "Named spacing preference.",
+      "enum": ["xs", "sm", "md", "lg", "xl"],
+      "default": "md"
+    },
+    "align": {
+      "type": "string",
+      "description": "Cross-axis alignment preference.",
+      "enum": ["start", "center", "end", "stretch"],
+      "default": "stretch"
+    }
+  },
+  "state": {},
+  "slots": {
+    "children": {
+      "title": "Children",
+      "description": "Child items arranged by the stack.",
+      "accepts": ["item"],
+      "multiple": true,
+      "required": false
+    }
+  },
+  "actions": {},
+  "events": {}
+}

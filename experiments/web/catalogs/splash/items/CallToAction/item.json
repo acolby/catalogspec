@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "title": "Call To Action",
+  "description": "Action control intended for prominent splash or hero calls to action.",
+  "kind": "component",
+  "props": {
+    "label": {
+      "type": "string",
+      "description": "Visible call-to-action label.",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "description": "Optional destination URL for navigation-style calls to action."
+    },
+    "target": {
+      "type": "string",
+      "description": "Navigation target hint when `url` is provided.",
+      "enum": ["self", "blank"],
+      "default": "self"
+    },
+    "variant": {
+      "type": "string",
+      "description": "Visual emphasis level.",
+      "enum": ["primary", "secondary", "ghost"],
+      "default": "primary"
+    }
+  },
+  "state": {},
+  "slots": {},
+  "actions": {
+    "activate": {
+      "title": "Activate",
+      "description": "Activates the call to action. If a URL is present, this usually maps to the catalog-level `openUrl` intent.",
+      "props": {}
+    }
+  },
+  "events": {
+    "activated": {
+      "title": "Activated",
+      "description": "Emitted when the call to action is activated by the user.",
+      "props": {
+        "label": { "type": "string", "required": true },
+        "url": { "type": "string" }
+      }
+    }
+  }
+}
