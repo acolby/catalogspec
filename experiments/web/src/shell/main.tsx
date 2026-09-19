@@ -1,36 +1,32 @@
 import { render } from "preact";
-import { useEffect, useRef, useState } from "preact/hooks";
-import { isRuntimeOutboundMessage, type RuntimeInboundMessage, type RuntimeOutboundMessage } from "../shared/messages";
-import { scenes } from "../shared/scenes";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { createHostCoordinator } from "../coordinator";
 import "../styles.css";
 
 function ShellApp() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [sceneId, setSceneId] = useState("launch-hero");
-  const [messages, setMessages] = useState<RuntimeOutboundMessage[]>([]);
+  const [messages, setMessages] = useState<unknown[]>([]);
+
+  const host = useMemo(() => {
+    return createHostCoordinator({
+      targetWindow: () => iframeRef.current?.contentWindow,
+    });
+  }, []);
 
   useEffect(() => {
-    const listener = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin) return;
-      if (!isRuntimeOutboundMessage(event.data)) return;
+    const unsubscribeMessage = host.onMessage((message) => setMessages((items) => [message, ...items].slice(0, 12)));
+    const unsubscribeReady = host.onReady(() => host.loadScene(sceneId));
 
-      setMessages((items) => [event.data, ...items].slice(0, 12));
-      if (event.data.type === "catalogspec.runtime.ready") {
-        postToRuntime({ type: "catalogspec.scene.replace", scene: scenes[sceneId] });
-      }
+    return () => {
+      unsubscribeMessage();
+      unsubscribeReady();
     };
-
-    window.addEventListener("message", listener);
-    return () => window.removeEventListener("message", listener);
-  }, [sceneId]);
-
-  function postToRuntime(message: RuntimeInboundMessage): void {
-    iframeRef.current?.contentWindow?.postMessage(message, window.location.origin);
-  }
+  }, [host, sceneId]);
 
   function loadScene(nextSceneId: string): void {
     setSceneId(nextSceneId);
-    postToRuntime({ type: "catalogspec.scene.replace", scene: scenes[nextSceneId] });
+    host.loadScene(nextSceneId);
   }
 
   return (
@@ -44,7 +40,7 @@ function ShellApp() {
         <label>
           Scene
           <select value={sceneId} onChange={(event) => loadScene((event.currentTarget as HTMLSelectElement).value)}>
-            {Object.keys(scenes).map((id) => (
+            {host.getSceneIds().map((id) => (
               <option value={id}>{id}</option>
             ))}
           </select>

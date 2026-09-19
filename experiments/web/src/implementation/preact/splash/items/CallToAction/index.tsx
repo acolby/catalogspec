@@ -1,8 +1,8 @@
 import type { PreactItemComponentProps } from "../../../_utils";
-import type { CallToActionProps, SplashThemeTokens } from "../../types";
+import type { CallToActionProps, ThemeTokens } from "../../generated";
 
 export function CallToAction({ instance, props, runtime }: PreactItemComponentProps<CallToActionProps>) {
-  const theme = runtime.theme;
+  const theme = runtime.theme as ThemeTokens | undefined;
   const variant = props.variant ?? "primary";
   const styles = variantStyle(variant, theme);
 
@@ -27,7 +27,7 @@ export function CallToAction({ instance, props, runtime }: PreactItemComponentPr
   );
 }
 
-function variantStyle(variant: string, theme?: SplashThemeTokens) {
+function variantStyle(variant: string, theme?: ThemeTokens) {
   if (variant === "secondary") {
     return { background: theme?.color?.surface ?? "#fff", color: theme?.color?.text ?? "#111", border: "1px solid rgba(148,163,184,.35)" };
   }

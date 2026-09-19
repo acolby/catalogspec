@@ -1,18 +1,21 @@
+import { createRuntimeCoordinator } from "../coordinator";
 import { mountPreactRuntime } from "../implementation/preact/_utils";
-import { splashPreactImplementation } from "../implementation/preact/splash";
-import { getScene } from "../shared/scenes";
-import { IframePostMessageTransport } from "./postMessageTransport";
+import { preactImplementation } from "../implementation/preact/splash";
 import "../styles.css";
 
-const initialScene = getScene(new URLSearchParams(window.location.search).get("scene"));
-const transport = new IframePostMessageTransport({
-  targetOrigin: window.location.origin,
-  allowedOrigins: [window.location.origin],
-});
+async function main() {
+  const coordinator = await createRuntimeCoordinator({
+    sceneId: new URLSearchParams(window.location.search).get("scene"),
+  });
 
-mountPreactRuntime({
-  root: document.getElementById("runtime-root")!,
-  transport,
-  implementations: [splashPreactImplementation],
-  initialScene,
+  mountPreactRuntime({
+    root: document.getElementById("runtime-root")!,
+    coordinator,
+    implementations: [preactImplementation],
+  });
+}
+
+main().catch((error: unknown) => {
+  document.getElementById("runtime-root")!.innerHTML = `<main class="runtime-frame-root"><div class="runtime-error">Unable to start runtime.</div></main>`;
+  console.error(error);
 });

@@ -1,5 +1,5 @@
 import type { PreactItemComponentProps } from "../../../_utils";
-import type { BackgroundProps } from "../../types";
+import type { BackgroundProps } from "../../generated";
 
 export function Background({ props }: PreactItemComponentProps<BackgroundProps>) {
   return <div aria-hidden="true" style={{ position: "absolute", inset: 0, ...backgroundStyle(props) }} />;

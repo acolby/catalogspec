@@ -1,6 +1,6 @@
-import type { RuntimeContext, SceneSnapshot, ThemeTokens } from "../../../shared/types";
+import type { SceneSnapshot, ThemeTokens } from "../../../shared/types";
 import { renderPreactInstance } from "./renderInstance";
-import type { PreactCatalogImplementation } from "./types";
+import type { PreactCatalogImplementation, RuntimeContext } from "./types";
 
 export type PreactRenderSceneProps = {
   scene: SceneSnapshot;

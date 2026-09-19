@@ -1,7 +1,7 @@
-import { isRuntimeInboundMessage, type RuntimeInboundMessage, type RuntimeOutboundMessage } from "../shared/messages";
-import type { RuntimeTransport } from "./RuntimeCoordinator";
+import { isHostToRuntimeMessage, type HostToRuntimeMessage, type RuntimeToHostMessage } from "../protocol";
+import type { RuntimeTransport } from "../runtime";
 
-export class IframePostMessageTransport implements RuntimeTransport {
+export class IframeRuntimeTransport implements RuntimeTransport {
   private readonly targetOrigin: string;
   private readonly allowedOrigins?: Set<string>;
 
@@ -10,14 +10,14 @@ export class IframePostMessageTransport implements RuntimeTransport {
     this.allowedOrigins = options.allowedOrigins ? new Set(options.allowedOrigins) : undefined;
   }
 
-  send(message: RuntimeOutboundMessage): void {
+  send(message: RuntimeToHostMessage): void {
     window.parent.postMessage(message, this.targetOrigin);
   }
 
-  subscribe(handler: (message: RuntimeInboundMessage) => void): () => void {
+  subscribe(handler: (message: HostToRuntimeMessage) => void): () => void {
     const listener = (event: MessageEvent) => {
       if (this.allowedOrigins && !this.allowedOrigins.has(event.origin)) return;
-      if (!isRuntimeInboundMessage(event.data)) return;
+      if (!isHostToRuntimeMessage(event.data)) return;
       handler(event.data);
     };
 

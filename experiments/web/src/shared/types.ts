@@ -25,25 +25,6 @@ export type ThemeTokens = {
   font?: Record<string, string>;
 };
 
-export type RuntimeAction = {
-  name: string;
-  props?: Record<string, unknown>;
-  source?: SceneItemInstance;
-};
-
-export type RuntimeEvent = {
-  name: string;
-  props?: Record<string, unknown>;
-  source?: SceneItemInstance;
-};
-
-export type RuntimeContext = {
-  scene: SceneSnapshot;
-  theme?: ThemeTokens;
-  action: (action: RuntimeAction) => void;
-  emit: (event: RuntimeEvent) => void;
-};
-
 export type CatalogImplementation<TItem = unknown> = {
   catalog: {
     id: string;

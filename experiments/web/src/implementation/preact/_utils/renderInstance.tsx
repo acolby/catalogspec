@@ -1,5 +1,5 @@
-import type { RuntimeContext, SceneItemInstance } from "../../../shared/types";
-import type { PreactCatalogImplementation } from "./types";
+import type { SceneItemInstance } from "../../../shared/types";
+import type { PreactCatalogImplementation, RuntimeContext } from "./types";
 
 export function renderPreactInstance(instance: SceneItemInstance, implementation: PreactCatalogImplementation, runtime: RuntimeContext) {
   const Component = implementation.items[instance.item];

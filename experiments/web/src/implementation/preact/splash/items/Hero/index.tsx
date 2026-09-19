@@ -1,5 +1,5 @@
 import type { PreactItemComponentProps } from "../../../_utils";
-import type { HeroProps } from "../../types";
+import type { HeroProps } from "../../generated";
 
 export function Hero({ props, slots, runtime }: PreactItemComponentProps<HeroProps>) {
   const theme = runtime.theme;

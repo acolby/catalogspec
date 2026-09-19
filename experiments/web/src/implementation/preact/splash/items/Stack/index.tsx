@@ -1,5 +1,5 @@
 import type { PreactItemComponentProps } from "../../../_utils";
-import type { StackProps } from "../../types";
+import type { StackProps } from "../../generated";
 
 export function Stack({ props, slots, runtime }: PreactItemComponentProps<StackProps>) {
   const direction = props.direction ?? "vertical";

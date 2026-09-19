@@ -1,36 +1,26 @@
 import { render } from "preact";
-import { useEffect, useMemo, useState } from "preact/hooks";
-import type { RuntimeTransport } from "../../../runtime/RuntimeCoordinator";
-import { RuntimeCoordinator } from "../../../runtime/RuntimeCoordinator";
+import { useEffect, useState } from "preact/hooks";
+import type { createRuntimeCoordinator } from "../../../coordinator";
 import type { SceneSnapshot } from "../../../shared/types";
 import { PreactRenderScene } from "./renderScene";
 import type { PreactCatalogImplementation } from "./types";
 
 export type MountPreactRuntimeOptions = {
   root: Element;
-  transport: RuntimeTransport;
+  coordinator: Awaited<ReturnType<typeof createRuntimeCoordinator>>;
   implementations: PreactCatalogImplementation[];
-  initialScene: SceneSnapshot;
 };
 
 export function mountPreactRuntime(options: MountPreactRuntimeOptions): void {
   render(<PreactRuntimeRoot {...options} />, options.root);
 }
 
-function PreactRuntimeRoot({ transport, implementations, initialScene }: MountPreactRuntimeOptions) {
-  const coordinator = useMemo(() => new RuntimeCoordinator(transport, implementations, initialScene), [transport, implementations, initialScene]);
+function PreactRuntimeRoot({ coordinator, implementations }: MountPreactRuntimeOptions) {
   const [scene, setScene] = useState<SceneSnapshot>(coordinator.getScene());
 
-  useEffect(() => {
-    const unsubscribe = coordinator.onSceneChange(setScene);
-    coordinator.start();
-    return () => {
-      unsubscribe();
-      coordinator.stop();
-    };
-  }, [coordinator]);
+  useEffect(() => coordinator.onSceneChange(setScene), [coordinator]);
 
-  const implementation = coordinator.getImplementation(scene);
+  const implementation = getImplementation(scene, implementations);
 
   return (
     <main class="runtime-frame-root">
@@ -42,4 +32,8 @@ function PreactRuntimeRoot({ transport, implementations, initialScene }: MountPr
       )}
     </main>
   );
+}
+
+function getImplementation(scene: SceneSnapshot, implementations: PreactCatalogImplementation[]): PreactCatalogImplementation | undefined {
+  return implementations.find((implementation) => implementation.catalog.id === scene.catalog.id && implementation.catalog.version === scene.catalog.version);
 }

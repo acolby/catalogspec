@@ -11,7 +11,8 @@ experiments/web/
   catalogs/splash/      CatalogSpec catalog contract
   scenes/               SceneSpec-style JSON snapshots
   src/shell/            host/tooling UI outside the iframe
-  src/runtime/          framework-neutral runtime coordinator/transport used by runtime.html
+  src/coordinator/      scene coordination, local scene API shim, and environment transports
+  src/runtime/          runtime.html entrypoint
   src/implementation/
     preact/_utils/      Preact-coupled runtime mounting and scene rendering utilities
     preact/splash/      Preact implementation of the Splash catalog
@@ -27,7 +28,8 @@ Shell page: /index.html
         ▼
 Runtime page: /runtime.html
   thin entrypoint at src/runtime/main.ts
-  iframe-safe runtime coordinator
+  scene coordinator imported from src/coordinator
+  default iframe postMessage transport
   Preact mount/render utilities from implementation/preact/_utils
   Preact Splash implementation
 ```
@@ -57,10 +59,10 @@ http://localhost:5173/
 
 ## Notes
 
-The current runtime accepts full scene replacement only:
+The current runtime accepts scene load requests only:
 
 ```ts
-{ type: "catalogspec.scene.replace", scene }
+{ type: "catalogspec.scene.load", sceneId }
 ```
 
 Streaming updates, framework-neutral implementation manifests, formal SceneSpec validation, and action handling are intentionally deferred.
