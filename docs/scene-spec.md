@@ -125,7 +125,9 @@ An item instance has a stable `id` within the scene and an `item` field that ref
 | `state` | Concrete or initial values conforming to the catalog item's `state` contract |
 | `slots` | Slot content keyed by catalog-defined slot names |
 
-Instance IDs must be unique within a scene. They are used for persistence, inspection, and future update operations.
+Every scene item instance, including the root and all nested slot children, must have a stable `id`. Instance IDs must be unique within a scene and should remain stable across updates while the same conceptual instance persists.
+
+They are used for persistence, inspection, future update operations, event routing, and action requests. See [ADR 0002](./adrs/0002-scene-item-instance-identity.md).
 
 ## Root instance
 
