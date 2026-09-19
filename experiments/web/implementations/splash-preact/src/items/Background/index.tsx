@@ -1,4 +1,4 @@
-import type { PreactItemComponentProps } from "../../../_utils";
+import type { PreactItemComponentProps } from "../../../../../renderers/preact";
 import type { BackgroundProps } from "../../generated";
 
 export function Background({ props }: PreactItemComponentProps<BackgroundProps>) {

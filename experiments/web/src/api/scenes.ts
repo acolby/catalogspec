@@ -1,6 +1,6 @@
-import launchHero from "../../../scenes/launch-hero.json";
-import productWaitlist from "../../../scenes/product-waitlist.json";
-import type { SceneSnapshot } from "../../shared/types";
+import launchHero from "../../scenes/launch-hero.json";
+import productWaitlist from "../../scenes/product-waitlist.json";
+import type { SceneSnapshot } from "../shared/types";
 
 const scenes = {
   "launch-hero": launchHero as SceneSnapshot,

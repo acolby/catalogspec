@@ -1,6 +1,6 @@
 import type { ComponentChildren, ComponentType } from "preact";
-import type { createRuntimeCoordinator } from "../../../coordinator";
-import type { CatalogImplementation, SceneItemInstance, SceneSnapshot, ThemeTokens } from "../../../shared/types";
+import type { createRuntimeCoordinator } from "../../../src/coordinator";
+import type { CatalogImplementation, SceneItemInstance, SceneSnapshot, ThemeTokens } from "../../../src/shared/types";
 
 type Coordinator = Awaited<ReturnType<typeof createRuntimeCoordinator>>;
 

@@ -1,4 +1,4 @@
-import { sceneIds } from "./api";
+import { api } from "../api";
 import type { HostToRuntimeMessage, RuntimeToHostMessage } from "./protocol";
 import { IframeHostTransport } from "./transports/iframeHostTransport";
 
@@ -74,7 +74,7 @@ export function createHostCoordinator(options: CreateHostCoordinatorOptions): Ho
 
   return {
     getSceneIds() {
-      return sceneIds;
+      return api.sceneIds;
     },
 
     loadScene(sceneId) {

@@ -1,4 +1,4 @@
-import type { PreactItemComponentProps } from "../../../_utils";
+import type { PreactItemComponentProps } from "../../../../../renderers/preact";
 import type { StackProps } from "../../generated";
 
 export function Stack({ props, slots, runtime }: PreactItemComponentProps<StackProps>) {

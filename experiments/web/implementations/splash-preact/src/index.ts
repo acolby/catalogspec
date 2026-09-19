@@ -1,4 +1,4 @@
-import type { PreactCatalogImplementation } from "../_utils";
+import type { PreactCatalogImplementation } from "../../../renderers/preact";
 import { catalog, themes } from "./generated";
 import { Background } from "./items/Background";
 import { CallToAction } from "./items/CallToAction";

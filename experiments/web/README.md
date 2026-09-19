@@ -11,11 +11,13 @@ experiments/web/
   catalogs/splash/      CatalogSpec catalog contract
   scenes/               SceneSpec-style JSON snapshots
   src/shell/            host/tooling UI outside the iframe
-  src/coordinator/      scene coordination, local scene API shim, and environment transports
+  src/api/              local API client shim for scenes and implementations
+  src/coordinator/      scene coordination and environment transports
   src/runtime/          runtime.html entrypoint
-  src/implementation/
-    preact/_utils/      Preact-coupled runtime mounting and scene rendering utilities
-    preact/splash/      Preact implementation of the Splash catalog
+  renderers/
+    preact/             Preact scene renderer
+  implementations/
+    splash-preact/      Preact implementation of the Splash catalog
 ```
 
 ## Boundary
@@ -30,8 +32,8 @@ Runtime page: /runtime.html
   thin entrypoint at src/runtime/main.ts
   scene coordinator imported from src/coordinator
   default iframe postMessage transport
-  Preact mount/render utilities from implementation/preact/_utils
-  Preact Splash implementation
+  Preact scene renderer from renderers/preact
+  Preact Splash implementation from implementations/splash-preact
 ```
 
 The runtime page can also be opened directly:

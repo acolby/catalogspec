@@ -1,17 +1,17 @@
-import type { SceneSnapshot, ThemeTokens } from "../../../shared/types";
-import { renderPreactInstance } from "./renderInstance";
+import type { SceneSnapshot, ThemeTokens } from "../../../src/shared/types";
+import { renderInstance } from "./renderInstance";
 import type { PreactCatalogImplementation, RuntimeContext } from "./types";
 
-export type PreactRenderSceneProps = {
+export type RenderSceneProps = {
   scene: SceneSnapshot;
   implementation: PreactCatalogImplementation;
   onAction: RuntimeContext["action"];
   onEvent: RuntimeContext["emit"];
 };
 
-export function PreactRenderScene({ scene, implementation, onAction, onEvent }: PreactRenderSceneProps) {
+export function renderScene({ scene, implementation, onAction, onEvent }: RenderSceneProps) {
   if (scene.catalog.id !== implementation.catalog.id || scene.catalog.version !== implementation.catalog.version) {
-    return <PreactRuntimeError message={`No matching implementation for ${scene.catalog.id}@${scene.catalog.version}.`} />;
+    return <RuntimeError message={`No matching implementation for ${scene.catalog.id}@${scene.catalog.version}.`} />;
   }
 
   const theme = resolveTheme(scene, implementation);
@@ -24,7 +24,7 @@ export function PreactRenderScene({ scene, implementation, onAction, onEvent }: 
 
   return (
     <div class="scene-root" style={{ fontFamily: theme?.font?.body, color: theme?.color?.text, background: theme?.color?.background }}>
-      {renderPreactInstance(scene.root, implementation, runtime)}
+      {renderInstance(scene.root, implementation, runtime)}
     </div>
   );
 }
@@ -33,6 +33,6 @@ function resolveTheme(scene: SceneSnapshot, implementation: PreactCatalogImpleme
   return implementation.themes?.[scene.theme ?? "light"] ?? implementation.themes?.light;
 }
 
-function PreactRuntimeError({ message }: { message: string }) {
+function RuntimeError({ message }: { message: string }) {
   return <div class="runtime-error">{message}</div>;
 }

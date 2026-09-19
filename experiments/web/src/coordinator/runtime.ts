@@ -1,5 +1,5 @@
 import type { SceneSnapshot } from "../shared/types";
-import { fetchScene } from "./api";
+import { api } from "../api";
 import type { HostToRuntimeMessage, RuntimeAction, RuntimeEvent, RuntimeToHostMessage } from "./protocol";
 import { IframeRuntimeTransport } from "./transports/iframeRuntimeTransport";
 
@@ -27,7 +27,7 @@ type CreateRuntimeCoordinatorOptions = {
 };
 
 export async function createRuntimeCoordinator(options: CreateRuntimeCoordinatorOptions): Promise<RuntimeCoordinator> {
-  const loadScene = options.fetchScene ?? fetchScene;
+  const loadScene = options.fetchScene ?? api.fetchScene;
   const initialScene = options.initialScene ?? await loadScene(options.sceneId);
   const transport = options.transport ?? new IframeRuntimeTransport({
     targetOrigin: options.targetOrigin ?? window.location.origin,

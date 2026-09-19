@@ -1,4 +1,4 @@
-import type { PreactItemComponentProps } from "../../../_utils";
+import type { PreactItemComponentProps } from "../../../../../renderers/preact";
 import type { CallToActionProps, ThemeTokens } from "../../generated";
 
 export function CallToAction({ instance, props, runtime }: PreactItemComponentProps<CallToActionProps>) {
