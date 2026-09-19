@@ -1,15 +1,16 @@
 import type { SceneSnapshot, ThemeTokens } from "../../../src/shared/types";
-import { renderInstance } from "./renderInstance";
 import type { PreactCatalogImplementation, RuntimeContext } from "./types";
+import type { RenderItem } from "./renderItem";
 
 export type RenderSceneProps = {
   scene: SceneSnapshot;
   implementation: PreactCatalogImplementation;
+  renderItem: RenderItem;
   onAction: RuntimeContext["action"];
   onEvent: RuntimeContext["emit"];
 };
 
-export function renderScene({ scene, implementation, onAction, onEvent }: RenderSceneProps) {
+export function renderScene({ scene, implementation, renderItem, onAction, onEvent }: RenderSceneProps) {
   if (scene.catalog.id !== implementation.catalog.id || scene.catalog.version !== implementation.catalog.version) {
     return <RuntimeError message={`No matching implementation for ${scene.catalog.id}@${scene.catalog.version}.`} />;
   }
@@ -24,7 +25,7 @@ export function renderScene({ scene, implementation, onAction, onEvent }: Render
 
   return (
     <div class="scene-root" style={{ fontFamily: theme?.font?.body, color: theme?.color?.text, background: theme?.color?.background }}>
-      {renderInstance(scene.root, implementation, runtime)}
+      {renderItem(scene.root, implementation, runtime)}
     </div>
   );
 }
