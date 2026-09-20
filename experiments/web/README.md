@@ -17,7 +17,7 @@ experiments/web/
   renderers/
     preact/             Preact scene renderer
   implementations/
-    splash-preact/      Preact implementation of the Splash catalog
+    preact/splash/      Preact implementation of the Splash catalog
 ```
 
 ## Boundary
@@ -33,7 +33,7 @@ Runtime page: /runtime.html
   scene coordinator imported from src/coordinator
   default iframe postMessage transport
   Preact scene renderer from renderers/preact
-  Preact Splash implementation from implementations/splash-preact
+  Preact Splash implementation from implementations/preact/splash
 ```
 
 The runtime page can also be opened directly:

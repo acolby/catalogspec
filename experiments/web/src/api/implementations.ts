@@ -1,4 +1,4 @@
-import { preactImplementation } from "../../implementations/splash-preact";
+import { preactImplementation } from "../../implementations/preact/splash";
 import type { PreactCatalogImplementation } from "../../renderers/preact";
 import type { SceneSnapshot } from "../shared/types";
 

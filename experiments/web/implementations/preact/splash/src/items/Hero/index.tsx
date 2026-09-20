@@ -1,4 +1,4 @@
-import type { PreactItemComponentProps } from "../../../../../renderers/preact";
+import type { PreactItemComponentProps } from "../../../../../../renderers/preact";
 import type { HeroProps } from "../../generated";
 
 export function Hero({ props, slots, runtime }: PreactItemComponentProps<HeroProps>) {

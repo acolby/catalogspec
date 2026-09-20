@@ -1,5 +1,5 @@
 import { render, type ComponentChild } from "preact";
-import { createSceneMounter } from "../../../src/coordinator/createSceneMounter";
+import { createSceneMounter } from "../../createSceneMounter";
 import { renderItem } from "./renderItem";
 import { renderScene } from "./renderScene";
 

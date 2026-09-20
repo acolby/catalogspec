@@ -1,14 +1,12 @@
 import type { ComponentChildren, ComponentType } from "preact";
-import type { createRuntimeCoordinator } from "../../../src/coordinator";
+import type { RuntimeCoordinator } from "../../../src/coordinator";
 import type { CatalogImplementation, SceneItemInstance, SceneSnapshot, ThemeTokens } from "../../../src/shared/types";
-
-type Coordinator = Awaited<ReturnType<typeof createRuntimeCoordinator>>;
 
 export type RuntimeContext = {
   scene: SceneSnapshot;
   theme?: ThemeTokens;
-  action: Coordinator["handleAction"];
-  emit: Coordinator["handleEvent"];
+  action: RuntimeCoordinator["handleAction"];
+  emit: RuntimeCoordinator["handleEvent"];
 };
 
 export type PreactItemComponentProps<TProps extends Record<string, unknown> = Record<string, unknown>> = {

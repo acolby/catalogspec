@@ -13,6 +13,6 @@ export async function mountScene({ root, sceneId }: MountSceneOptions): Promise<
   mountPreactScene({
     root,
     coordinator,
-    resolveImplementation: api.resolveImplementation,
+    api,
   });
 }
