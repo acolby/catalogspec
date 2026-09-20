@@ -1,6 +1,6 @@
 import { render, type ComponentChild } from "preact";
 import { createSceneMounter } from "../../createSceneMounter";
-import { renderItem } from "./renderItem";
+import { renderImplementedItem } from "./renderImplementedItem";
 import { renderScene } from "./renderScene";
 
 export const mountScene = createSceneMounter({
@@ -8,7 +8,7 @@ export const mountScene = createSceneMounter({
     render(view, root);
   },
   renderScene,
-  renderItem,
+  renderImplementedItem,
 });
 
 export type MountSceneOptions = Parameters<typeof mountScene>[0];

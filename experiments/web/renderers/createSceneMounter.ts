@@ -2,16 +2,17 @@ import type { ApiClient } from "../src/api";
 import type { RuntimeCoordinator } from "../src/coordinator";
 import type { SceneSnapshot } from "../src/shared/types";
 
-export type CreateSceneMounterOptions<TImplementation, TView, TRenderItem> = {
+export type CreateSceneMounterOptions<TImplementation, TView, TRenderImplementedItem> = {
   renderView(root: Element, view: TView): void;
   renderScene(input: {
     scene: SceneSnapshot;
     implementation: TImplementation;
-    renderItem: TRenderItem;
+    renderImplementedItem: TRenderImplementedItem;
     onAction: RuntimeCoordinator["handleAction"];
     onEvent: RuntimeCoordinator["handleEvent"];
+    requestRender(): void;
   }): TView;
-  renderItem: TRenderItem;
+  renderImplementedItem: TRenderImplementedItem;
 };
 
 export type SceneMounterOptions<TImplementation> = {
@@ -20,15 +21,17 @@ export type SceneMounterOptions<TImplementation> = {
   api: ApiClient<TImplementation>;
 };
 
-export function createSceneMounter<TImplementation, TView, TRenderItem>({
+export function createSceneMounter<TImplementation, TView, TRenderImplementedItem>({
   renderView,
   renderScene,
-  renderItem,
-}: CreateSceneMounterOptions<TImplementation, TView, TRenderItem>) {
+  renderImplementedItem,
+}: CreateSceneMounterOptions<TImplementation, TView, TRenderImplementedItem>) {
   return function mountScene({ root, coordinator, api }: SceneMounterOptions<TImplementation>): () => void {
     let version = 0;
+    let currentScene = coordinator.getScene();
 
-    return coordinator.onSceneChange((scene) => {
+    function renderCurrentScene(): void {
+      const scene = currentScene;
       const currentVersion = ++version;
 
       api.resolveImplementation(scene)
@@ -40,15 +43,21 @@ export function createSceneMounter<TImplementation, TView, TRenderItem>({
             renderScene({
               scene,
               implementation,
-              renderItem,
+              renderImplementedItem,
               onAction: coordinator.handleAction,
               onEvent: coordinator.handleEvent,
+              requestRender: renderCurrentScene,
             }),
           );
         })
         .catch((error: unknown) => {
           console.error("Unable to resolve scene implementation.", error);
         });
+    }
+
+    return coordinator.onSceneChange((scene) => {
+      currentScene = scene;
+      renderCurrentScene();
     });
   };
 }

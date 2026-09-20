@@ -4,7 +4,7 @@
 export const catalog = {
   id: "splash",
   version: 1,
-  items: ["Hero", "CallToAction", "Background", "Stack"],
+  items: ["Hero", "CallToAction", "Background", "Stack", "Counter"],
   themes: {
     default: "light",
     available: ["light", "dark"],
@@ -125,4 +125,8 @@ export type StackProps = {
   direction?: "vertical" | "horizontal";
   gap?: "xs" | "sm" | "md" | "lg" | "xl";
   align?: "start" | "center" | "end" | "stretch";
+};
+
+export type CounterProps = {
+  label?: string;
 };

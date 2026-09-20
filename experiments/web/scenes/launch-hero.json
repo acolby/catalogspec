@@ -59,7 +59,20 @@
           "slots": {}
         }
       ],
-      "content": []
+      "content": [
+        {
+          "id": "launch-hero-counter",
+          "item": "Counter",
+          "props": {
+            "label": "State model experiment"
+          },
+          "state": {
+            "count": 3,
+            "initialCount": 3
+          },
+          "slots": {}
+        }
+      ]
     }
   }
 }

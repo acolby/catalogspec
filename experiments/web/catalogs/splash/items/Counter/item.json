@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "title": "Counter",
+  "description": "Stateful counter used to explore framework-independent item models and action-driven state updates.",
+  "kind": "component",
+  "props": {
+    "label": {
+      "type": "string",
+      "description": "Label displayed above the counter.",
+      "default": "Counter"
+    }
+  },
+  "state": {
+    "count": {
+      "type": "number",
+      "description": "Current count value managed by the item model.",
+      "default": 0
+    },
+    "initialCount": {
+      "type": "number",
+      "description": "Count used when the item model reset action is called.",
+      "default": 0
+    }
+  },
+  "slots": {},
+  "actions": {
+    "increment": {
+      "title": "Increment",
+      "description": "Increases the count by one.",
+      "props": {}
+    },
+    "decrement": {
+      "title": "Decrement",
+      "description": "Decreases the count by one.",
+      "props": {}
+    },
+    "reset": {
+      "title": "Reset",
+      "description": "Resets the count to the initial count.",
+      "props": {}
+    }
+  },
+  "events": {
+    "stateChanged": {
+      "title": "State Changed",
+      "description": "Emitted when the counter model state changes.",
+      "props": {
+        "state": { "type": "object" },
+        "previous": { "type": "object" }
+      }
+    }
+  }
+}

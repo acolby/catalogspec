@@ -1,9 +1,15 @@
-import type { PreactItemComponentProps } from "../../../../../../renderers/preact";
-import type { BackgroundProps } from "../../generated";
+import type { ComponentChildren } from "preact";
+import { defineImplementedItem } from "../../../../../../renderers";
+import type { BackgroundProps, ThemeTokens } from "../../generated";
+import { model, type BackgroundActions, type BackgroundState } from "./model";
 
-export function Background({ props }: PreactItemComponentProps<BackgroundProps>) {
-  return <div aria-hidden="true" style={{ position: "absolute", inset: 0, ...backgroundStyle(props) }} />;
-}
+export const Background = defineImplementedItem<ComponentChildren, BackgroundProps, BackgroundState, BackgroundActions, ThemeTokens>({
+  model,
+
+  view({ props }) {
+    return <div aria-hidden="true" style={{ position: "absolute", inset: 0, ...backgroundStyle(props) }} />;
+  },
+});
 
 function backgroundStyle(props: BackgroundProps) {
   if (props.kind === "image" && props.imageUrl) {

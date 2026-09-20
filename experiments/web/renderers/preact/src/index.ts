@@ -1,7 +1,6 @@
 export { mountScene } from "./mountScene";
 export type { MountSceneOptions } from "./mountScene";
-export { renderItem } from "./renderItem";
-export type { RenderItem } from "./renderItem";
+export { renderImplementedItem } from "./renderImplementedItem";
+export type { RenderImplementedItem } from "./renderImplementedItem";
 export { renderScene } from "./renderScene";
 export type { RenderSceneProps } from "./renderScene";
-export type { PreactCatalogImplementation, PreactItemComponent, PreactItemComponentProps } from "./types";
