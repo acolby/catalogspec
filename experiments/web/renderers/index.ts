@@ -10,5 +10,5 @@ export type {
   ImplementedItemContext,
   ImplementedItemInput,
   RendererRuntimeContext,
-  ComposeImplementedItemView,
+  ComposeView,
 } from "./types";

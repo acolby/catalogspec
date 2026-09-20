@@ -47,7 +47,7 @@ export type RendererRuntimeContext = {
   requestRender(): void;
 };
 
-export type ComposeImplementedItemView<TView, TImplementedCatalog> = (
+export type ComposeView<TView, TImplementedCatalog> = (
   instance: SceneItemInstance,
   implementedCatalog: TImplementedCatalog,
   runtime: RendererRuntimeContext,
