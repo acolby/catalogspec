@@ -1,7 +1,7 @@
 export { createSceneMounter } from "./createSceneMounter";
 export type { CreateSceneMounterOptions, SceneMounterOptions } from "./createSceneMounter";
-export { defineImplementedItem, isModelBackedImplementedItem } from "./implementedItem";
-export type { ModelBackedImplementedItem } from "./implementedItem";
+export { isModelBackedImplementedItem } from "./implementedItem";
+export type { ImplementedItemView, ModelBackedImplementedItem } from "./implementedItem";
 export type {
   ActionHandler,
   EventEmitter,
@@ -10,5 +10,5 @@ export type {
   ImplementedItemContext,
   ImplementedItemInput,
   RendererRuntimeContext,
-  RenderImplementedItem,
+  ComposeImplementedItemView,
 } from "./types";

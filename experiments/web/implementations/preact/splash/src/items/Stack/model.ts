@@ -1,10 +1,7 @@
-import { defineItemModel } from "../../../../../../models";
+import type { Model } from "./types";
 
-export type StackState = Record<string, never>;
-export type StackActions = Record<string, never>;
-
-export const model = defineItemModel<StackState, StackActions>({
+export const model = {
   actions() {
     return {};
   },
-});
+} satisfies Model;

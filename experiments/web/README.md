@@ -14,8 +14,9 @@ experiments/web/
   src/api/              local API client shim for scenes and implementations
   src/coordinator/      scene coordination and environment transports
   src/runtime/          runtime.html entrypoint
+  models/               experimental framework-agnostic model primitives
   renderers/
-    preact/             Preact scene renderer
+    preact/             Preact view renderer
   implementations/
     preact/splash/      Preact implementation of the Splash catalog
 ```
@@ -32,7 +33,7 @@ Runtime page: /runtime.html
   thin entrypoint at src/runtime/main.ts
   scene coordinator imported from src/coordinator
   default iframe postMessage transport
-  Preact scene renderer from renderers/preact
+  Preact view renderer from renderers/preact
   Preact Splash implementation from implementations/preact/splash
 ```
 

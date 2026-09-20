@@ -1,10 +1,7 @@
-import { defineItemModel } from "../../../../../../models";
+import type { Model } from "./types";
 
-export type CallToActionState = Record<string, never>;
-export type CallToActionActions = Record<string, never>;
-
-export const model = defineItemModel<CallToActionState, CallToActionActions>({
+export const model = {
   actions() {
     return {};
   },
-});
+} satisfies Model;

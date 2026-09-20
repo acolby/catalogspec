@@ -18,12 +18,6 @@ export type ItemModelDefinition<State extends object, Actions extends Record<str
   actions: CreateItemActions<State, Actions>;
 };
 
-export function defineItemModel<State extends object, Actions extends Record<string, (...args: any[]) => any>>(
-  definition: ItemModelDefinition<State, Actions>,
-): ItemModelDefinition<State, Actions> {
-  return definition;
-}
-
 export function createItemModel<State extends object, Actions extends Record<string, (...args: any[]) => any>>(
   initialState: State,
   definition: ItemModelDefinition<State, Actions>,

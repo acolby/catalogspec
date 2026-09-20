@@ -1,10 +1,7 @@
-import { defineItemModel } from "../../../../../../models";
+import type { Model } from "./types";
 
-export type HeroState = Record<string, never>;
-export type HeroActions = Record<string, never>;
-
-export const model = defineItemModel<HeroState, HeroActions>({
+export const model = {
   actions() {
     return {};
   },
-});
+} satisfies Model;

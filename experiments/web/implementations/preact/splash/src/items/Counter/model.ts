@@ -1,17 +1,6 @@
-import { defineItemModel } from "../../../../../../models";
+import type { Model } from "./types";
 
-export type CounterState = {
-  count: number;
-  initialCount: number;
-};
-
-export type CounterActions = {
-  increment(): void;
-  decrement(): void;
-  reset(): void;
-};
-
-export const model = defineItemModel<CounterState, CounterActions>({
+export const model = {
   actions(state) {
     return {
       increment() {
@@ -25,4 +14,4 @@ export const model = defineItemModel<CounterState, CounterActions>({
       },
     };
   },
-});
+} satisfies Model;

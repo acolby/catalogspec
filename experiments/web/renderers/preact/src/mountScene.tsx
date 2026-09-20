@@ -1,14 +1,14 @@
 import { render, type ComponentChild } from "preact";
 import { createSceneMounter } from "../../createSceneMounter";
-import { renderImplementedItem } from "./renderImplementedItem";
-import { renderScene } from "./renderScene";
+import { composeImplementedItemView } from "./composeImplementedItemView";
+import { composeSceneView } from "./composeSceneView";
 
 export const mountScene = createSceneMounter({
   renderView(root: Element, view: ComponentChild) {
     render(view, root);
   },
-  renderScene,
-  renderImplementedItem,
+  composeSceneView,
+  composeImplementedItemView,
 });
 
 export type MountSceneOptions = Parameters<typeof mountScene>[0];

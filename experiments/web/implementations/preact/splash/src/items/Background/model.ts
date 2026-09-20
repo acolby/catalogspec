@@ -1,10 +1,7 @@
-import { defineItemModel } from "../../../../../../models";
+import type { Model } from "./types";
 
-export type BackgroundState = Record<string, never>;
-export type BackgroundActions = Record<string, never>;
-
-export const model = defineItemModel<BackgroundState, BackgroundActions>({
+export const model = {
   actions() {
     return {};
   },
-});
+} satisfies Model;

@@ -2,17 +2,17 @@ import type { ApiClient } from "../src/api";
 import type { RuntimeCoordinator } from "../src/coordinator";
 import type { SceneSnapshot } from "../src/shared/types";
 
-export type CreateSceneMounterOptions<TImplementation, TView, TRenderImplementedItem> = {
+export type CreateSceneMounterOptions<TImplementation, TView, TComposeImplementedItemView> = {
   renderView(root: Element, view: TView): void;
-  renderScene(input: {
+  composeSceneView(input: {
     scene: SceneSnapshot;
     implementation: TImplementation;
-    renderImplementedItem: TRenderImplementedItem;
+    composeImplementedItemView: TComposeImplementedItemView;
     onAction: RuntimeCoordinator["handleAction"];
     onEvent: RuntimeCoordinator["handleEvent"];
     requestRender(): void;
   }): TView;
-  renderImplementedItem: TRenderImplementedItem;
+  composeImplementedItemView: TComposeImplementedItemView;
 };
 
 export type SceneMounterOptions<TImplementation> = {
@@ -21,16 +21,16 @@ export type SceneMounterOptions<TImplementation> = {
   api: ApiClient<TImplementation>;
 };
 
-export function createSceneMounter<TImplementation, TView, TRenderImplementedItem>({
+export function createSceneMounter<TImplementation, TView, TComposeImplementedItemView>({
   renderView,
-  renderScene,
-  renderImplementedItem,
-}: CreateSceneMounterOptions<TImplementation, TView, TRenderImplementedItem>) {
+  composeSceneView,
+  composeImplementedItemView,
+}: CreateSceneMounterOptions<TImplementation, TView, TComposeImplementedItemView>) {
   return function mountScene({ root, coordinator, api }: SceneMounterOptions<TImplementation>): () => void {
     let version = 0;
     let currentScene = coordinator.getScene();
 
-    function renderCurrentScene(): void {
+    function composeAndRenderCurrentScene(): void {
       const scene = currentScene;
       const currentVersion = ++version;
 
@@ -40,13 +40,13 @@ export function createSceneMounter<TImplementation, TView, TRenderImplementedIte
 
           renderView(
             root,
-            renderScene({
+            composeSceneView({
               scene,
               implementation,
-              renderImplementedItem,
+              composeImplementedItemView,
               onAction: coordinator.handleAction,
               onEvent: coordinator.handleEvent,
-              requestRender: renderCurrentScene,
+              requestRender: composeAndRenderCurrentScene,
             }),
           );
         })
@@ -57,7 +57,7 @@ export function createSceneMounter<TImplementation, TView, TRenderImplementedIte
 
     return coordinator.onSceneChange((scene) => {
       currentScene = scene;
-      renderCurrentScene();
+      composeAndRenderCurrentScene();
     });
   };
 }
