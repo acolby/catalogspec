@@ -4,7 +4,7 @@
 export const catalog = {
   id: "splash",
   version: 1,
-  items: ["Hero", "CallToAction", "Background", "Stack", "Counter"],
+  items: ["Hero", "CallToAction", "Background", "Stack", "Counter", "Modal", "BetaSignupForm"],
   themes: {
     default: "light",
     available: ["light", "dark"],
@@ -129,4 +129,17 @@ export type StackProps = {
 
 export type CounterProps = {
   label?: string;
+};
+
+export type ModalProps = {
+  triggerLabel: string;
+  title: string;
+};
+
+export type BetaSignupFormProps = {
+  title: string;
+  description?: string;
+  emailPlaceholder?: string;
+  submitLabel?: string;
+  successMessage?: string;
 };

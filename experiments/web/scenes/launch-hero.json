@@ -71,6 +71,37 @@
             "initialCount": 3
           },
           "slots": {}
+        },
+        {
+          "id": "launch-hero-beta-modal",
+          "item": "Modal",
+          "props": {
+            "triggerLabel": "Join the beta",
+            "title": "Join the private beta"
+          },
+          "state": {
+            "open": false
+          },
+          "slots": {
+            "content": [
+              {
+                "id": "launch-hero-beta-form",
+                "item": "BetaSignupForm",
+                "props": {
+                  "title": "Request early access",
+                  "description": "Get notified when CatalogSpec runtime experiments are ready for more builders.",
+                  "emailPlaceholder": "builder@example.com",
+                  "submitLabel": "Request invite",
+                  "successMessage": "Thanks — you're on the beta list."
+                },
+                "state": {
+                  "email": "",
+                  "submitted": false
+                },
+                "slots": {}
+              }
+            ]
+          }
         }
       ]
     }
