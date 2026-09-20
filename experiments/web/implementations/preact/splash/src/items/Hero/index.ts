@@ -1,8 +1,10 @@
+import { lifecycle } from "./lifecycle";
 import { model } from "./model";
 import type { Item } from "./types";
 import { view } from "./view";
 
 export const Hero = {
   model,
+  lifecycle,
   view,
 } satisfies Item;

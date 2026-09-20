@@ -1,5 +1,6 @@
 import type { RuntimeCoordinator } from "../src/coordinator";
 import type { CatalogImplementation, SceneItemInstance, SceneSnapshot, ThemeTokens } from "../src/shared/types";
+import type { LifecycleFrame } from "./implementedItem";
 
 export type ActionHandler = (props?: Record<string, unknown>) => void;
 
@@ -48,6 +49,10 @@ export type RendererRuntimeContext = {
   emit: RuntimeCoordinator["handleEvent"];
   sceneState: Record<string, unknown>;
   sceneActions: Record<string, (...args: any[]) => any>;
+  lifecycle: {
+    enterItem(id: string, unmount?: () => void): void;
+    onTick(callback: (frame: LifecycleFrame) => void): () => void;
+  };
   requestRender(): void;
 };
 

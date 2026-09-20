@@ -50,7 +50,26 @@ export const Counter = {
 } satisfies Item;
 ```
 
-Initial/current item state is supplied by the scene/runtime item instance, not by the implemented item view. Scene-level state is supplied by the scene snapshot and may be backed by an implementation-level `model.ts`. `composeView` is the adapter that creates/looks up item models, passes readonly model state and bound actions into item views, emits state transitions, and requests a renderer update. This is intentionally early scaffolding for framework-independent state/action handling and debug tooling.
+Items provide a lifecycle file for runtime-driven orchestration. Individual lifecycle hooks are optional; an empty lifecycle object is a no-op:
+
+```ts
+export const lifecycle = {} satisfies Lifecycle;
+
+// Or, for runtime tick behavior:
+export const lifecycle = {
+  tick({ actions }, frame) {
+    actions.advance({ deltaMs: frame.deltaMs });
+  },
+} satisfies Lifecycle;
+
+export const Background = {
+  model,
+  lifecycle,
+  view,
+} satisfies Item;
+```
+
+Initial/current item state is supplied by the scene/runtime item instance, not by the implemented item view. Scene-level state is supplied by the scene snapshot and may be backed by an implementation-level `model.ts`. `composeView` is the adapter that creates/looks up item models, passes readonly model state and bound actions into item views, calls optional model lifecycle hooks, emits state transitions, and requests a renderer update. This is intentionally early scaffolding for framework-independent state/action/lifecycle handling and debug tooling.
 
 ## Responsibility split
 
@@ -65,6 +84,7 @@ Shared web/environment utility. It wires together:
 - theme resolution
 - scene-level model creation from `scene.state`
 - renderer runtime context construction
+- model lifecycle tracking and one shared ticker
 - DOM scene root styling
 - a renderer-specific `composeView`
 - a renderer-specific `renderView`
@@ -75,7 +95,7 @@ It does not know Preact, React, Lit, or any specific catalog.
 
 Framework-specific item/tree view composer.
 
-It receives one scene item instance, finds the matching implemented item in the catalog implementation, composes slots recursively, binds model state/actions to the item view, and returns the framework view value for that item tree.
+It receives one scene item instance, finds the matching implemented item in the catalog implementation, composes slots recursively, binds model state/actions to the item view, registers optional lifecycle hooks, and returns the framework view value for that item tree.
 
 ### `renderView`
 

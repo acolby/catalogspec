@@ -1,7 +1,12 @@
 import type { Model } from "./types";
 
 export const model = {
-  actions() {
-    return {};
+  actions(state) {
+    return {
+      advance({ deltaMs }) {
+        state.elapsedMs += deltaMs;
+        state.phase = (state.phase + deltaMs * 0.00008) % 1;
+      },
+    };
   },
 } satisfies Model;

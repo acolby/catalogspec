@@ -12,11 +12,14 @@ export type PreactImplementedCatalog = ImplementedCatalog<PreactImplementedItem,
 type ModelRecord = {
   model: ReturnType<typeof createItemModel<any, any>>;
   unsubscribe: () => void;
+  mounted: boolean;
 };
 
 const itemModels = new Map<string, ModelRecord>();
 
 export function composeView(instance: SceneItemInstance, implementedCatalog: PreactImplementedCatalog, runtime: RendererRuntimeContext) {
+  runtime.lifecycle.enterItem(instance.id);
+
   const implementedItem = implementedCatalog.items[instance.item];
   if (!implementedItem) return <MissingItem instance={instance} />;
 
@@ -39,6 +42,7 @@ export function composeView(instance: SceneItemInstance, implementedCatalog: Pre
 
   if (isModelBackedImplementedItem(implementedItem)) {
     const model = getItemModel(instance, implementedItem, runtime);
+    mountItem(instance, implementedItem, model, runtime);
     const View = implementedItem.view;
 
     return (
@@ -78,8 +82,48 @@ function getItemModel(instance: SceneItemInstance, implementedItem: PreactModelB
     runtime.requestRender();
   });
 
-  itemModels.set(key, { model, unsubscribe });
+  itemModels.set(key, { model, unsubscribe, mounted: false });
   return model;
+}
+
+function mountItem(
+  instance: SceneItemInstance,
+  implementedItem: PreactModelBackedImplementedItem,
+  model: ReturnType<typeof createItemModel<any, any>>,
+  runtime: RendererRuntimeContext,
+): void {
+  const record = itemModels.get(instance.id);
+  if (!record || record.mounted) return;
+
+  const lifecycle = implementedItem.lifecycle;
+  const cleanupMount = lifecycle?.mount?.(lifecycleInput(instance, model, runtime));
+  const unsubscribeTick = lifecycle?.tick
+    ? runtime.lifecycle.onTick((frame) => lifecycle.tick?.(lifecycleInput(instance, model, runtime), frame))
+    : undefined;
+
+  record.mounted = true;
+  runtime.lifecycle.enterItem(instance.id, () => {
+    unsubscribeTick?.();
+    if (typeof cleanupMount === "function") cleanupMount();
+    lifecycle?.unmount?.(lifecycleInput(instance, model, runtime));
+    record.unsubscribe();
+    itemModels.delete(instance.id);
+  });
+}
+
+function lifecycleInput(instance: SceneItemInstance, model: ReturnType<typeof createItemModel<any, any>>, runtime: RendererRuntimeContext) {
+  return {
+    item: { id: instance.id, name: instance.item },
+    props: instance.props ?? {},
+    state: model.state(),
+    actions: model.actions(),
+    emit: (event: string, props?: Record<string, unknown>) => runtime.emit({ name: event, source: instance, props }),
+    scene: {
+      theme: runtime.theme,
+      state: runtime.sceneState,
+      actions: runtime.sceneActions,
+    },
+  };
 }
 
 function createActions(dispatch: (action: string, props?: Record<string, unknown>) => void): Record<string, ActionHandler> {

@@ -29,8 +29,27 @@
       "default": "none"
     }
   },
-  "state": {},
+  "state": {
+    "elapsedMs": {
+      "type": "number",
+      "description": "Elapsed animation time in milliseconds.",
+      "default": 0
+    },
+    "phase": {
+      "type": "number",
+      "description": "Normalized animation phase from 0 to 1.",
+      "default": 0
+    }
+  },
   "slots": {},
-  "actions": {},
+  "actions": {
+    "advance": {
+      "title": "Advance",
+      "description": "Advances decorative background animation state.",
+      "props": {
+        "deltaMs": { "type": "number", "required": true }
+      }
+    }
+  },
   "events": {}
 }

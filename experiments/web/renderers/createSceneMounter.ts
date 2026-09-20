@@ -34,6 +34,11 @@ export function createSceneMounter<TImplementation extends SceneModelImplementat
     let sceneModel: ItemModel<any, any> | undefined;
     let sceneModelKey: string | undefined;
     let unsubscribeSceneModel: (() => void) | undefined;
+    let activeItemIds = new Set<string>();
+    const mountedItemCleanups = new Map<string, () => void>();
+    const tickCallbacks = new Set<(frame: { now: number; deltaMs: number }) => void>();
+    let animationFrame = 0;
+    let previousTick = 0;
 
     function composeAndRenderCurrentScene(): void {
       const scene = currentScene;
@@ -61,15 +66,59 @@ export function createSceneMounter<TImplementation extends SceneModelImplementat
             emit: coordinator.handleEvent,
             sceneState,
             sceneActions,
+            lifecycle: {
+              enterItem(id, unmount) {
+                activeItemIds.add(id);
+                if (unmount && !mountedItemCleanups.has(id)) mountedItemCleanups.set(id, unmount);
+              },
+              onTick(callback) {
+                tickCallbacks.add(callback);
+                startTicker();
+                return () => {
+                  tickCallbacks.delete(callback);
+                  stopTickerIfIdle();
+                };
+              },
+            },
             requestRender: composeAndRenderCurrentScene,
           };
 
+          activeItemIds = new Set<string>();
           applySceneRoot(root, runtime.theme);
           renderView(root, composeView(scene.root, implementation, runtime));
+          unmountInactiveItems();
         })
         .catch((error: unknown) => {
           console.error("Unable to resolve scene implementation.", error);
         });
+    }
+
+    function startTicker(): void {
+      if (animationFrame || tickCallbacks.size === 0) return;
+      previousTick = performance.now();
+      const tick = (now: number) => {
+        animationFrame = 0;
+        const frame = { now, deltaMs: Math.min(now - previousTick, 100) };
+        previousTick = now;
+        for (const callback of [...tickCallbacks]) callback(frame);
+        if (tickCallbacks.size > 0) animationFrame = requestAnimationFrame(tick);
+      };
+      animationFrame = requestAnimationFrame(tick);
+    }
+
+    function stopTickerIfIdle(): void {
+      if (tickCallbacks.size > 0 || !animationFrame) return;
+      cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+    }
+
+    function unmountInactiveItems(): void {
+      for (const [id, cleanup] of [...mountedItemCleanups]) {
+        if (activeItemIds.has(id)) continue;
+        cleanup();
+        mountedItemCleanups.delete(id);
+      }
+      stopTickerIfIdle();
     }
 
     function getSceneModel(scene: SceneSnapshot, implementation: TImplementation): ItemModel<any, any> | undefined {
@@ -87,10 +136,19 @@ export function createSceneMounter<TImplementation extends SceneModelImplementat
       return sceneModel;
     }
 
-    return coordinator.onSceneChange((scene) => {
+    const unsubscribeSceneChange = coordinator.onSceneChange((scene) => {
       currentScene = scene;
       composeAndRenderCurrentScene();
     });
+
+    return () => {
+      unsubscribeSceneChange();
+      unsubscribeSceneModel?.();
+      for (const cleanup of mountedItemCleanups.values()) cleanup();
+      mountedItemCleanups.clear();
+      tickCallbacks.clear();
+      stopTickerIfIdle();
+    };
   };
 }
 
