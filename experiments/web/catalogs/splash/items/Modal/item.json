@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "title": "Modal",
+  "description": "Dialog surface that displays slotted content above the scene.",
+  "kind": "component",
+  "props": {
+    "triggerLabel": {
+      "type": "string",
+      "description": "Label for the button that opens the modal.",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "description": "Accessible modal title.",
+      "required": true
+    }
+  },
+  "state": {
+    "open": {
+      "type": "boolean",
+      "description": "Whether the modal is currently visible.",
+      "default": false
+    }
+  },
+  "slots": {
+    "content": {
+      "description": "Modal body content. Usually contains a form or focused interaction.",
+      "items": ["BetaSignupForm"]
+    }
+  },
+  "actions": {
+    "open": {
+      "title": "Open",
+      "description": "Shows the modal.",
+      "props": {}
+    },
+    "close": {
+      "title": "Close",
+      "description": "Hides the modal.",
+      "props": {}
+    }
+  },
+  "events": {
+    "opened": {
+      "title": "Opened",
+      "description": "Emitted when the modal is opened.",
+      "props": {}
+    },
+    "closed": {
+      "title": "Closed",
+      "description": "Emitted when the modal is closed.",
+      "props": {}
+    }
+  }
+}

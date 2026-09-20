@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "title": "Beta Signup Form",
+  "description": "Simple email capture form for beta access experiments.",
+  "kind": "component",
+  "props": {
+    "title": {
+      "type": "string",
+      "description": "Form headline.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "Supporting form copy."
+    },
+    "emailPlaceholder": {
+      "type": "string",
+      "description": "Placeholder text for the email input.",
+      "default": "you@example.com"
+    },
+    "submitLabel": {
+      "type": "string",
+      "description": "Submit button label.",
+      "default": "Request access"
+    },
+    "successMessage": {
+      "type": "string",
+      "description": "Message shown after submission.",
+      "default": "You're on the list."
+    }
+  },
+  "state": {
+    "email": {
+      "type": "string",
+      "description": "Current email input value.",
+      "default": ""
+    },
+    "submitted": {
+      "type": "boolean",
+      "description": "Whether the form has been submitted.",
+      "default": false
+    }
+  },
+  "slots": {},
+  "actions": {
+    "updateEmail": {
+      "title": "Update Email",
+      "description": "Updates the email field.",
+      "props": {
+        "email": { "type": "string", "required": true }
+      }
+    },
+    "submit": {
+      "title": "Submit",
+      "description": "Submits the beta signup form.",
+      "props": {}
+    }
+  },
+  "events": {
+    "submitted": {
+      "title": "Submitted",
+      "description": "Emitted when the beta signup form is submitted.",
+      "props": {
+        "email": { "type": "string", "required": true }
+      }
+    }
+  }
+}
