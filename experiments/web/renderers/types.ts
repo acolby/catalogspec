@@ -37,13 +37,17 @@ export type ImplementedItem<
   TTheme = ThemeTokens,
 > = (input: ImplementedItemInput<TView, TProps, TTheme>) => TView;
 
-export type ImplementedCatalog<TImplementedItem> = CatalogImplementation<TImplementedItem>;
+export type ImplementedCatalog<TImplementedItem, TModel = unknown> = CatalogImplementation<TImplementedItem> & {
+  model?: TModel;
+};
 
 export type RendererRuntimeContext = {
   scene: SceneSnapshot;
   theme?: ThemeTokens;
   action: RuntimeCoordinator["handleAction"];
   emit: RuntimeCoordinator["handleEvent"];
+  sceneState: Record<string, unknown>;
+  sceneActions: Record<string, (...args: any[]) => any>;
   requestRender(): void;
 };
 

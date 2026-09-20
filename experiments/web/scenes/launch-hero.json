@@ -6,7 +6,10 @@
     "version": 1
   },
   "theme": "dark",
-  "state": {},
+  "state": {
+    "loggedIn": false,
+    "username": null
+  },
   "root": {
     "id": "launch-hero-root",
     "item": "Hero",
@@ -70,6 +73,17 @@
             "count": 3,
             "initialCount": 3
           },
+          "slots": {}
+        },
+        {
+          "id": "launch-hero-auth",
+          "item": "AuthButton",
+          "props": {
+            "loginLabel": "Log in as Aaron",
+            "logoutLabel": "Log out",
+            "username": "Aaron"
+          },
+          "state": {},
           "slots": {}
         },
         {

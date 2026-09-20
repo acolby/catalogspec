@@ -50,7 +50,7 @@ export const Counter = {
 } satisfies Item;
 ```
 
-Initial/current state is supplied by the scene/runtime item instance, not by the implemented item view. `composeView` is the adapter that creates/looks up the item model from that state, passes readonly model state and bound actions into the view, emits state transitions, and requests a renderer update. This is intentionally early scaffolding for framework-independent state/action handling and debug tooling.
+Initial/current item state is supplied by the scene/runtime item instance, not by the implemented item view. Scene-level state is supplied by the scene snapshot and may be backed by an implementation-level `model.ts`. `composeView` is the adapter that creates/looks up item models, passes readonly model state and bound actions into item views, emits state transitions, and requests a renderer update. This is intentionally early scaffolding for framework-independent state/action handling and debug tooling.
 
 ## Responsibility split
 
@@ -63,6 +63,7 @@ Shared web/environment utility. It wires together:
 - implementation resolution
 - catalog/version matching
 - theme resolution
+- scene-level model creation from `scene.state`
 - renderer runtime context construction
 - DOM scene root styling
 - a renderer-specific `composeView`

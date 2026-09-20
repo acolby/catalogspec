@@ -7,7 +7,7 @@ import type { SceneItemInstance } from "../../../src/shared/types";
 type PreactPlainImplementedItem = ComponentType<ImplementedItemInput<ComponentChildren, any>>;
 type PreactModelBackedImplementedItem = ModelBackedImplementedItem<ComponentChildren, any, any, any>;
 type PreactImplementedItem = PreactPlainImplementedItem | PreactModelBackedImplementedItem;
-export type PreactImplementedCatalog = ImplementedCatalog<PreactImplementedItem>;
+export type PreactImplementedCatalog = ImplementedCatalog<PreactImplementedItem, any>;
 
 type ModelRecord = {
   model: ReturnType<typeof createItemModel<any, any>>;
@@ -32,8 +32,8 @@ export function composeView(instance: SceneItemInstance, implementedCatalog: Pre
     emit: (event: string, props?: Record<string, unknown>) => runtime.emit({ name: event, source: instance, props }),
     scene: {
       theme: runtime.theme,
-      state: runtime.scene.state ?? {},
-      actions: createActions((action, props) => runtime.action({ name: action, props })),
+      state: runtime.sceneState,
+      actions: runtime.sceneActions,
     },
   };
 

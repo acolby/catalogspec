@@ -4,7 +4,7 @@
 export const catalog = {
   id: "splash",
   version: 1,
-  items: ["Hero", "CallToAction", "Background", "Stack", "Counter", "Modal", "BetaSignupForm"],
+  items: ["Hero", "CallToAction", "Background", "Stack", "Counter", "Modal", "BetaSignupForm", "AuthButton"],
   themes: {
     default: "light",
     available: ["light", "dark"],
@@ -142,4 +142,10 @@ export type BetaSignupFormProps = {
   emailPlaceholder?: string;
   submitLabel?: string;
   successMessage?: string;
+};
+
+export type AuthButtonProps = {
+  loginLabel?: string;
+  logoutLabel?: string;
+  username?: string;
 };

@@ -10,8 +10,34 @@
       "default": "en-US"
     }
   },
-  "state": {},
+  "state": {
+    "loggedIn": {
+      "type": "boolean",
+      "description": "Whether the current scene viewer is logged in.",
+      "default": false
+    },
+    "username": {
+      "type": "string",
+      "description": "Display name for the logged-in viewer."
+    }
+  },
   "actions": {
+    "login": {
+      "title": "Login",
+      "description": "Updates scene-level authentication state for the current viewer.",
+      "props": {
+        "username": {
+          "type": "string",
+          "required": true,
+          "description": "Display username."
+        }
+      }
+    },
+    "logout": {
+      "title": "Logout",
+      "description": "Clears scene-level authentication state for the current viewer.",
+      "props": {}
+    },
     "openUrl": {
       "title": "Open URL",
       "description": "Requests navigation to a URL selected from a splash call to action.",
@@ -34,5 +60,5 @@
     "default": "light",
     "available": ["light", "dark"]
   },
-  "items": ["Hero", "CallToAction", "Background", "Stack", "Counter", "Modal", "BetaSignupForm"]
+  "items": ["Hero", "CallToAction", "Background", "Stack", "Counter", "Modal", "BetaSignupForm", "AuthButton"]
 }

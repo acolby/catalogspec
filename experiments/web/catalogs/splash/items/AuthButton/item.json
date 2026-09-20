@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "title": "Auth Button",
+  "description": "Authentication control backed by scene-level login state.",
+  "kind": "component",
+  "props": {
+    "loginLabel": {
+      "type": "string",
+      "description": "Button label when the viewer is logged out.",
+      "default": "Log in"
+    },
+    "logoutLabel": {
+      "type": "string",
+      "description": "Button label when the viewer is logged in.",
+      "default": "Log out"
+    },
+    "username": {
+      "type": "string",
+      "description": "Username to set when logging in from this control.",
+      "default": "Aaron"
+    }
+  },
+  "state": {},
+  "slots": {},
+  "actions": {},
+  "events": {
+    "loginRequested": {
+      "title": "Login Requested",
+      "description": "Emitted before the scene login action is called.",
+      "props": {
+        "username": { "type": "string", "required": true }
+      }
+    },
+    "logoutRequested": {
+      "title": "Logout Requested",
+      "description": "Emitted before the scene logout action is called.",
+      "props": {}
+    }
+  }
+}
