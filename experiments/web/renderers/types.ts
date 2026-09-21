@@ -7,6 +7,17 @@ export type ActionHandler = (props?: Record<string, unknown>) => void;
 
 export type EventEmitter = (event: string, props?: Record<string, unknown>) => void;
 
+export type BoundaryInput<TView> = {
+  key: string;
+  kind: "slot" | "item" | string;
+  render(): TView | readonly TView[] | undefined;
+};
+
+export type ViewAdapter<TView> = {
+  boundary(input: BoundaryInput<TView>): TView | undefined;
+  mount(root: Element, view: TView): void;
+};
+
 export type ImplementedItemContext<TContext = RuntimeContext> = {
   item: {
     id: string;
@@ -60,4 +71,5 @@ export type ComposeView<TView, TImplementedCatalog> = (
   instance: SceneItemInstance,
   implementedCatalog: TImplementedCatalog,
   runtime: RendererRuntimeContext,
+  adapter: ViewAdapter<TView>,
 ) => TView;

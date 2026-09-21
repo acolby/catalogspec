@@ -1,3 +1,5 @@
+export { composeView } from "./composeView";
+export type { GenericImplementedCatalog } from "./composeView";
 export { createSceneMounter } from "./createSceneMounter";
 export type { CreateSceneMounterOptions, SceneMounterOptions } from "./createSceneMounter";
 export type {
@@ -18,6 +20,7 @@ export type {
 } from "./implementedItem";
 export type {
   ActionHandler,
+  BoundaryInput,
   DefaultSlots,
   EventEmitter,
   ImplementedCatalog,
@@ -26,4 +29,5 @@ export type {
   ImplementedItemInput,
   RendererRuntimeContext,
   ComposeView,
+  ViewAdapter,
 } from "./types";

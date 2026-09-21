@@ -9,17 +9,18 @@ The web experiment separates two layers:
 - **web/environment layer**: owns DOM root setup, scene fetching, implementation resolution, catalog/theme checks, and runtime context construction.
 - **view renderer layer**: owns only framework-specific view composition and committing that view to the host.
 
-The renderer contract uses two important words:
+The renderer contract has two framework-specific primitives:
 
-- **compose**: turn a scene item instance plus runtime/model input into a framework-specific view value, such as Preact `ComponentChild`, React `ReactNode`, or Lit `TemplateResult`.
-- **render**: commit that framework-specific view value into a host target, such as a DOM element.
+- **boundary**: create an embeddable framework-native view boundary, such as a Preact child, React node, or Lit template fragment.
+- **mount**: commit a completed framework-native view value into a host target, such as a DOM element.
 
-In other words, `composeView` builds the framework view tree; `renderView` mounts/updates it.
+The shared `composeView` function now owns scene traversal, model binding, lifecycle binding, and slot outlet creation by using the adapter's `boundary` primitive. The adapter's `mount` primitive only commits the final view to the host.
 
 ## Current shape
 
 ```txt
 renderers/
+  composeView.ts          # shared renderer-agnostic scene item composer
   createSceneMounter.ts   # shared web/environment mounter factory
   implementedItem.ts
   types.ts
@@ -27,8 +28,8 @@ renderers/
   preact/
     index.ts
     src/
+      adapter.tsx         # Preact boundary + mount primitives
       mountScene.tsx      # Preact mounter created from createSceneMounter
-      composeView.tsx     # scene item instance -> implemented item input -> Preact view value
 ```
 
 ## Stateful item model scaffold
@@ -81,7 +82,7 @@ export const implemented = {
 } satisfies Item<ComponentChildren>;
 ```
 
-Initial/current item state is supplied by the scene/runtime item instance, not by the implemented item view. Shared runtime capabilities are supplied through typed implementation contexts, such as `context.scene.state/actions` and `context.theme.state/actions`. `composeView` is the adapter that creates/looks up item models, passes readonly model state, bound actions, slots, and context into item views, calls optional model lifecycle hooks, emits state transitions, and requests a renderer update. This is intentionally early scaffolding for framework-independent state/action/lifecycle/context handling and debug tooling.
+Initial/current item state is supplied by the scene/runtime item instance, not by the implemented item view. Shared runtime capabilities are supplied through typed implementation contexts, such as `context.scene.state/actions` and `context.theme.state/actions`. Shared `composeView` creates/looks up item models, passes readonly model state, bound actions, slots, and context into item views, calls optional model lifecycle hooks, emits state transitions, and requests a renderer update. This is intentionally early scaffolding for framework-independent state/action/lifecycle/context handling and debug tooling.
 
 ## Responsibility split
 
@@ -98,16 +99,16 @@ Shared web/environment utility. It wires together:
 - renderer runtime context construction
 - model lifecycle tracking and one shared ticker
 - DOM scene root styling
-- a renderer-specific `composeView`
-- a renderer-specific `renderView`
+- the shared `composeView`
+- a framework adapter with `boundary` and `mount` primitives
 
 It does not know Preact, React, Lit, or any specific catalog.
 
 ### `composeView`
 
-Framework-specific item/tree view composer.
+Shared item/tree view composer.
 
-It receives one scene item instance, finds the matching implemented item in the catalog implementation, creates renderer-specific slot outlets, binds model state/actions and typed runtime context to the item view, registers optional lifecycle hooks, and returns the framework view value for that item boundary.
+It receives one scene item instance, finds the matching implemented item in the catalog implementation, creates slot outlets through the framework adapter, binds model state/actions and typed runtime context to the item view, registers optional lifecycle hooks, and returns the framework view value for that item boundary.
 
 Slots are represented generically as renderer-specific outlet values, not arrays of already-composed child view values. Item contracts may narrow the slot object by name:
 
@@ -121,17 +122,23 @@ type ModalSlots<TView> = {
 
 A Preact view can render those outlets directly, while other renderers can project them into their own native boundary primitive. This keeps slot names catalog-derived while leaving the concrete outlet value generic over each renderer.
 
-### `renderView`
+### Framework adapter
 
-Framework/native mount primitive.
+Framework/native boundary and mount primitives.
 
 For Preact this is effectively:
 
-```ts
-render(view, root);
+```tsx
+boundary({ key, render }) {
+  return <Boundary key={key} render={render} />;
+}
+
+mount(root, view) {
+  render(view, root);
+}
 ```
 
-It takes the framework view value returned by `composeView` and commits it into the DOM root.
+`boundary` creates an embeddable view value for slots and future item boundaries. `mount` takes the framework view value returned by `composeView` and commits it into the DOM root.
 
 ## Flow
 
@@ -155,7 +162,7 @@ flowchart TD
   J --> K[Implemented item view]
   K --> J
   J --> M[Framework view]
-  M --> N[renderView]
+  M --> N[adapter.mount]
   N --> O[DOM root]
 
   K -->|action/event| E
@@ -179,14 +186,14 @@ sequenceDiagram
   Coord->>Api: fetchScene(sceneId)
   Api-->>Coord: SceneSnapshot
   CoordMount->>PreactMount: mountScene({ root, coordinator, api })
-  PreactMount->>Mounter: createSceneMounter({ composeView, renderView })
+  PreactMount->>Mounter: createSceneMounter({ adapter })
   Coord-->>Mounter: onSceneChange(scene)
   Mounter->>Api: resolveImplementation(scene)
   Api-->>Mounter: ImplementedCatalog
   Mounter->>Mounter: validate catalog + resolve theme + apply DOM root
-  Mounter->>Compose: composeView(scene.root, implementation, runtime)
+  Mounter->>Compose: composeView(scene.root, implementation, runtime, adapter)
   Compose-->>Mounter: Preact view
-  Mounter->>DOM: renderView(root, view)
+  Mounter->>DOM: adapter.mount(root, view)
 ```
 
 ## Naming note
@@ -194,7 +201,7 @@ sequenceDiagram
 Exports inside a renderer are intentionally framework-local:
 
 ```ts
-import { mountScene, composeView } from "../../renderers/preact";
+import { mountScene, adapter } from "../../renderers/preact";
 ```
 
 The import path already identifies the framework, so exported names do not include `Preact`.

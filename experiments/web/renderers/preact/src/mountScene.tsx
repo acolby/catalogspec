@@ -1,12 +1,10 @@
-import { render, type ComponentChild } from "preact";
+import type { ComponentChildren } from "preact";
 import { createSceneMounter } from "../../createSceneMounter";
-import { composeView, type PreactImplementedCatalog } from "./composeView";
+import type { GenericImplementedCatalog } from "../../composeView";
+import { adapter } from "./adapter";
 
-export const mountScene = createSceneMounter<PreactImplementedCatalog, ComponentChild>({
-  composeView,
-  renderView(root: Element, view: ComponentChild) {
-    render(view, root);
-  },
+export const mountScene = createSceneMounter<GenericImplementedCatalog<ComponentChildren>, ComponentChildren>({
+  adapter,
 });
 
 export type MountSceneOptions = Parameters<typeof mountScene>[0];

@@ -1,5 +1,5 @@
-import type { ComponentChildren, ComponentType } from "preact";
-import type { ImplementedCatalog, ImplementedItemInput, ModelBackedImplementedItem } from "../../../../renderers";
+import type { ComponentChildren } from "preact";
+import type { ImplementedCatalog, ModelBackedImplementedItem } from "../../../../renderers";
 import { context } from "./contexts";
 import { catalog, themes } from "./generated";
 import { implemented as AuthButton } from "./items/AuthButton";
@@ -12,9 +12,7 @@ import { implemented as Modal } from "./items/Modal";
 import { implemented as Stack } from "./items/Stack";
 import { implemented as ThemePicker } from "./items/ThemePicker";
 
-type PreactImplementedItem =
-  | ComponentType<ImplementedItemInput<ComponentChildren, any, any, any, any, any>>
-  | ModelBackedImplementedItem<ComponentChildren, any, any, any, any, any>;
+type PreactImplementedItem = ModelBackedImplementedItem<ComponentChildren, any, any, any, any, any>;
 
 export const preactImplementation: ImplementedCatalog<PreactImplementedItem> = {
   catalog: {
