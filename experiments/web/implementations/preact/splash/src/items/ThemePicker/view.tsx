@@ -1,8 +1,7 @@
-import type { ComponentChildren } from "preact";
 import { catalog, type ThemeName } from "../../generated";
 import type { View } from "./types";
 
-export const view: View<ComponentChildren> = ({ props, emit, context }) => {
+export const view: View = ({ props, emit, context }) => {
   const theme = context.theme.state.tokens;
   const themeState = context.theme.state;
   const currentTheme = themeState.name ?? catalog.themes.default;

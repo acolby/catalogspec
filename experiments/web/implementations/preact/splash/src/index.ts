@@ -1,7 +1,6 @@
-import type { ComponentChildren } from "preact";
 import type { ModelBackedImplementedItem, ViewAdaptedImplementedCatalog } from "../../../../renderers";
 import { context } from "./contexts";
-import { viewAdapter } from "./adapter";
+import { viewAdapter, type ImplementationView } from "./adapter";
 import { catalog, themes } from "./generated";
 import { implemented as AuthButton } from "./items/AuthButton";
 import { implemented as Background } from "./items/Background";
@@ -13,9 +12,9 @@ import { implemented as Modal } from "./items/Modal";
 import { implemented as Stack } from "./items/Stack";
 import { implemented as ThemePicker } from "./items/ThemePicker";
 
-type PreactImplementedItem = ModelBackedImplementedItem<ComponentChildren, any, any, any, any, any>;
+type PreactImplementedItem = ModelBackedImplementedItem<ImplementationView, any, any, any, any, any>;
 
-export const preactImplementation: ViewAdaptedImplementedCatalog<ComponentChildren> = {
+export const preactImplementation: ViewAdaptedImplementedCatalog<ImplementationView> = {
   catalog: {
     id: catalog.id,
     version: catalog.version,

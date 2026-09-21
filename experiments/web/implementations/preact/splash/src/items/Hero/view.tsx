@@ -1,7 +1,6 @@
-import type { ComponentChildren } from "preact";
 import type { View } from "./types";
 
-export const view: View<ComponentChildren> = ({ props, slots, context }) => {
+export const view: View = ({ props, slots, context }) => {
   const theme = context.theme.state.tokens;
   const align = props.align ?? "center";
   const isCenter = align === "center";

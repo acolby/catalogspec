@@ -1,7 +1,6 @@
-import type { ComponentChildren } from "preact";
 import type { View } from "./types";
 
-export const view: View<ComponentChildren> = ({ props, slots, context }) => {
+export const view: View = ({ props, slots, context }) => {
   const direction = props.direction ?? "vertical";
   const align = props.align ?? "stretch";
   return (

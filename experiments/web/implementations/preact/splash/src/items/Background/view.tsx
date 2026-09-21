@@ -1,8 +1,16 @@
-import type { ComponentChildren } from "preact";
 import type { Props, State, Theme, View } from "./types";
 
-export const view: View<ComponentChildren> = ({ props, state, context }) => {
-  return <div aria-hidden="true" style={{ position: "absolute", inset: 0, ...backgroundStyle(props, state, context.theme.state.tokens) }} />;
+export const view: View = ({ props, state, context }) => {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        inset: 0,
+        ...backgroundStyle(props, state, context.theme.state.tokens),
+      }}
+    />
+  );
 };
 
 function backgroundStyle(props: Props, state: Readonly<State>, theme?: Theme) {
@@ -22,11 +30,19 @@ function backgroundStyle(props: Props, state: Readonly<State>, theme?: Theme) {
   }
   if (props.kind === "gradient") {
     const light = isLight(theme?.color?.background);
-    const base = light ? theme?.color?.background ?? "#ffffff" : props.color ?? theme?.color?.background ?? "#0f172a";
-    const accent = light ? theme?.color?.accent ?? "#2563eb" : props.accentColor ?? theme?.color?.accent ?? "#8b5cf6";
-    const surface = light ? theme?.color?.surface ?? "#f7f7f8" : theme?.color?.surface ?? "#111827";
+    const base = light
+      ? (theme?.color?.background ?? "#ffffff")
+      : (props.color ?? theme?.color?.background ?? "#0f172a");
+    const accent = light
+      ? (theme?.color?.accent ?? "#2563eb")
+      : (props.accentColor ?? theme?.color?.accent ?? "#8b5cf6");
+    const surface = light
+      ? (theme?.color?.surface ?? "#f7f7f8")
+      : (theme?.color?.surface ?? "#111827");
     const glow = light ? colorWithAlpha(accent, 0.22) : accent;
-    const secondaryGlow = light ? "rgba(14,165,233,.18)" : "rgba(14,165,233,.52)";
+    const secondaryGlow = light
+      ? "rgba(14,165,233,.18)"
+      : "rgba(14,165,233,.52)";
 
     return {
       background: [
@@ -37,12 +53,16 @@ function backgroundStyle(props: Props, state: Readonly<State>, theme?: Theme) {
       filter: light ? "saturate(1.02)" : "saturate(1.12)",
     };
   }
-  return { background: props.color ?? theme?.color?.background ?? "transparent" };
+  return {
+    background: props.color ?? theme?.color?.background ?? "transparent",
+  };
 }
 
 function overlay(strength?: string) {
-  if (strength === "dark") return "linear-gradient(rgba(15,23,42,.45), rgba(15,23,42,.45))";
-  if (strength === "light") return "linear-gradient(rgba(255,255,255,.35), rgba(255,255,255,.35))";
+  if (strength === "dark")
+    return "linear-gradient(rgba(15,23,42,.45), rgba(15,23,42,.45))";
+  if (strength === "light")
+    return "linear-gradient(rgba(255,255,255,.35), rgba(255,255,255,.35))";
   return "linear-gradient(transparent, transparent)";
 }
 

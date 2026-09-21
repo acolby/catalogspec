@@ -1,7 +1,9 @@
 import { render, type ComponentChildren } from "preact";
 import type { BoundaryInput, ViewAdapter } from "../../../../renderers";
 
-export const viewAdapter: ViewAdapter<ComponentChildren> = {
+export type ImplementationView = ComponentChildren;
+
+export const viewAdapter: ViewAdapter<ImplementationView> = {
   boundary(input) {
     return <Boundary key={input.key} input={input} />;
   },
@@ -11,6 +13,6 @@ export const viewAdapter: ViewAdapter<ComponentChildren> = {
   },
 };
 
-function Boundary({ input }: { input: BoundaryInput<ComponentChildren> }) {
+function Boundary({ input }: { input: BoundaryInput<ImplementationView> }) {
   return <>{input.render()}</>;
 }
