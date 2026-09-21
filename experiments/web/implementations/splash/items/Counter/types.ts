@@ -1,13 +1,20 @@
-import type { ItemModelDefinition } from "../../../../../../models";
+import type { ItemModelDefinition } from "../../../../models";
 import type { ImplementationView } from "../../adapter";
-import type { ImplementedItemLifecycle, ImplementedItemView, ModelBackedImplementedItem } from "../../../../../../renderers";
+import type { ImplementedItemLifecycle, ImplementedItemView, ModelBackedImplementedItem } from "../../../../renderers";
 import type { Context } from "../../contexts";
-import type { ThemePickerProps, ThemeTokens } from "../../generated";
+import type { CounterProps, ThemeTokens } from "../../generated";
 
-export type Props = ThemePickerProps;
+export type Props = CounterProps;
 export type Theme = ThemeTokens;
-export type State = Record<string, never>;
-export type Actions = Record<string, never>;
+export type State = {
+  count: number;
+  initialCount: number;
+};
+export type Actions = {
+  increment(): void;
+  decrement(): void;
+  reset(): void;
+};
 export type Slots = Record<string, never>;
 export type Model = ItemModelDefinition<State, Actions>;
 export type Lifecycle = ImplementedItemLifecycle<Props, State, Actions, Context>;

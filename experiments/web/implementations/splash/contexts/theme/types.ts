@@ -1,5 +1,5 @@
-import type { ContextImplementation, ContextLifecycle, RuntimeContextValue } from "../../../../../../renderers";
-import type { ItemModelDefinition, ReadonlyDeep } from "../../../../../../models";
+import type { ContextImplementation, ContextLifecycle, RuntimeContextValue } from "../../../../renderers";
+import type { ItemModelDefinition, ReadonlyDeep } from "../../../../models";
 import type { ThemeName, ThemeTokens } from "../../generated";
 
 export type State = {

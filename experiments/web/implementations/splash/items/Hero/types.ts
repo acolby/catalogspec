@@ -1,19 +1,16 @@
-import type { ItemModelDefinition } from "../../../../../../models";
+import type { ItemModelDefinition } from "../../../../models";
 import type { ImplementationView } from "../../adapter";
-import type { ImplementedItemLifecycle, ImplementedItemView, ModelBackedImplementedItem } from "../../../../../../renderers";
+import type { ImplementedItemLifecycle, ImplementedItemView, ModelBackedImplementedItem } from "../../../../renderers";
 import type { Context } from "../../contexts";
-import type { ModalProps, ThemeTokens } from "../../generated";
+import type { HeroProps, ThemeTokens } from "../../generated";
 
-export type Props = ModalProps;
+export type Props = HeroProps;
 export type Theme = ThemeTokens;
-export type State = {
-  open: boolean;
-};
-export type Actions = {
-  open(): void;
-  close(): void;
-};
+export type State = Record<string, never>;
+export type Actions = Record<string, never>;
 export type Slots = {
+  background?: ImplementationView;
+  actions?: ImplementationView;
   content?: ImplementationView;
 };
 export type Model = ItemModelDefinition<State, Actions>;

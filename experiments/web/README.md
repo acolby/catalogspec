@@ -17,7 +17,7 @@ experiments/web/
   models/               experimental framework-agnostic model primitives
   renderers/            shared web renderer/model composition utilities
   implementations/
-    preact/splash/      Preact implementation of the Splash catalog, including its view adapter
+    splash/             Splash catalog implementation, including its Preact view adapter
 ```
 
 ## Boundary
@@ -33,7 +33,7 @@ Runtime page: /runtime.html
   scene coordinator imported from src/coordinator
   default iframe postMessage transport
   shared renderer utilities from renderers/
-  Preact Splash implementation and view adapter from implementations/preact/splash
+  Splash implementation and Preact view adapter from implementations/splash
 ```
 
 The runtime page can also be opened directly:

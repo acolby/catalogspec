@@ -26,7 +26,7 @@ renderers/
   types.ts
   index.ts
 
-implementations/preact/splash/src/
+implementations/splash/
   adapter.tsx             # Preact boundary + mount primitives supplied by the implementation
 ```
 

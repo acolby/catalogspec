@@ -1,17 +1,18 @@
-import type { ItemModelDefinition } from "../../../../../../models";
+import type { ItemModelDefinition } from "../../../../models";
 import type { ImplementationView } from "../../adapter";
-import type { ImplementedItemLifecycle, ImplementedItemView, ModelBackedImplementedItem } from "../../../../../../renderers";
+import type { ImplementedItemLifecycle, ImplementedItemView, ModelBackedImplementedItem } from "../../../../renderers";
 import type { Context } from "../../contexts";
-import type { BackgroundProps, ThemeTokens } from "../../generated";
+import type { BetaSignupFormProps, ThemeTokens } from "../../generated";
 
-export type Props = BackgroundProps;
+export type Props = BetaSignupFormProps;
 export type Theme = ThemeTokens;
 export type State = {
-  elapsedMs: number;
-  phase: number;
+  email: string;
+  submitted: boolean;
 };
 export type Actions = {
-  advance(input: { deltaMs: number }): void;
+  updateEmail(input: { email: string }): void;
+  submit(): void;
 };
 export type Slots = Record<string, never>;
 export type Model = ItemModelDefinition<State, Actions>;

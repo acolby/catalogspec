@@ -1,4 +1,4 @@
-import type { ViewAdaptedImplementedCatalog } from "../../../../renderers";
+import type { ViewAdaptedImplementedCatalog } from "../../renderers";
 import { adapter, type ImplementationView } from "./adapter";
 import { context } from "./contexts";
 import { catalog, themes } from "./generated";

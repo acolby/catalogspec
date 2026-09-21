@@ -1,5 +1,5 @@
 import { render, type ComponentChildren } from "preact";
-import type { BoundaryInput, ViewAdapter } from "../../../../renderers";
+import type { BoundaryInput, ViewAdapter } from "../../renderers";
 
 export type ImplementationView = ComponentChildren;
 

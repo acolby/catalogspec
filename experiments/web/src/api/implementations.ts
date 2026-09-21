@@ -1,4 +1,4 @@
-import { implementedCatalog } from "../../implementations/preact/splash";
+import { implementedCatalog } from "../../implementations/splash";
 import type { SceneSnapshot } from "../shared/types";
 
 type ResolvedImplementation = typeof implementedCatalog;
