@@ -4,6 +4,7 @@
   "title": "CatalogSpec",
   "type": "object",
   "required": ["version", "id", "name", "items"],
+  "additionalProperties": false,
   "properties": {
     "version": { "const": 1 },
     "id": { "type": "string", "pattern": "^[a-zA-Z0-9_-]+$" },
@@ -14,13 +15,10 @@
       "type": "object",
       "additionalProperties": { "$ref": "#/$defs/field" }
     },
-    "state": {
+    "contexts": {
       "type": "object",
-      "additionalProperties": { "$ref": "#/$defs/field" }
-    },
-    "actions": {
-      "type": "object",
-      "additionalProperties": { "$ref": "#/$defs/action" }
+      "propertyNames": { "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$" },
+      "additionalProperties": { "$ref": "#/$defs/context" }
     },
     "themes": {
       "type": "object",
@@ -52,6 +50,21 @@
     }
   },
   "$defs": {
+    "context": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "state": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/field" }
+        },
+        "actions": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/action" }
+        }
+      }
+    },
     "item": {
       "type": "object",
       "required": ["title", "props"],

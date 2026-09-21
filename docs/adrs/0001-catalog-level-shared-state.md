@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Superseded by [ADR 0004: Named catalog contexts](./0004-named-catalog-contexts.md)
 
 ## Decision summary
 

@@ -10,66 +10,80 @@
       "default": "en-US"
     }
   },
-  "state": {
-    "loggedIn": {
-      "type": "boolean",
-      "description": "Whether the current scene viewer is logged in.",
-      "default": false
-    },
-    "username": {
-      "type": "string",
-      "description": "Display name for the logged-in viewer."
-    },
-    "themeName": {
-      "type": "string",
-      "description": "Current theme selected for the scene.",
-      "enum": ["light", "dark"],
-      "default": "light"
-    }
-  },
-  "actions": {
-    "login": {
-      "title": "Login",
-      "description": "Updates scene-level authentication state for the current viewer.",
-      "props": {
+  "contexts": {
+    "scene": {
+      "title": "Scene",
+      "description": "Shared splash scene/session context available to items.",
+      "state": {
+        "loggedIn": {
+          "type": "boolean",
+          "description": "Whether the current scene viewer is logged in.",
+          "default": false
+        },
         "username": {
           "type": "string",
-          "required": true,
-          "description": "Display username."
+          "description": "Display name for the logged-in viewer."
         }
-      }
-    },
-    "logout": {
-      "title": "Logout",
-      "description": "Clears scene-level authentication state for the current viewer.",
-      "props": {}
-    },
-    "openUrl": {
-      "title": "Open URL",
-      "description": "Requests navigation to a URL selected from a splash call to action.",
-      "props": {
-        "url": {
-          "type": "string",
-          "required": true,
-          "description": "Destination URL."
+      },
+      "actions": {
+        "login": {
+          "title": "Login",
+          "description": "Updates authentication state for the current viewer.",
+          "props": {
+            "username": {
+              "type": "string",
+              "required": true,
+              "description": "Display username."
+            }
+          }
         },
-        "target": {
-          "type": "string",
-          "description": "Navigation target hint.",
-          "enum": ["self", "blank"],
-          "default": "self"
+        "logout": {
+          "title": "Logout",
+          "description": "Clears authentication state for the current viewer.",
+          "props": {}
+        },
+        "openUrl": {
+          "title": "Open URL",
+          "description": "Requests navigation to a URL selected from a splash call to action.",
+          "props": {
+            "url": {
+              "type": "string",
+              "required": true,
+              "description": "Destination URL."
+            },
+            "target": {
+              "type": "string",
+              "description": "Navigation target hint.",
+              "enum": ["self", "blank"],
+              "default": "self"
+            }
+          }
         }
       }
     },
-    "setTheme": {
-      "title": "Set Theme",
-      "description": "Updates the active scene theme.",
-      "props": {
-        "theme": {
+    "theme": {
+      "title": "Theme",
+      "description": "Active theme context projected from the catalog theme contract and concrete theme instances.",
+      "state": {
+        "name": {
           "type": "string",
-          "required": true,
+          "description": "Current active theme name.",
           "enum": ["light", "dark"],
-          "description": "Theme name to activate."
+          "default": "light"
+        }
+      },
+      "actions": {
+        "setTheme": {
+          "title": "Set Theme",
+          "description": "Updates the active theme context.",
+          "props": {
+            "name": {
+              "type": "string",
+              "required": true,
+              "enum": ["light", "dark"],
+              "description": "Theme name to activate."
+            }
+          }
         }
       }
     }

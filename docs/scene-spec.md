@@ -55,10 +55,22 @@ A scene is locked to one catalog and one catalog version.
     "id": "commerce",
     "version": 1
   },
-  "theme": "light",
-  "state": {
-    "isLoggedIn": true,
-    "market": "US"
+  "context": {
+    "auth": {
+      "state": {
+        "isLoggedIn": true
+      }
+    },
+    "market": {
+      "state": {
+        "region": "US"
+      }
+    },
+    "theme": {
+      "state": {
+        "name": "light"
+      }
+    }
   },
   "root": {
     "id": "featured-product-page",
@@ -97,8 +109,7 @@ A scene is locked to one catalog and one catalog version.
 | `id` | Stable scene identity, suitable for persistence and associating streams/updates |
 | `catalog.id` | Catalog this scene references |
 | `catalog.version` | Catalog version this scene is locked to |
-| `theme` | Selected theme from the referenced catalog |
-| `state` | Concrete values for catalog-level shared state |
+| `context` | Concrete state values for named catalog contexts |
 | `root` | Single root item instance |
 
 ## Item instances
@@ -170,7 +181,7 @@ A scene should validate against the referenced catalog:
 - `catalog.id` references a CatalogSpec catalog
 - `catalog.version` matches the catalog version the scene was created against
 - `theme` is included in `catalog.json.themes.available`
-- scene `state` conforms to catalog-level `state`
+- scene `context` values conform to catalog `contexts`
 - `root.item` exists in `catalog.json.items`
 - each instance `item` exists in `catalog.json.items`
 - each instance `props` conforms to the referenced item's `props`
@@ -191,7 +202,7 @@ Possible future operation categories:
 - create scene
 - replace scene
 - set theme
-- set catalog state
+- set context state
 - add instance
 - replace instance
 - remove instance

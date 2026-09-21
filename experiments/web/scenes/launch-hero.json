@@ -5,11 +5,18 @@
     "id": "splash",
     "version": 1
   },
-  "theme": "dark",
-  "state": {
-    "loggedIn": false,
-    "username": null,
-    "themeName": "dark"
+  "context": {
+    "scene": {
+      "state": {
+        "loggedIn": false,
+        "username": null
+      }
+    },
+    "theme": {
+      "state": {
+        "name": "dark"
+      }
+    }
   },
   "root": {
     "id": "launch-hero-root",

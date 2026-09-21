@@ -16,7 +16,7 @@ SceneSpec currently describes scene snapshots. It does not yet have a canonical 
 
 Active. The implementation-independent contract vocabulary an agent may use when creating or updating a scene.
 
-CatalogSpec defines catalog items, shared state shape, theme contracts, actions, events, and requirements.
+CatalogSpec defines catalog items, named shared contexts, theme contracts, actions, events, and requirements.
 
 ## Catalog
 

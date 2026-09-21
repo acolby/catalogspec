@@ -31,8 +31,8 @@ An implementation should answer:
 - Which catalog does it implement?
 - Which catalog items are implemented?
 - Which catalog themes are supported?
-- How are catalog actions handled or delegated?
-- How is catalog state consumed?
+- How are context and item actions handled or delegated?
+- How are catalog contexts consumed?
 - Which catalog capabilities are unsupported?
 
 A future implementation manifest may describe this mapping explicitly.
@@ -47,9 +47,10 @@ Illustrative only:
   "items": {
     "ProductCard": "./items/ProductCard.tsx"
   },
-  "theme": "./theme.ts",
-  "actions": "./actions.ts",
-  "state": "./state.ts"
+  "contexts": {
+    "auth": "./context/auth.ts",
+    "theme": "./context/theme.ts"
+  }
 }
 ```
 
@@ -62,9 +63,9 @@ A runtime may be responsible for:
 - loading catalog contracts
 - loading or receiving scenes
 - validating scene values against catalog contracts
-- selecting a theme
-- providing catalog state
-- dispatching catalog and item actions
+- selecting or initializing context values such as theme
+- providing catalog context state
+- dispatching context and item actions
 - routing item events
 - resolving item implementations
 - mounting/rendering the scene

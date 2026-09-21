@@ -5,6 +5,7 @@ export const catalog = {
   id: "splash",
   version: 1,
   items: ["Hero", "CallToAction", "Background", "Stack", "Counter", "Modal", "BetaSignupForm", "AuthButton", "ThemePicker"],
+  contexts: ["scene", "theme"],
   themes: {
     default: "light",
     available: ["light", "dark"],

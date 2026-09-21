@@ -150,22 +150,20 @@ export function createSceneMounter<TImplementation extends ContextBackedImplemen
 
     function initialContextState(name: string, scene: SceneSnapshot, implementation: TImplementation): Record<string, unknown> {
       if (name === "scene") {
-        const state = scene.state ?? {};
-        return {
-          loggedIn: state.loggedIn,
-          username: state.username,
-        };
+        return scene.context?.scene?.state ?? {};
       }
       if (name === "theme") {
-        const fallbackThemeName = scene.theme ?? "light";
-        const sceneThemeName = typeof scene.state?.themeName === "string" ? scene.state.themeName : fallbackThemeName;
-        const tokens = implementation.themes?.[sceneThemeName] ?? implementation.themes?.[fallbackThemeName] ?? implementation.themes?.light;
+        const fallbackThemeName = "light";
+        const contextThemeName = scene.context?.theme?.state?.name;
+        const themeName = typeof contextThemeName === "string" ? contextThemeName : fallbackThemeName;
+        const tokens = implementation.themes?.[themeName] ?? implementation.themes?.[fallbackThemeName] ?? implementation.themes?.light;
         return {
-          name: sceneThemeName,
+          name: themeName,
           tokens,
           available: Object.keys(implementation.themes ?? {}),
         };
       }
+      return scene.context?.[name]?.state ?? {};
       return {};
     }
 

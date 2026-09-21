@@ -5,8 +5,19 @@
     "id": "splash",
     "version": 1
   },
-  "theme": "light",
-  "state": {},
+  "context": {
+    "theme": {
+      "state": {
+        "name": "light"
+      }
+    },
+    "scene": {
+      "state": {
+        "loggedIn": false,
+        "username": null
+      }
+    }
+  },
   "root": {
     "id": "product-waitlist-stack",
     "item": "Stack",

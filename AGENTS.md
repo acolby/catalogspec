@@ -41,9 +41,9 @@ When creating or modifying a catalog, use this structure:
 ## Catalog rules
 
 - A catalog represents a domain, not a framework implementation.
-- `catalog.json` defines shared catalog props, state, actions, themes, and items.
-- Catalog state is shared domain/session context available to items.
-- Catalog actions are domain-level callable functions.
+- `catalog.json` defines shared catalog props, named contexts, themes, and items.
+- Catalog contexts are shared domain/session/environment capabilities available to items.
+- Context actions are callable functions grouped under their named context.
 - `theme.json` defines the shape of theme tokens.
 - `/themes/*.json` files provide concrete theme values that conform to `theme.json`.
 - `requirements.md` explains behavior, expectations, edge cases, and non-goals.

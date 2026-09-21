@@ -22,4 +22,4 @@ This catalog does not define a full marketing site system, routing model, analyt
 
 A runtime may render these items using any web technology. The catalog only defines the interface and behavioral expectations.
 
-Catalog actions such as `openUrl` are intents. The runtime or host application decides whether and how navigation occurs.
+Context actions such as `scene.openUrl` are intents. The runtime or host application decides whether and how navigation occurs.

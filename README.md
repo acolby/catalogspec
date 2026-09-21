@@ -67,7 +67,7 @@ Status: Active
 
 CatalogSpec defines the language bridge between agent-authored scenes and framework-specific implementations.
 
-A catalog describes a domain's available UI items, shared state shape, theme contract, actions, events, and behavioral requirements. It does not prescribe React, SwiftUI, Flutter, HTML, or any other target.
+A catalog describes a domain's available UI items, named shared contexts, theme contract, actions, events, and behavioral requirements. It does not prescribe React, SwiftUI, Flutter, HTML, or any other target.
 
 See [CatalogSpec](./docs/catalog-spec.md).
 
@@ -89,7 +89,7 @@ An implementation fulfills a catalog for a specific framework or platform. For e
 
 Status: Draft
 
-A runtime renders and maintains a concrete scene using an available implementation of the referenced catalog. It validates scene data, provides state/theme/actions, mounts rendered items, applies updates, and routes events.
+A runtime renders and maintains a concrete scene using an available implementation of the referenced catalog. It validates scene data, provides context/theme/actions, mounts rendered items, applies updates, and routes events.
 
 See [Runtime model](./docs/runtime-model.md).
 

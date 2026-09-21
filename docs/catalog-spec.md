@@ -13,8 +13,7 @@ CatalogSpec keeps generated UI bounded and implementation-independent.
 It defines:
 
 - domain-level props/configuration
-- shared domain/session state shape
-- domain-level actions
+- named shared context state/action contracts
 - theme token contracts and concrete themes
 - renderable item interfaces
 - item props, state, slots, actions, and events
@@ -79,8 +78,7 @@ The item document does not repeat its own ID. Human-readable labels use `title`.
   "name": "Commerce",
   "description": "A catalog for product discovery and cart-oriented commerce UI.",
   "props": {},
-  "state": {},
-  "actions": {},
+  "contexts": {},
   "themes": {
     "default": "light",
     "available": ["light", "dark"]
@@ -92,12 +90,11 @@ The item document does not repeat its own ID. Human-readable labels use `title`.
 | Surface | Meaning |
 |---|---|
 | `props` | Stable configuration or environment values supplied to the catalog |
-| `state` | Shared domain/session context available to catalog items |
-| `actions` | Domain-level functions available across the catalog |
+| `contexts` | Named shared ambient capabilities available to catalog items |
 | `themes` | Available theme instances conforming to `theme.json` |
 | `items` | PascalCase item names available in the catalog |
 
-Catalog state defines shared context shape, not storage or state-management mechanics. See [Architecture decision records](./adrs/README.md).
+Catalog contexts define shared state/action shape, not storage or state-management mechanics. See [Architecture decision records](./adrs/README.md).
 
 ## Item contract
 
@@ -155,16 +152,30 @@ Example:
 }
 ```
 
-## Props and state
+## Props, state, and contexts
 
 `props` are data/configuration provided from outside the item.
 
-`state` is mutable JSON data owned by the item or provided as initial scene state. Item state is distinct from catalog-level state:
+Item `state` is mutable JSON data owned by the item or provided as initial scene item state.
 
-- catalog `state` describes shared domain/session context
-- item `state` describes local item state
+Catalog `contexts` describe named shared ambient capabilities available to items. Each context may define `state` and `actions`:
 
-CatalogSpec defines state shape. It does not prescribe where state lives or how it is updated.
+```json
+{
+  "contexts": {
+    "auth": {
+      "state": {
+        "loggedIn": { "type": "boolean", "default": false }
+      },
+      "actions": {
+        "login": { "props": { "username": { "type": "string", "required": true } } }
+      }
+    }
+  }
+}
+```
+
+Use contexts for shared domain/session/environment capabilities that multiple items may consume. Use item `state` for item-local mutable data. CatalogSpec defines shapes; it does not prescribe where state lives or how it is updated.
 
 ## Slots
 
@@ -186,7 +197,7 @@ SceneSpec currently drafts a narrower initial snapshot model where slots contain
 
 ## Actions and events
 
-Actions are callable intents exposed by a catalog or item. CatalogSpec declares that an action exists and what arguments it accepts; it does not declare the handler.
+Actions are callable intents exposed by a named context or item. CatalogSpec declares that an action exists and what arguments it accepts; it does not declare the handler.
 
 ```json
 {

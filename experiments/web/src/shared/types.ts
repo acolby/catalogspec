@@ -5,9 +5,12 @@ export type SceneSnapshot = {
     id: string;
     version: number;
   };
-  theme?: string;
-  state?: Record<string, unknown>;
+  context?: Record<string, SceneContextSnapshot>;
   root: SceneItemInstance;
+};
+
+export type SceneContextSnapshot = {
+  state?: Record<string, unknown>;
 };
 
 export type SceneItemInstance = {
