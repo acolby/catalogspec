@@ -1,11 +1,16 @@
 import { render, type ComponentChildren } from "preact";
-import type { BoundaryInput, ViewAdapter } from "../../catalogComposer";
+import type { ViewAdapter, ViewAdapterBoundaryInput } from "../../catalogComposer";
 
 export type ImplementationView = ComponentChildren;
 
 export const adapter: ViewAdapter<ImplementationView> = {
   boundary(input) {
-    return <Boundary key={input.key} input={input} />;
+    return (
+      <Boundary
+        key={input.key}
+        input={input}
+      />
+    );
   },
 
   mount(root, view) {
@@ -13,6 +18,6 @@ export const adapter: ViewAdapter<ImplementationView> = {
   },
 };
 
-function Boundary({ input }: { input: BoundaryInput<ImplementationView> }) {
+function Boundary({ input }: { input: ViewAdapterBoundaryInput<ImplementationView> }) {
   return <>{input.render()}</>;
 }

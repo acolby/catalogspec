@@ -5,7 +5,7 @@ export const view: View = ({ props, emit, context }) => {
   const theme = context.theme.state.tokens;
   const themeState = context.theme.state;
   const currentTheme = themeState.name ?? catalog.themes.default;
-
+  
   return (
     <label style={{ display: "inline-flex", alignItems: "center", gap: theme?.space?.sm ?? "0.5rem", color: theme?.color?.mutedText }}>
       <span>{props.label ?? "Theme"}</span>
