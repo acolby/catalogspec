@@ -16,11 +16,33 @@ export const view: View = ({ props, state, actions, context }) => {
         backdropFilter: "blur(12px)",
       }}
     >
-      <span style={{ color: theme?.color?.mutedText }}>{props.label ?? "Counter"}</span>
-      <strong style={{ minWidth: 32, textAlign: "center" }}>{state.count}</strong>
-      <button type="button" class="cta" onClick={() => actions.decrement()}>−</button>
-      <button type="button" class="cta" onClick={() => actions.increment()}>+</button>
-      <button type="button" class="cta" onClick={() => actions.reset()}>Reset</button>
+      <span style={{ color: theme?.color?.mutedText }}>
+        {props.label ?? "Counter"}
+      </span>
+      <strong style={{ minWidth: 32, textAlign: "center" }}>
+        {state.count}
+      </strong>
+      <button
+        type="button"
+        class="cta"
+        onClick={() => actions.decrement()}
+      >
+        −
+      </button>
+      <button
+        type="button"
+        class="cta"
+        onClick={() => actions.increment()}
+      >
+        +
+      </button>
+      <button
+        type="button"
+        class="cta"
+        onClick={() => actions.reset()}
+      >
+        Reset
+      </button>
     </div>
   );
 };

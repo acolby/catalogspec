@@ -1,7 +1,4 @@
-import type { ItemModelDefinition } from "../../../../models";
-import type { ImplementationView } from "../../adapter";
-import type { ImplementedItemLifecycle, ImplementedItemView, ModelBackedImplementedItem } from "../../../../renderers";
-import type { Context } from "../../contexts";
+import type { ItemImplementation, ItemLifecycle, ItemModel, ItemSlot, ItemView } from "../types";
 import type { ModalProps, ThemeTokens } from "../../generated";
 
 export type Props = ModalProps;
@@ -14,9 +11,9 @@ export type Actions = {
   close(): void;
 };
 export type Slots = {
-  content?: ImplementationView;
+  content?: ItemSlot;
 };
-export type Model = ItemModelDefinition<State, Actions>;
-export type Lifecycle = ImplementedItemLifecycle<Props, State, Actions, Context>;
-export type View = ImplementedItemView<ImplementationView, Props, State, Actions, Slots, Context>;
-export type Item = ModelBackedImplementedItem<ImplementationView, Props, State, Actions, Slots, Context>;
+export type Model = ItemModel<State, Actions>;
+export type Lifecycle = ItemLifecycle<Props, State, Actions>;
+export type View = ItemView<Props, State, Actions, Slots>;
+export type Item = ItemImplementation<Props, State, Actions, Slots>;

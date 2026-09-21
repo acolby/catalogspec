@@ -17,5 +17,5 @@
     "jsx": "react-jsx",
     "jsxImportSource": "preact"
   },
-  "include": ["src", "renderers", "implementations"]
+  "include": ["src", "catalogComposer", "implementations"]
 }

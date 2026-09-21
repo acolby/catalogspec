@@ -1,5 +1,5 @@
-import type { ContextImplementation, ContextLifecycle, RuntimeContextValue } from "../../../../renderers";
-import type { ItemModelDefinition, ReadonlyDeep } from "../../../../models";
+import type { ComposeContext, ComposeContextLifecycle, ComposeContextValue } from "../../../../catalogComposer";
+import type { ModelDefinition, ReadonlyDeep } from "../../../../catalogComposer";
 import type { ThemeName, ThemeTokens } from "../../generated";
 
 export type State = {
@@ -12,7 +12,7 @@ export type Actions = {
   setTheme(input: { name: ThemeName }): void;
 };
 
-export type Model = ItemModelDefinition<State, Actions>;
-export type Lifecycle = ContextLifecycle<State, Actions>;
-export type Value = RuntimeContextValue<ReadonlyDeep<State>, Actions>;
-export type Implementation = ContextImplementation<State, Actions>;
+export type Model = ModelDefinition<State, Actions>;
+export type Lifecycle = ComposeContextLifecycle<State, Actions>;
+export type Value = ComposeContextValue<ReadonlyDeep<State>, Actions>;
+export type Implementation = ComposeContext<State, Actions>;
