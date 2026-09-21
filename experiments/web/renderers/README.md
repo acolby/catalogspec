@@ -175,7 +175,7 @@ sequenceDiagram
   participant Api as api
   participant Mounter as createSceneMounter
   participant Compose as composeView
-  participant Adapter as implementation.viewAdapter
+  participant Adapter as implementation.adapter
   participant DOM as DOM root
 
   Main->>CoordMount: mountScene({ root, sceneId })
@@ -185,12 +185,12 @@ sequenceDiagram
   CoordMount->>Mounter: createSceneMounter()
   Coord-->>Mounter: onSceneChange(scene)
   Mounter->>Api: resolveImplementation(scene)
-  Api-->>Mounter: Preact implementation with viewAdapter
+  Api-->>Mounter: Preact implementation with adapter
   Mounter->>Mounter: validate catalog + resolve theme + apply DOM root
-  Mounter->>Compose: composeView(scene.root, implementation, runtime, implementation.viewAdapter)
+  Mounter->>Compose: composeView(scene.root, implementation, runtime, implementation.adapter)
   Compose-->>Mounter: Preact view
   Mounter->>Adapter: mount(root, view)
   Adapter->>DOM: commit view
 ```
 
-Implementations are BYO-view-adapter: as long as item views and `viewAdapter` agree on `TView`, the shared mounter/composer handles the rest.
+Implementations are BYO-adapter: as long as item views and `adapter` agree on `TView`, the shared mounter/composer handles the rest.

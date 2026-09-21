@@ -8,7 +8,7 @@ export type MountSceneOptions = {
 };
 
 type RuntimeImplementation = NonNullable<Awaited<ReturnType<typeof api.resolveImplementation>>>;
-type RuntimeView = RuntimeImplementation extends { viewAdapter: ViewAdapter<infer TView> } ? TView : never;
+type RuntimeView = RuntimeImplementation extends { adapter: ViewAdapter<infer TView> } ? TView : never;
 
 const mountResolvedScene = createSceneMounter<RuntimeImplementation, RuntimeView>();
 

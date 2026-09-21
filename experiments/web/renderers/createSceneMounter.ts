@@ -79,7 +79,7 @@ export function createSceneMounter<TImplementation extends ContextBackedImplemen
 
           activeItemIds = new Set<string>();
           applySceneRoot(root, theme);
-          implementation.viewAdapter.mount(root, composeView(scene.root, implementation, runtime, implementation.viewAdapter));
+          implementation.adapter.mount(root, composeView(scene.root, implementation, runtime, implementation.adapter));
           unmountInactiveItems();
         })
         .catch((error: unknown) => {

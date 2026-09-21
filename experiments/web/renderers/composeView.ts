@@ -6,7 +6,7 @@ import type { ImplementedCatalog, RendererRuntimeContext, ViewAdapter } from "./
 type GenericImplementedItem<TView> = ModelBackedImplementedItem<TView, any, any, any, any, any>;
 export type GenericImplementedCatalog<TView> = ImplementedCatalog<GenericImplementedItem<TView>, any>;
 export type ViewAdaptedImplementedCatalog<TView> = GenericImplementedCatalog<TView> & {
-  viewAdapter: ViewAdapter<TView>;
+  adapter: ViewAdapter<TView>;
 };
 
 type ModelRecord = {

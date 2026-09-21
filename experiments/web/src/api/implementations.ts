@@ -1,11 +1,11 @@
-import { preactImplementation } from "../../implementations/preact/splash";
+import { implementedCatalog } from "../../implementations/preact/splash";
 import type { SceneSnapshot } from "../shared/types";
 
-type ResolvedImplementation = typeof preactImplementation;
+type ResolvedImplementation = typeof implementedCatalog;
 
 export async function resolveImplementation(scene: SceneSnapshot): Promise<ResolvedImplementation | undefined> {
-  if (scene.catalog.id === preactImplementation.catalog.id && scene.catalog.version === preactImplementation.catalog.version) {
-    return preactImplementation;
+  if (scene.catalog.id === implementedCatalog.catalog.id && scene.catalog.version === implementedCatalog.catalog.version) {
+    return implementedCatalog;
   }
 
   return undefined;

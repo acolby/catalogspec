@@ -3,7 +3,7 @@ import type { BoundaryInput, ViewAdapter } from "../../../../renderers";
 
 export type ImplementationView = ComponentChildren;
 
-export const viewAdapter: ViewAdapter<ImplementationView> = {
+export const adapter: ViewAdapter<ImplementationView> = {
   boundary(input) {
     return <Boundary key={input.key} input={input} />;
   },
