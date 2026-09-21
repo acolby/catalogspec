@@ -15,10 +15,9 @@ experiments/web/
   src/coordinator/      scene coordination and environment transports
   src/runtime/          runtime.html entrypoint
   models/               experimental framework-agnostic model primitives
-  renderers/
-    preact/             Preact view renderer
+  renderers/            shared web renderer/model composition utilities
   implementations/
-    preact/splash/      Preact implementation of the Splash catalog
+    preact/splash/      Preact implementation of the Splash catalog, including its view adapter
 ```
 
 ## Boundary
@@ -33,8 +32,8 @@ Runtime page: /runtime.html
   thin entrypoint at src/runtime/main.ts
   scene coordinator imported from src/coordinator
   default iframe postMessage transport
-  Preact view renderer from renderers/preact
-  Preact Splash implementation from implementations/preact/splash
+  shared renderer utilities from renderers/
+  Preact Splash implementation and view adapter from implementations/preact/splash
 ```
 
 The runtime page can also be opened directly:

@@ -1,5 +1,5 @@
 export { composeView } from "./composeView";
-export type { GenericImplementedCatalog } from "./composeView";
+export type { GenericImplementedCatalog, ViewAdaptedImplementedCatalog } from "./composeView";
 export { createSceneMounter } from "./createSceneMounter";
 export type { CreateSceneMounterOptions, SceneMounterOptions } from "./createSceneMounter";
 export type {

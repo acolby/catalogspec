@@ -2,14 +2,14 @@
 
 Status: experimental / non-normative
 
-A renderer adapts scene data and catalog implementations to a native UI framework such as Preact, React, Lit, or another target.
+The shared renderer utilities adapt scene data and catalog implementations to a framework-native view value, such as Preact children, React nodes, Lit templates, or another web view target.
 
 The web experiment separates two layers:
 
 - **web/environment layer**: owns DOM root setup, scene fetching, implementation resolution, catalog/theme checks, and runtime context construction.
-- **view renderer layer**: owns only framework-specific view composition and committing that view to the host.
+- **view adapter layer**: supplied by each implementation; owns only framework-specific boundary creation and host mounting.
 
-The renderer contract has two framework-specific primitives:
+The required implementation-provided view adapter has two framework-specific primitives:
 
 - **boundary**: create an embeddable framework-native view boundary, such as a Preact child, React node, or Lit template fragment.
 - **mount**: commit a completed framework-native view value into a host target, such as a DOM element.
@@ -25,11 +25,9 @@ renderers/
   implementedItem.ts
   types.ts
   index.ts
-  preact/
-    index.ts
-    src/
-      adapter.tsx         # Preact boundary + mount primitives
-      mountScene.tsx      # Preact mounter created from createSceneMounter
+
+implementations/preact/splash/src/
+  adapter.tsx             # Preact boundary + mount primitives supplied by the implementation
 ```
 
 ## Stateful item model scaffold
@@ -100,9 +98,9 @@ Shared web/environment utility. It wires together:
 - model lifecycle tracking and one shared ticker
 - DOM scene root styling
 - the shared `composeView`
-- a framework adapter with `boundary` and `mount` primitives
+- the implementation-provided view adapter with `boundary` and `mount` primitives
 
-It does not know Preact, React, Lit, or any specific catalog.
+It does not know Preact, React, Lit, or any specific catalog. The implementation resolved by the API brings its own adapter.
 
 ### `composeView`
 
@@ -122,9 +120,9 @@ type ModalSlots<TView> = {
 
 A Preact view can render those outlets directly, while other renderers can project them into their own native boundary primitive. This keeps slot names catalog-derived while leaving the concrete outlet value generic over each renderer.
 
-### Framework adapter
+### Implementation view adapter
 
-Framework/native boundary and mount primitives.
+Framework/native boundary and mount primitives supplied on the resolved implementation.
 
 For Preact this is effectively:
 
@@ -148,8 +146,7 @@ flowchart TD
   B --> C[createRuntimeCoordinator]
   C --> D[API fetchScene sceneId]
   D --> E[RuntimeCoordinator]
-  B --> F[renderer/preact mountScene]
-  F --> G[createSceneMounter]
+  B --> G[createSceneMounter]
 
   E -->|onSceneChange scene| G
   G --> H[API resolveImplementation scene]
@@ -176,32 +173,24 @@ sequenceDiagram
   participant CoordMount as coordinator/mountScene
   participant Coord as RuntimeCoordinator
   participant Api as api
-  participant PreactMount as renderers/preact mountScene
   participant Mounter as createSceneMounter
   participant Compose as composeView
+  participant Adapter as implementation.viewAdapter
   participant DOM as DOM root
 
   Main->>CoordMount: mountScene({ root, sceneId })
   CoordMount->>Coord: createRuntimeCoordinator({ sceneId })
   Coord->>Api: fetchScene(sceneId)
   Api-->>Coord: SceneSnapshot
-  CoordMount->>PreactMount: mountScene({ root, coordinator, api })
-  PreactMount->>Mounter: createSceneMounter({ adapter })
+  CoordMount->>Mounter: createSceneMounter()
   Coord-->>Mounter: onSceneChange(scene)
   Mounter->>Api: resolveImplementation(scene)
-  Api-->>Mounter: ImplementedCatalog
+  Api-->>Mounter: Preact implementation with viewAdapter
   Mounter->>Mounter: validate catalog + resolve theme + apply DOM root
-  Mounter->>Compose: composeView(scene.root, implementation, runtime, adapter)
+  Mounter->>Compose: composeView(scene.root, implementation, runtime, implementation.viewAdapter)
   Compose-->>Mounter: Preact view
-  Mounter->>DOM: adapter.mount(root, view)
+  Mounter->>Adapter: mount(root, view)
+  Adapter->>DOM: commit view
 ```
 
-## Naming note
-
-Exports inside a renderer are intentionally framework-local:
-
-```ts
-import { mountScene, adapter } from "../../renderers/preact";
-```
-
-The import path already identifies the framework, so exported names do not include `Preact`.
+Implementations are BYO-view-adapter: as long as item views and `viewAdapter` agree on `TView`, the shared mounter/composer handles the rest.

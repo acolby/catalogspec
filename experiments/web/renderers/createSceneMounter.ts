@@ -3,8 +3,8 @@ import type { RuntimeCoordinator } from "../src/coordinator";
 import type { CatalogImplementation, SceneSnapshot, ThemeTokens } from "../src/shared/types";
 import { createItemModel, type ItemModel } from "../models";
 import type { ContextImplementation, ContextImplementations, RuntimeContext } from "./context";
-import { composeView, type GenericImplementedCatalog } from "./composeView";
-import type { ActionHandler, RendererRuntimeContext, ViewAdapter } from "./types";
+import { composeView, type ViewAdaptedImplementedCatalog } from "./composeView";
+import type { ActionHandler, RendererRuntimeContext } from "./types";
 
 type ContextBackedImplementation<TItem = unknown> = CatalogImplementation<TItem> & {
   context?: ContextImplementations;
@@ -18,9 +18,7 @@ type ContextModelRecord = {
   tickUnsubscribe?: () => void;
 };
 
-export type CreateSceneMounterOptions<TView> = {
-  adapter: ViewAdapter<TView>;
-};
+export type CreateSceneMounterOptions = Record<string, never>;
 
 export type SceneMounterOptions<TImplementation extends ContextBackedImplementation> = {
   root: Element;
@@ -28,9 +26,9 @@ export type SceneMounterOptions<TImplementation extends ContextBackedImplementat
   api: ApiClient<TImplementation>;
 };
 
-export function createSceneMounter<TImplementation extends ContextBackedImplementation & GenericImplementedCatalog<TView>, TView>({
-  adapter,
-}: CreateSceneMounterOptions<TView>) {
+export function createSceneMounter<TImplementation extends ContextBackedImplementation & ViewAdaptedImplementedCatalog<TView>, TView>(
+  _options: CreateSceneMounterOptions = {},
+) {
   return function mountScene({ root, coordinator, api }: SceneMounterOptions<TImplementation>): () => void {
     let version = 0;
     let currentScene = coordinator.getScene();
@@ -81,7 +79,7 @@ export function createSceneMounter<TImplementation extends ContextBackedImplemen
 
           activeItemIds = new Set<string>();
           applySceneRoot(root, theme);
-          adapter.mount(root, composeView(scene.root, implementation, runtime, adapter));
+          implementation.viewAdapter.mount(root, composeView(scene.root, implementation, runtime, implementation.viewAdapter));
           unmountInactiveItems();
         })
         .catch((error: unknown) => {

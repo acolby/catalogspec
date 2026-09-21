@@ -1,6 +1,7 @@
 import type { ComponentChildren } from "preact";
-import type { ImplementedCatalog, ModelBackedImplementedItem } from "../../../../renderers";
+import type { ModelBackedImplementedItem, ViewAdaptedImplementedCatalog } from "../../../../renderers";
 import { context } from "./contexts";
+import { viewAdapter } from "./adapter";
 import { catalog, themes } from "./generated";
 import { implemented as AuthButton } from "./items/AuthButton";
 import { implemented as Background } from "./items/Background";
@@ -14,7 +15,7 @@ import { implemented as ThemePicker } from "./items/ThemePicker";
 
 type PreactImplementedItem = ModelBackedImplementedItem<ComponentChildren, any, any, any, any, any>;
 
-export const preactImplementation: ImplementedCatalog<PreactImplementedItem> = {
+export const preactImplementation: ViewAdaptedImplementedCatalog<ComponentChildren> = {
   catalog: {
     id: catalog.id,
     version: catalog.version,
@@ -32,4 +33,5 @@ export const preactImplementation: ImplementedCatalog<PreactImplementedItem> = {
     ThemePicker,
   },
   themes,
+  viewAdapter,
 };
