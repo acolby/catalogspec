@@ -30,7 +30,7 @@ export type ImplementedItemView<
   TProps extends Record<string, unknown>,
   TState extends object,
   TActions extends Record<string, (...args: any[]) => any>,
-  TSlots = Record<string, TView[]>,
+  TSlots = Record<string, TView | undefined>,
   TContext = RuntimeContext,
 > = (input: ImplementedItemInput<TView, TProps, ReadonlyDeep<TState>, TActions, TSlots, TContext>) => TView;
 
@@ -39,7 +39,7 @@ export type ModelBackedImplementedItem<
   TProps extends Record<string, unknown>,
   TState extends object,
   TActions extends Record<string, (...args: any[]) => any>,
-  TSlots = Record<string, TView[]>,
+  TSlots = Record<string, TView | undefined>,
   TContext = RuntimeContext,
 > = {
   model: ItemModelDefinition<TState, TActions>;

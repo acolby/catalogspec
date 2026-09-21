@@ -16,7 +16,7 @@ export type ImplementedItemContext<TContext = RuntimeContext> = {
   context: TContext;
 };
 
-export type DefaultSlots<TView> = Record<string, TView[]>;
+export type DefaultSlots<TView> = Record<string, TView | undefined>;
 
 export type ImplementedItemInput<
   TView,

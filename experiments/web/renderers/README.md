@@ -107,19 +107,19 @@ It does not know Preact, React, Lit, or any specific catalog.
 
 Framework-specific item/tree view composer.
 
-It receives one scene item instance, finds the matching implemented item in the catalog implementation, composes slots recursively, binds model state/actions and typed runtime context to the item view, registers optional lifecycle hooks, and returns the framework view value for that item tree.
+It receives one scene item instance, finds the matching implemented item in the catalog implementation, creates renderer-specific slot outlets, binds model state/actions and typed runtime context to the item view, registers optional lifecycle hooks, and returns the framework view value for that item boundary.
 
-Slots are represented generically as arrays of composed child view values, and item contracts may narrow the slot object by name:
+Slots are represented generically as renderer-specific outlet values, not arrays of already-composed child view values. Item contracts may narrow the slot object by name:
 
 ```ts
-type DefaultSlots<TView> = Record<string, TView[]>;
+type DefaultSlots<TView> = Record<string, TView | undefined>;
 
 type ModalSlots<TView> = {
-  content?: TView[];
+  content?: TView;
 };
 ```
 
-A Preact view can render those arrays directly, while other renderers can flatten, wrap, or project them into their own native child representation. This keeps slot names catalog-derived while leaving the concrete view value generic over each renderer.
+A Preact view can render those outlets directly, while other renderers can project them into their own native boundary primitive. This keeps slot names catalog-derived while leaving the concrete outlet value generic over each renderer.
 
 ### `renderView`
 

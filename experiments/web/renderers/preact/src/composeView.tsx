@@ -23,9 +23,9 @@ export function composeView(instance: SceneItemInstance, implementedCatalog: Pre
   const implementedItem = implementedCatalog.items[instance.item];
   if (!implementedItem) return <MissingItem instance={instance} />;
 
-  const slots: Record<string, ComponentChildren[]> = {};
+  const slots: Record<string, ComponentChildren | undefined> = {};
   for (const [slotName, children] of Object.entries(instance.slots ?? {})) {
-    slots[slotName] = children.map((child) => composeView(child, implementedCatalog, runtime));
+    slots[slotName] = createSlotOutlet(instance, slotName, children, implementedCatalog, runtime);
   }
 
   const baseInput = {
@@ -116,6 +116,41 @@ function lifecycleInput(instance: SceneItemInstance, model: ReturnType<typeof cr
     emit: (event: string, props?: Record<string, unknown>) => runtime.emit({ name: event, source: instance, props }),
     context: runtime.context,
   };
+}
+
+function createSlotOutlet(
+  parent: SceneItemInstance,
+  slotName: string,
+  children: SceneItemInstance[],
+  implementedCatalog: PreactImplementedCatalog,
+  runtime: RendererRuntimeContext,
+): ComponentChildren | undefined {
+  if (children.length === 0) return undefined;
+
+  return (
+    <SlotOutlet
+      key={`${parent.id}:${slotName}`}
+      parentId={parent.id}
+      slotName={slotName}
+      childrenInstances={children}
+      implementedCatalog={implementedCatalog}
+      runtime={runtime}
+    />
+  );
+}
+
+function SlotOutlet({
+  childrenInstances,
+  implementedCatalog,
+  runtime,
+}: {
+  parentId: string;
+  slotName: string;
+  childrenInstances: SceneItemInstance[];
+  implementedCatalog: PreactImplementedCatalog;
+  runtime: RendererRuntimeContext;
+}) {
+  return <>{childrenInstances.map((child) => composeView(child, implementedCatalog, runtime))}</>;
 }
 
 function createActions(dispatch: (action: string, props?: Record<string, unknown>) => void): Record<string, ActionHandler> {

@@ -13,7 +13,7 @@ export type Actions = {
   close(): void;
 };
 export type Slots<TView> = {
-  content?: TView[];
+  content?: TView;
 };
 export type Model = ItemModelDefinition<State, Actions>;
 export type Lifecycle = ImplementedItemLifecycle<Props, State, Actions, Context>;
