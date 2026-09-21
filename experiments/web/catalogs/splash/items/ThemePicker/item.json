@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "title": "Theme Picker",
+  "description": "Theme selection control that requests scene-level theme changes.",
+  "kind": "component",
+  "props": {
+    "label": {
+      "type": "string",
+      "description": "Label displayed next to the theme selector.",
+      "default": "Theme"
+    }
+  },
+  "state": {},
+  "slots": {},
+  "actions": {},
+  "events": {
+    "themeChangeRequested": {
+      "title": "Theme Change Requested",
+      "description": "Emitted before the scene theme action is called.",
+      "props": {
+        "theme": { "type": "string", "required": true }
+      }
+    }
+  }
+}

@@ -19,6 +19,12 @@
     "username": {
       "type": "string",
       "description": "Display name for the logged-in viewer."
+    },
+    "themeName": {
+      "type": "string",
+      "description": "Current theme selected for the scene.",
+      "enum": ["light", "dark"],
+      "default": "light"
     }
   },
   "actions": {
@@ -54,11 +60,23 @@
           "default": "self"
         }
       }
+    },
+    "setTheme": {
+      "title": "Set Theme",
+      "description": "Updates the active scene theme.",
+      "props": {
+        "theme": {
+          "type": "string",
+          "required": true,
+          "enum": ["light", "dark"],
+          "description": "Theme name to activate."
+        }
+      }
     }
   },
   "themes": {
     "default": "light",
     "available": ["light", "dark"]
   },
-  "items": ["Hero", "CallToAction", "Background", "Stack", "Counter", "Modal", "BetaSignupForm", "AuthButton"]
+  "items": ["Hero", "CallToAction", "Background", "Stack", "Counter", "Modal", "BetaSignupForm", "AuthButton", "ThemePicker"]
 }

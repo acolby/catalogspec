@@ -4,8 +4,8 @@ import { isModelBackedImplementedItem, type ModelBackedImplementedItem } from ".
 import type { ActionHandler, ImplementedCatalog, ImplementedItemInput, RendererRuntimeContext } from "../../types";
 import type { SceneItemInstance } from "../../../src/shared/types";
 
-type PreactPlainImplementedItem = ComponentType<ImplementedItemInput<ComponentChildren, any>>;
-type PreactModelBackedImplementedItem = ModelBackedImplementedItem<ComponentChildren, any, any, any>;
+type PreactPlainImplementedItem = ComponentType<ImplementedItemInput<ComponentChildren, any, any, any, any, any>>;
+type PreactModelBackedImplementedItem = ModelBackedImplementedItem<ComponentChildren, any, any, any, any, any>;
 type PreactImplementedItem = PreactPlainImplementedItem | PreactModelBackedImplementedItem;
 export type PreactImplementedCatalog = ImplementedCatalog<PreactImplementedItem, any>;
 
@@ -23,7 +23,7 @@ export function composeView(instance: SceneItemInstance, implementedCatalog: Pre
   const implementedItem = implementedCatalog.items[instance.item];
   if (!implementedItem) return <MissingItem instance={instance} />;
 
-  const slots: Record<string, ComponentChildren> = {};
+  const slots: Record<string, ComponentChildren[]> = {};
   for (const [slotName, children] of Object.entries(instance.slots ?? {})) {
     slots[slotName] = children.map((child) => composeView(child, implementedCatalog, runtime));
   }
@@ -33,11 +33,7 @@ export function composeView(instance: SceneItemInstance, implementedCatalog: Pre
     props: instance.props ?? {},
     slots,
     emit: (event: string, props?: Record<string, unknown>) => runtime.emit({ name: event, source: instance, props }),
-    scene: {
-      theme: runtime.theme,
-      state: runtime.sceneState,
-      actions: runtime.sceneActions,
-    },
+    context: runtime.context,
   };
 
   if (isModelBackedImplementedItem(implementedItem)) {
@@ -118,11 +114,7 @@ function lifecycleInput(instance: SceneItemInstance, model: ReturnType<typeof cr
     state: model.state(),
     actions: model.actions(),
     emit: (event: string, props?: Record<string, unknown>) => runtime.emit({ name: event, source: instance, props }),
-    scene: {
-      theme: runtime.theme,
-      state: runtime.sceneState,
-      actions: runtime.sceneActions,
-    },
+    context: runtime.context,
   };
 }
 

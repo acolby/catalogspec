@@ -1,6 +1,7 @@
+import type { ComponentChildren } from "preact";
 import type { View } from "./types";
 
-export const view: View = ({ props, slots, scene }) => {
+export const view: View<ComponentChildren> = ({ props, slots, context }) => {
   const direction = props.direction ?? "vertical";
   const align = props.align ?? "stretch";
   return (
@@ -8,7 +9,7 @@ export const view: View = ({ props, slots, scene }) => {
       style={{
         display: "flex",
         flexDirection: direction === "horizontal" ? "row" : "column",
-        gap: scene.theme?.space?.[props.gap ?? "md"] ?? "16px",
+        gap: context.theme.state.tokens?.space?.[props.gap ?? "md"] ?? "16px",
         alignItems: alignItems(align),
         minHeight: "100%",
       }}

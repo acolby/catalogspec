@@ -1,15 +1,23 @@
 import type { ApiClient } from "../src/api";
 import type { RuntimeCoordinator } from "../src/coordinator";
 import type { CatalogImplementation, SceneSnapshot, ThemeTokens } from "../src/shared/types";
-import { createItemModel, type ItemModel, type ItemModelDefinition } from "../models";
+import { createItemModel, type ItemModel } from "../models";
+import type { ContextImplementation, ContextImplementations, RuntimeContext } from "./context";
 import type { ActionHandler, RendererRuntimeContext } from "./types";
 
-type SceneModelDefinition = ItemModelDefinition<any, any>;
-type SceneModelImplementation<TItem = unknown> = CatalogImplementation<TItem> & {
-  model?: SceneModelDefinition;
+type ContextBackedImplementation<TItem = unknown> = CatalogImplementation<TItem> & {
+  context?: ContextImplementations;
 };
 
-export type CreateSceneMounterOptions<TImplementation extends SceneModelImplementation, TView> = {
+type ContextModelRecord = {
+  key: string;
+  model: ItemModel<any, any>;
+  unsubscribe: () => void;
+  cleanup?: () => void;
+  tickUnsubscribe?: () => void;
+};
+
+export type CreateSceneMounterOptions<TImplementation extends ContextBackedImplementation, TView> = {
   composeView(
     instance: SceneSnapshot["root"],
     implementation: TImplementation,
@@ -18,22 +26,20 @@ export type CreateSceneMounterOptions<TImplementation extends SceneModelImplemen
   renderView(root: Element, view: TView): void;
 };
 
-export type SceneMounterOptions<TImplementation extends SceneModelImplementation> = {
+export type SceneMounterOptions<TImplementation extends ContextBackedImplementation> = {
   root: Element;
   coordinator: RuntimeCoordinator;
   api: ApiClient<TImplementation>;
 };
 
-export function createSceneMounter<TImplementation extends SceneModelImplementation, TView>({
+export function createSceneMounter<TImplementation extends ContextBackedImplementation, TView>({
   composeView,
   renderView,
 }: CreateSceneMounterOptions<TImplementation, TView>) {
   return function mountScene({ root, coordinator, api }: SceneMounterOptions<TImplementation>): () => void {
     let version = 0;
     let currentScene = coordinator.getScene();
-    let sceneModel: ItemModel<any, any> | undefined;
-    let sceneModelKey: string | undefined;
-    let unsubscribeSceneModel: (() => void) | undefined;
+    const contextModels = new Map<string, ContextModelRecord>();
     let activeItemIds = new Set<string>();
     const mountedItemCleanups = new Map<string, () => void>();
     const tickCallbacks = new Set<(frame: { now: number; deltaMs: number }) => void>();
@@ -52,20 +58,15 @@ export function createSceneMounter<TImplementation extends SceneModelImplementat
             throw new Error(`No matching implementation for ${scene.catalog.id}@${scene.catalog.version}.`);
           }
 
-          const sceneRuntimeModel = getSceneModel(scene, implementation);
-          const sceneState = sceneRuntimeModel?.state() ?? scene.state ?? {};
-          const sceneActions = createSceneActions({
-            modelActions: sceneRuntimeModel?.actions(),
-            dispatchExternalAction: (action, props) => coordinator.handleAction({ name: action, props }),
-          });
+          const context = createRuntimeContext(scene, implementation);
+          const theme = context.theme?.state?.tokens as ThemeTokens | undefined;
 
           const runtime: RendererRuntimeContext = {
             scene,
-            theme: resolveTheme(scene, implementation),
+            theme,
             action: coordinator.handleAction,
             emit: coordinator.handleEvent,
-            sceneState,
-            sceneActions,
+            context,
             lifecycle: {
               enterItem(id, unmount) {
                 activeItemIds.add(id);
@@ -84,13 +85,97 @@ export function createSceneMounter<TImplementation extends SceneModelImplementat
           };
 
           activeItemIds = new Set<string>();
-          applySceneRoot(root, runtime.theme);
+          applySceneRoot(root, theme);
           renderView(root, composeView(scene.root, implementation, runtime));
           unmountInactiveItems();
         })
         .catch((error: unknown) => {
           console.error("Unable to resolve scene implementation.", error);
         });
+    }
+
+    function createRuntimeContext(scene: SceneSnapshot, implementation: TImplementation): RuntimeContext {
+      const context: RuntimeContext = {};
+      const implementations = implementation.context ?? {};
+
+      for (const [name, contextImplementation] of Object.entries(implementations)) {
+        const model = getContextModel(name, scene, implementation, contextImplementation);
+        context[name] = {
+          state: model.state(),
+          actions: createContextActions({
+            modelActions: model.actions(),
+            dispatchExternalAction: (action, props) => coordinator.handleAction({ name: action, props }),
+          }),
+        };
+      }
+
+      return context;
+    }
+
+    function getContextModel(
+      name: string,
+      scene: SceneSnapshot,
+      implementation: TImplementation,
+      contextImplementation: ContextImplementation<any, any>,
+    ): ItemModel<any, any> {
+      const key = `${scene.catalog.id}@${scene.catalog.version}:${scene.id}:${name}`;
+      const existing = contextModels.get(name);
+      if (existing?.key === key) return existing.model;
+
+      existing?.tickUnsubscribe?.();
+      existing?.cleanup?.();
+      existing?.unsubscribe();
+
+      const model = createItemModel(initialContextState(name, scene, implementation), contextImplementation.model);
+      const unsubscribe = model.subscribe((state, previous) => {
+        coordinator.handleEvent({ name: `${name}ContextChanged`, props: { state, previous } });
+        composeAndRenderCurrentScene();
+      });
+      const lifecycleInput = () => ({ state: model.state(), actions: model.actions() });
+      const cleanup = contextImplementation.lifecycle.mount?.(lifecycleInput());
+      const tickUnsubscribe = contextImplementation.lifecycle.tick
+        ? registerTick((frame) => contextImplementation.lifecycle.tick?.(lifecycleInput(), frame))
+        : undefined;
+
+      const record: ContextModelRecord = {
+        key,
+        model,
+        unsubscribe,
+        cleanup: typeof cleanup === "function" ? cleanup : undefined,
+        tickUnsubscribe,
+      };
+      contextModels.set(name, record);
+      return model;
+    }
+
+    function initialContextState(name: string, scene: SceneSnapshot, implementation: TImplementation): Record<string, unknown> {
+      if (name === "scene") {
+        const state = scene.state ?? {};
+        return {
+          loggedIn: state.loggedIn,
+          username: state.username,
+        };
+      }
+      if (name === "theme") {
+        const fallbackThemeName = scene.theme ?? "light";
+        const sceneThemeName = typeof scene.state?.themeName === "string" ? scene.state.themeName : fallbackThemeName;
+        const tokens = implementation.themes?.[sceneThemeName] ?? implementation.themes?.[fallbackThemeName] ?? implementation.themes?.light;
+        return {
+          name: sceneThemeName,
+          tokens,
+          available: Object.keys(implementation.themes ?? {}),
+        };
+      }
+      return {};
+    }
+
+    function registerTick(callback: (frame: { now: number; deltaMs: number }) => void): () => void {
+      tickCallbacks.add(callback);
+      startTicker();
+      return () => {
+        tickCallbacks.delete(callback);
+        stopTickerIfIdle();
+      };
     }
 
     function startTicker(): void {
@@ -121,21 +206,6 @@ export function createSceneMounter<TImplementation extends SceneModelImplementat
       stopTickerIfIdle();
     }
 
-    function getSceneModel(scene: SceneSnapshot, implementation: TImplementation): ItemModel<any, any> | undefined {
-      if (!implementation.model) return undefined;
-      const key = `${scene.catalog.id}@${scene.catalog.version}:${scene.id}`;
-      if (sceneModel && sceneModelKey === key) return sceneModel;
-
-      unsubscribeSceneModel?.();
-      sceneModelKey = key;
-      sceneModel = createItemModel(scene.state ?? {}, implementation.model);
-      unsubscribeSceneModel = sceneModel.subscribe((state, previous) => {
-        coordinator.handleEvent({ name: "sceneStateChanged", props: { state, previous } });
-        composeAndRenderCurrentScene();
-      });
-      return sceneModel;
-    }
-
     const unsubscribeSceneChange = coordinator.onSceneChange((scene) => {
       currentScene = scene;
       composeAndRenderCurrentScene();
@@ -143,7 +213,12 @@ export function createSceneMounter<TImplementation extends SceneModelImplementat
 
     return () => {
       unsubscribeSceneChange();
-      unsubscribeSceneModel?.();
+      for (const record of contextModels.values()) {
+        record.tickUnsubscribe?.();
+        record.cleanup?.();
+        record.unsubscribe();
+      }
+      contextModels.clear();
       for (const cleanup of mountedItemCleanups.values()) cleanup();
       mountedItemCleanups.clear();
       tickCallbacks.clear();
@@ -156,10 +231,6 @@ function matchesSceneCatalog(scene: SceneSnapshot, implementation: CatalogImplem
   return scene.catalog.id === implementation.catalog.id && scene.catalog.version === implementation.catalog.version;
 }
 
-function resolveTheme(scene: SceneSnapshot, implementation: CatalogImplementation): ThemeTokens | undefined {
-  return implementation.themes?.[scene.theme ?? "light"] ?? implementation.themes?.light;
-}
-
 function applySceneRoot(root: Element, theme?: ThemeTokens): void {
   root.classList.add("scene-root");
   if (!(root instanceof HTMLElement)) return;
@@ -169,7 +240,7 @@ function applySceneRoot(root: Element, theme?: ThemeTokens): void {
   root.style.background = theme?.color?.background ?? "";
 }
 
-function createSceneActions({
+function createContextActions({
   modelActions,
   dispatchExternalAction,
 }: {

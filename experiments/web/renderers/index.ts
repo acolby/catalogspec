@@ -1,5 +1,13 @@
 export { createSceneMounter } from "./createSceneMounter";
 export type { CreateSceneMounterOptions, SceneMounterOptions } from "./createSceneMounter";
+export type {
+  ContextImplementation,
+  ContextImplementations,
+  ContextLifecycle,
+  ContextLifecycleInput,
+  RuntimeContext,
+  RuntimeContextValue,
+} from "./context";
 export { isModelBackedImplementedItem } from "./implementedItem";
 export type {
   ImplementedItemLifecycle,
@@ -10,6 +18,7 @@ export type {
 } from "./implementedItem";
 export type {
   ActionHandler,
+  DefaultSlots,
   EventEmitter,
   ImplementedCatalog,
   ImplementedItem,

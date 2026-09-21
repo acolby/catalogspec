@@ -1,13 +1,9 @@
+import type { ComponentChildren } from "preact";
 import type { View } from "./types";
 
-type AuthSceneState = {
-  loggedIn?: boolean;
-  username?: string | null;
-};
-
-export const view: View = ({ props, emit, scene }) => {
-  const theme = scene.theme;
-  const auth = scene.state as AuthSceneState;
+export const view: View<ComponentChildren> = ({ props, emit, context }) => {
+  const theme = context.theme.state.tokens;
+  const auth = context.scene.state;
   const loggedIn = auth.loggedIn === true;
   const username = auth.username ?? props.username ?? "Aaron";
 
@@ -26,11 +22,11 @@ export const view: View = ({ props, emit, scene }) => {
         onClick={() => {
           if (loggedIn) {
             emit("logoutRequested");
-            scene.actions.logout();
+            context.scene.actions.logout();
           } else {
             const nextUsername = props.username ?? "Aaron";
             emit("loginRequested", { username: nextUsername });
-            scene.actions.login({ username: nextUsername });
+            context.scene.actions.login({ username: nextUsername });
           }
         }}
       >

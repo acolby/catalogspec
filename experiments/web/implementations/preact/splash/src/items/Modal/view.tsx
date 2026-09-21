@@ -1,7 +1,8 @@
+import type { ComponentChildren } from "preact";
 import type { View } from "./types";
 
-export const view: View = ({ props, state, actions, emit, slots, scene }) => {
-  const theme = scene.theme;
+export const view: View<ComponentChildren> = ({ props, state, actions, emit, slots, context }) => {
+  const theme = context.theme.state.tokens;
 
   return (
     <>

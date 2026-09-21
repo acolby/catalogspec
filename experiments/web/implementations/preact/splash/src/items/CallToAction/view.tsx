@@ -1,7 +1,8 @@
+import type { ComponentChildren } from "preact";
 import type { Theme, View } from "./types";
 
-export const view: View = ({ props, emit, scene }) => {
-  const theme = scene.theme;
+export const view: View<ComponentChildren> = ({ props, emit, context }) => {
+  const theme = context.theme.state.tokens;
   const variant = props.variant ?? "primary";
   const styles = variantStyle(variant, theme);
 
@@ -18,7 +19,7 @@ export const view: View = ({ props, emit, scene }) => {
       }}
       onClick={() => {
         emit("activated", { label: props.label, url: props.url });
-        if (props.url) scene.actions.openUrl({ url: props.url, target: props.target ?? "self" });
+        if (props.url) context.scene.actions.openUrl?.({ url: props.url, target: props.target ?? "self" });
       }}
     >
       {props.label}
