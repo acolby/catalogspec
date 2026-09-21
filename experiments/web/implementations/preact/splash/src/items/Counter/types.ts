@@ -1,6 +1,6 @@
 import type { ItemModelDefinition } from "../../../../../../models";
 import type { ImplementedItemLifecycle, ImplementedItemView, ModelBackedImplementedItem } from "../../../../../../renderers";
-import type { Context } from "../../context";
+import type { Context } from "../../contexts";
 import type { CounterProps, ThemeTokens } from "../../generated";
 
 export type Props = CounterProps;

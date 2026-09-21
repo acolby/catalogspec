@@ -1,6 +1,6 @@
 import type { ItemModelDefinition } from "../../../../../../models";
 import type { ImplementedItemLifecycle, ImplementedItemView, ModelBackedImplementedItem } from "../../../../../../renderers";
-import type { Context } from "../../context";
+import type { Context } from "../../contexts";
 import type { CallToActionProps, ThemeTokens } from "../../generated";
 
 export type Props = CallToActionProps;

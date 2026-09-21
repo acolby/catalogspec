@@ -1,6 +1,6 @@
 import type { ComponentChildren, ComponentType } from "preact";
 import type { ImplementedCatalog, ImplementedItemInput, ModelBackedImplementedItem } from "../../../../renderers";
-import { context } from "./context";
+import { context } from "./contexts";
 import { catalog, themes } from "./generated";
 import { implemented as AuthButton } from "./items/AuthButton";
 import { implemented as Background } from "./items/Background";

@@ -48,8 +48,8 @@ Illustrative only:
     "ProductCard": "./items/ProductCard.tsx"
   },
   "contexts": {
-    "auth": "./context/auth.ts",
-    "theme": "./context/theme.ts"
+    "auth": "./contexts/auth.ts",
+    "theme": "./contexts/theme.ts"
   }
 }
 ```

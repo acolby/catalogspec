@@ -54,7 +54,7 @@ export const implemented = {
 Implementations may also provide shared contexts next to items:
 
 ```txt
-context/
+contexts/
   scene/   # scene/domain state + actions
   theme/   # active theme state + actions
 items/
