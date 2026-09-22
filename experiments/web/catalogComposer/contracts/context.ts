@@ -1,5 +1,5 @@
 import type { ItemModelDefinition, ReadonlyDeep } from "../model";
-import type { LifecycleFrame } from "../implementation/item";
+import type { LifecycleFrame } from "./lifecycle";
 
 export type RuntimeContextValue<
   TState = Record<string, unknown>,

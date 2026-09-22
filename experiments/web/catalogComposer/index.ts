@@ -1,5 +1,5 @@
-export { defineAdapter, defineCatalog, defineContext, defineItem } from "./define";
 export { createSceneRuntime } from "./runtime";
+export { defineAdapter, defineCatalog, defineContext, defineItem } from "./contracts";
 
 export type {
   ComposeContextLifecycle,
@@ -9,4 +9,4 @@ export type {
   ModelDefinition,
   ReadonlyDeep,
   ViewAdapter,
-} from "./publicTypes";
+} from "./contracts";

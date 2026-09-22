@@ -1,15 +1,14 @@
 import { createItemModel } from "../model";
 import type { SceneItemInstance } from "../../src/shared/types";
-import { type ModelBackedImplementedItem } from "../implementation/item";
-import type { ImplementedCatalog } from "../implementation/catalog";
-import type { ComposerRuntimeContext } from "./types";
-import type { ViewAdapter } from "../adapter";
+import type {
+  ComposerRuntimeContext,
+  GenericImplementedCatalog,
+  GenericImplementedItem,
+  ViewAdaptedImplementedCatalog,
+  ViewAdapter,
+} from "../contracts";
 
-type GenericImplementedItem<TView> = ModelBackedImplementedItem<TView, any, any, any, any, any>;
-export type GenericImplementedCatalog<TView> = ImplementedCatalog<GenericImplementedItem<TView>, any>;
-export type ViewAdaptedImplementedCatalog<TView> = GenericImplementedCatalog<TView> & {
-  adapter: ViewAdapter<TView>;
-};
+export type { GenericImplementedCatalog, ViewAdaptedImplementedCatalog };
 
 type ModelRecord = {
   model: ReturnType<typeof createItemModel<any, any>>;

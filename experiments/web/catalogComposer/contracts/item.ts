@@ -1,7 +1,7 @@
 import type { ItemModelDefinition, ReadonlyDeep } from "../model";
-import type { RuntimeContext } from "../context";
-import type { ImplementedItemInput } from "../composer/types";
-import type { LifecycleFrame } from "../runtime/lifecycle";
+import type { RuntimeContext } from "./context";
+import type { ImplementedItemInput } from "./composer";
+import type { LifecycleFrame } from "./lifecycle";
 
 export type { LifecycleFrame };
 

@@ -9,7 +9,63 @@ This folder currently contains two closely related notions:
 
 The design goal is low-entropy implementation code: explicit data flow, minimal framework leakage, and small implementation-provided surfaces.
 
+## Current source shape
+
+```txt
+catalogComposer/
+  contracts/  implementation-facing define helpers and type contracts
+  composer/   scene item tree -> framework-native view
+  model/      state/action model primitive
+  runtime/    scene runtime orchestration
+  utils/      small shared helpers
+```
+
+Most implementation-facing type complexity is intentionally consolidated into `contracts/` so the top-level tree reflects the code with actual runtime behavior.
+
 ## Layer responsibilities
+
+### `contracts/`
+
+`contracts/` owns the type and authoring surface shared by implementation authors and Catalog Composer internals.
+
+It contains:
+
+- `defineAdapter`, `defineCatalog`, `defineContext`, `defineItem`
+- framework adapter contracts
+- implemented catalog/item/context contracts
+- item view and lifecycle contracts
+- model definition aliases
+- composer runtime input contracts
+
+This directory should contain no scene traversal, DOM work, transport logic, API access, or runtime state management. It is the contract vocabulary for the rest of the system.
+
+### `composer/`
+
+`composer/composeView.ts` projects a scene item subtree into `TView`.
+
+It owns:
+
+- scene item traversal
+- item implementation lookup
+- slot outlet creation through `adapter.boundary`
+- item input construction: `item`, `props`, `state`, `actions`, `slots`, `emit`, `context`
+- item lifecycle registration
+
+It currently also creates and stores item models. That works for the experiment, but the intended cleanup is to move item/context model ownership into an explicit runtime model driver.
+
+### `model/`
+
+`model/createItemModel.ts` is the current state/action primitive.
+
+A model definition provides an `actions(state)` factory. Actions mutate a cloned draft and commit that draft after the action returns. Subscribers receive the next and previous readonly states.
+
+Current policy:
+
+- scene item `state` is used as initial model state
+- once a model exists, it is runtime-owned
+- model state changes emit events and request a render
+
+Future cleanup should introduce a runtime model driver responsible for identity, reconciliation, subscriptions, invalidation, and disposal.
 
 ### `runtime/`
 
@@ -34,77 +90,6 @@ The public shape is runtime-oriented:
 const runtime = createSceneRuntime({ root, coordinator, api });
 const dispose = runtime.start();
 ```
-
-### `composer/`
-
-`composer/composeView.ts` projects a scene item subtree into `TView`.
-
-It owns:
-
-- scene item traversal
-- item implementation lookup
-- slot outlet creation through `adapter.boundary`
-- item input construction: `item`, `props`, `state`, `actions`, `slots`, `emit`, `context`
-- item lifecycle registration
-
-It currently also creates and stores item models. That works for the experiment, but the intended cleanup is to move item/context model ownership into an explicit runtime model driver.
-
-### `adapter/`
-
-The adapter is the only framework-specific primitive Catalog Composer needs:
-
-```ts
-type ViewAdapter<TView> = {
-  boundary(input: ViewAdapterBoundaryInput<TView>): TView | undefined;
-  mount(root: Element, view: TView): void;
-};
-```
-
-`boundary` creates embeddable slot/item boundaries. `mount` commits the completed root view into the host element.
-
-### `model/`
-
-`model/createItemModel.ts` is the current state/action primitive.
-
-A model definition provides an `actions(state)` factory. Actions mutate a cloned draft and commit that draft after the action returns. Subscribers receive the next and previous readonly states.
-
-Current policy:
-
-- scene item `state` is used as initial model state
-- once a model exists, it is runtime-owned
-- model state changes emit events and request a render
-
-Future cleanup should introduce a runtime model driver responsible for identity, reconciliation, subscriptions, invalidation, and disposal.
-
-### `context/`
-
-Context contracts describe named runtime capabilities exposed to items, such as `scene` and `theme`.
-
-A runtime context value has:
-
-```ts
-{
-  state,
-  actions,
-}
-```
-
-Context models are currently created by the scene runtime because they depend on scene inputs, implementation themes, coordinator actions, and render invalidation.
-
-### `implementation/`
-
-Implementation contracts describe what catalog implementations provide:
-
-- model-backed items
-- item lifecycle hooks
-- item views
-- implemented catalog shape
-
-These types are implementation-facing and intentionally framework-generic over `TView`.
-
-### `runtime/lifecycle/`
-
-Runtime lifecycle currently exposes shared lifecycle frame types. The active ticker and cleanup registry live in `runtime/createSceneRuntime.ts`. If they grow, they should move into this nested lifecycle bucket.
 
 ### `utils/`
 
@@ -147,16 +132,12 @@ Longer term, this can split into two top-level notions or packages:
 
 ```txt
 Catalog Composer
-  adapter/
+  contracts/
   composer/
-  context/ contracts
-  define.ts
-  implementation/
-  model/ definition contracts
+  model definition contracts
 
 Scene Runtime
   runtime/
-  runtime/lifecycle/
   model driver/execution
   context model execution
   coordinator/API integration

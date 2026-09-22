@@ -1,6 +1,6 @@
-import type { ViewAdaptedImplementedCatalog } from "./composer";
+import type { ViewAdaptedImplementedCatalog } from "./catalog";
 import type { ContextImplementation, RuntimeContext } from "./context";
-import type { ModelBackedImplementedItem } from "./implementation";
+import type { ModelBackedImplementedItem } from "./item";
 import type { DefaultSlots } from "./composer";
 import type { ViewAdapter } from "./adapter";
 

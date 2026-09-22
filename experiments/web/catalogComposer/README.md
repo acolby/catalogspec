@@ -126,17 +126,13 @@ The runtime resolves the implementation for the active scene, creates runtime co
 ```txt
 catalogComposer/
   index.ts          public exports
-  define.ts         implementation authoring helpers
   README.md         consumer-facing interface
   ARCHITECTURE.md   internal architecture and data flow
 
-  adapter/          framework-neutral adapter contract
+  contracts/        implementation-facing define helpers and type contracts
   composer/         scene item tree -> framework-native view
-  context/          runtime context contracts
-  implementation/   implementation-side item/catalog contracts
   model/            state/action model primitive
   runtime/          scene runtime orchestration
-    lifecycle/      runtime lifecycle/tick types and future utilities
   utils/            small shared helpers
 ```
 

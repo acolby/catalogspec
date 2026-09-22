@@ -1,8 +1,8 @@
 import type { RuntimeCoordinator } from "../../src/coordinator";
 import type { SceneItemInstance, SceneSnapshot, ThemeTokens } from "../../src/shared/types";
-import type { ViewAdapter } from "../adapter";
-import type { RuntimeContext } from "../context/types";
-import type { LifecycleFrame } from "../implementation/item";
+import type { ViewAdapter } from "./adapter";
+import type { RuntimeContext } from "./context";
+import type { LifecycleFrame } from "./lifecycle";
 
 export type ActionHandler = (props?: Record<string, unknown>) => void;
 

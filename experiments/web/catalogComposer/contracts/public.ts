@@ -1,5 +1,5 @@
 import type { ContextLifecycle, RuntimeContext, RuntimeContextValue } from "./context";
-import type { ImplementedItemLifecycle, ImplementedItemView } from "./implementation";
+import type { ImplementedItemLifecycle, ImplementedItemView } from "./item";
 import type { ItemModelDefinition, ReadonlyDeep } from "./model";
 import type { DefaultSlots } from "./composer";
 import type { ViewAdapter } from "./adapter";

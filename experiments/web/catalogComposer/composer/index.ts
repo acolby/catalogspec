@@ -9,4 +9,4 @@ export type {
   ImplementedItem,
   ImplementedItemContext,
   ImplementedItemInput,
-} from "./types";
+} from "../contracts";
