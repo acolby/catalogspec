@@ -1,22 +1,12 @@
-import type { RuntimeCoordinator } from "../src/coordinator";
-import type { CatalogImplementation, SceneItemInstance, SceneSnapshot, ThemeTokens } from "../src/shared/types";
-import type { ContextImplementations, RuntimeContext } from "./context";
-import type { LifecycleFrame } from "./implementedItem";
+import type { RuntimeCoordinator } from "../../src/coordinator";
+import type { SceneItemInstance, SceneSnapshot, ThemeTokens } from "../../src/shared/types";
+import type { ViewAdapter } from "../adapter";
+import type { RuntimeContext } from "../context/types";
+import type { LifecycleFrame } from "../implementation/item";
 
 export type ActionHandler = (props?: Record<string, unknown>) => void;
 
 export type EventEmitter = (event: string, props?: Record<string, unknown>) => void;
-
-export type ViewAdapterBoundaryInput<TView> = {
-  key: string;
-  kind: "slot" | "item" | string;
-  render(): TView | readonly TView[] | undefined;
-};
-
-export type ViewAdapter<TView> = {
-  boundary(input: ViewAdapterBoundaryInput<TView>): TView | undefined;
-  mount(root: Element, view: TView): void;
-};
 
 export type ImplementedItemContext<TContext = RuntimeContext> = {
   item: {
@@ -49,10 +39,6 @@ export type ImplementedItem<
   TSlots = DefaultSlots<TView>,
   TContext = RuntimeContext,
 > = (input: ImplementedItemInput<TView, TProps, Record<string, unknown>, Record<string, ActionHandler>, TSlots, TContext>) => TView;
-
-export type ImplementedCatalog<TImplementedItem, TContext extends ContextImplementations = ContextImplementations> = CatalogImplementation<TImplementedItem> & {
-  context?: TContext;
-};
 
 export type ComposerRuntimeContext = {
   scene: SceneSnapshot;

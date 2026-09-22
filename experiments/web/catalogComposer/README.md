@@ -2,199 +2,142 @@
 
 Status: experimental / non-normative
 
-Catalog Composer adapts scene data and catalog implementations to a framework-native view value, such as Preact children, React nodes, Lit templates, or another web view target.
+Catalog Composer is the implementation-facing composition utility for the web experiment. It helps a catalog implementation declare items, contexts, models, lifecycle hooks, themes, and a framework adapter, then composes SceneSpec-style item trees into framework-native view values.
 
-The web experiment separates two layers:
+This folder currently also contains the experimental **scene runtime** entrypoint. The runtime consumes Catalog Composer, connects it to the coordinator/API environment, and starts rendering a scene into a host element.
 
-- **web/environment layer**: owns DOM root setup, scene fetching, implementation resolution, catalog/theme checks, and runtime context construction.
-- **view adapter layer**: supplied by each implementation; owns only framework-specific boundary creation and host mounting.
+## Public interface
 
-The public interface is intentionally small: implementations use `defineCatalog`, `defineAdapter`, `defineItem`, and `defineContext`; the web runtime uses `createCatalogMounter`.
-
-The required implementation-provided view adapter has two framework-specific primitives:
-
-- **boundary**: create an embeddable framework-native view boundary, such as a Preact child, React node, or Lit template fragment.
-- **mount**: commit a completed framework-native view value into a host target, such as a DOM element.
-
-The shared `composeView` function now owns scene traversal, model binding, lifecycle binding, and slot outlet creation by using the adapter's `boundary` primitive. The adapter's `mount` primitive only commits the final view to the host.
-
-## Current shape
-
-```txt
-catalogComposer/
-  composeView.ts          # shared catalog item/view composer
-  createSceneMounter.ts   # shared web/environment mounter factory
-  implementedItem.ts
-  types.ts
-  index.ts
-
-implementations/splash/
-  adapter.tsx             # Preact boundary + mount primitives supplied by the implementation
-```
-
-## Stateful item model scaffold
-
-`model.ts` contains an experimental item/context model scaffold inspired by the sibling ProxyModel project. It lets an implemented item separate model/state/actions from view rendering:
+Catalog implementations consume the top-level package only:
 
 ```ts
-export const model = {
-  actions: state => ({
-    increment() {
-      state.count += 1;
-    },
-  }),
-} satisfies Model;
-
-export const implemented = {
-  model,
-  lifecycle,
-  view,
-} satisfies Item<ComponentChildren>;
+import {
+  defineAdapter,
+  defineCatalog,
+  defineContext,
+  defineItem,
+  type ComposeItemView,
+  type ComposeItemLifecycle,
+  type ModelDefinition,
+} from "../../catalogComposer";
 ```
 
-Implementations may also provide shared contexts next to items:
-
-```txt
-contexts/
-  scene/   # scene/domain state + actions
-  theme/   # active theme state + actions
-items/
-```
-
-Item views receive these through `context`, for example `context.scene.actions.login(...)` or `context.theme.actions.setTheme(...)`.
-
-Items provide a lifecycle file for runtime-driven orchestration. Individual lifecycle hooks are optional; an empty lifecycle object is a no-op:
+Runtime code creates a scene runtime through the same public entrypoint:
 
 ```ts
-export const lifecycle = {} satisfies Lifecycle;
-
-// Or, for runtime tick behavior:
-export const lifecycle = {
-  tick({ actions }, frame) {
-    actions.advance({ deltaMs: frame.deltaMs });
-  },
-} satisfies Lifecycle;
-
-export const implemented = {
-  model,
-  lifecycle,
-  view,
-} satisfies Item<ComponentChildren>;
+import { createSceneRuntime } from "../../catalogComposer";
 ```
 
-Initial/current item state is supplied by the scene/runtime item instance, not by the implemented item view. Shared runtime capabilities are supplied through typed implementation contexts, such as `context.scene.state/actions` and `context.theme.state/actions`. Shared `composeView` creates/looks up item models, passes readonly model state, bound actions, slots, and context into item views, calls optional model lifecycle hooks, emits state transitions, and requests a composer update. This is intentionally early scaffolding for framework-independent state/action/lifecycle/context handling and debug tooling.
+## What an implementation provides
 
-## Responsibility split
+A compatible implementation provides:
 
-### `createSceneMounter`
+- an adapter with `boundary` and `mount`
+- implemented catalog items
+- optional named contexts
+- concrete theme tokens
+- catalog/version metadata matching the scene
 
-Shared web/environment utility. It wires together:
-
-- the runtime coordinator
-- the API client
-- implementation resolution
-- catalog/version matching
-- theme resolution
-- implementation context model creation from scene/theme inputs
-- composer runtime context construction
-- model lifecycle tracking and one shared ticker
-- DOM scene root styling
-- the shared `composeView`
-- the implementation-provided view adapter with `boundary` and `mount` primitives
-
-It does not know Preact, React, Lit, or any specific catalog. The implementation resolved by the API brings its own adapter.
-
-### `composeView`
-
-Shared item/tree view composer.
-
-It receives one scene item instance, finds the matching implemented item in the catalog implementation, creates slot outlets through the framework adapter, binds model state/actions and typed runtime context to the item view, registers optional lifecycle hooks, and returns the framework view value for that item boundary.
-
-Slots are represented generically as adapter-specific outlet values, not arrays of already-composed child view values. Item contracts may narrow the slot object by name:
+Minimal shape:
 
 ```ts
-type DefaultSlots<TView> = Record<string, TView | undefined>;
-
-type ModalSlots<TView> = {
-  content?: TView;
-};
-```
-
-A Preact view can render those outlets directly, while other adapters can project them into their own native boundary primitive. This keeps slot names catalog-derived while leaving the concrete outlet value generic over each adapter.
-
-### Implementation view adapter
-
-Framework/native boundary creation and mount primitives supplied on the resolved implementation.
-
-For Preact this is effectively:
-
-```tsx
-defineAdapter({
+export const adapter = defineAdapter<TView>({
   boundary({ key, render }) {
-    return <Boundary key={key} render={render} />;
+    return frameworkBoundary(key, render);
   },
 
   mount(root, view) {
-    render(view, root);
+    frameworkMount(view, root);
   },
+});
+
+export const implementedCatalog = defineCatalog({
+  catalog,
+  themes,
+  context,
+  items,
+  adapter,
 });
 ```
 
-`boundary` creates an embeddable view value for slots and future item boundaries. `mount` takes the framework view value returned by `composeView` and commits it into the DOM root.
+## Defining an item
 
-## Flow
+Items are model-backed. The item view receives explicit inputs: item identity, props, readonly model state, bound actions, slots, emit, and runtime context.
 
-```mermaid
-flowchart TD
-  A[Runtime page] --> B[coordinator.mountScene]
-  B --> C[createRuntimeCoordinator]
-  C --> D[API fetchScene sceneId]
-  D --> E[RuntimeCoordinator]
-  B --> G[createSceneMounter]
+```ts
+export const model = {
+  actions(state) {
+    return {
+      increment() {
+        state.count += 1;
+      },
+    };
+  },
+} satisfies ModelDefinition<State, Actions>;
 
-  E -->|onSceneChange scene| G
-  G --> H[API resolveImplementation scene]
-  H --> I[Catalog implementation]
-  G --> T[Resolve theme + runtime context]
-  G --> R[Apply DOM scene root]
+export const view: ComposeItemView<TView, Props, State, Actions, Slots, Context> = ({
+  props,
+  state,
+  actions,
+  slots,
+  context,
+}) => {
+  return renderSomething(props, state, actions, slots, context);
+};
 
-  T --> J[composeView root]
-  I --> J
-  J --> K[Implemented item view]
-  K --> J
-  J --> M[Framework view]
-  M --> N[adapter.mount]
-  N --> O[DOM root]
-
-  K -->|action/event| E
+export const implemented = defineItem<TView, Context>()({
+  model,
+  lifecycle: {},
+  view,
+});
 ```
 
-## Preact flow
+## Defining a context
 
-```mermaid
-sequenceDiagram
-  participant Main as runtime/main.ts
-  participant CoordMount as coordinator/mountScene
-  participant Coord as RuntimeCoordinator
-  participant Api as api
-  participant Mounter as createSceneMounter
-  participant Compose as composeView
-  participant Adapter as implementation.adapter
-  participant DOM as DOM root
+Contexts expose shared runtime capabilities to item views, such as `context.scene` or `context.theme`.
 
-  Main->>CoordMount: mountScene({ root, sceneId })
-  CoordMount->>Coord: createRuntimeCoordinator({ sceneId })
-  Coord->>Api: fetchScene(sceneId)
-  Api-->>Coord: SceneSnapshot
-  CoordMount->>Mounter: createSceneMounter()
-  Coord-->>Mounter: onSceneChange(scene)
-  Mounter->>Api: resolveImplementation(scene)
-  Api-->>Mounter: Preact implementation with adapter
-  Mounter->>Mounter: validate catalog + resolve theme + apply DOM root
-  Mounter->>Compose: composeView(scene.root, implementation, runtime, implementation.adapter)
-  Compose-->>Mounter: Preact view
-  Mounter->>Adapter: mount(root, view)
-  Adapter->>DOM: commit view
+```ts
+export const scene = defineContext<State, Actions>({
+  model,
+  lifecycle,
+});
 ```
 
-Implementations are BYO-adapter: as long as item views and `adapter` agree on `TView`, the shared mounter/composer handles the rest.
+Item views consume them through `context`:
+
+```ts
+context.theme.state.tokens;
+context.scene.actions.login({ provider: "demo" });
+```
+
+## Starting a scene runtime
+
+Runtime code wires a root element, coordinator, and API client into a scene runtime:
+
+```ts
+const runtime = createSceneRuntime({ root, coordinator, api });
+const dispose = runtime.start();
+```
+
+The runtime resolves the implementation for the active scene, creates runtime context values, composes the scene root through the implementation adapter, and commits the resulting framework view.
+
+## Source layout
+
+```txt
+catalogComposer/
+  index.ts          public exports
+  define.ts         implementation authoring helpers
+  README.md         consumer-facing interface
+  ARCHITECTURE.md   internal architecture and data flow
+
+  adapter/          framework-neutral adapter contract
+  composer/         scene item tree -> framework-native view
+  context/          runtime context contracts
+  implementation/   implementation-side item/catalog contracts
+  model/            state/action model primitive
+  runtime/          scene runtime orchestration
+    lifecycle/      runtime lifecycle/tick types and future utilities
+  utils/            small shared helpers
+```
+
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for internal ownership boundaries and cleanup direction.

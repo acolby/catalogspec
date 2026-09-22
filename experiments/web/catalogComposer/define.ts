@@ -1,8 +1,8 @@
-import type { ViewAdaptedImplementedCatalog } from "./composeView";
-import type { ContextImplementation } from "./context";
-import type { ModelBackedImplementedItem } from "./implementedItem";
-import type { RuntimeContext } from "./context";
-import type { DefaultSlots, ViewAdapter } from "./types";
+import type { ViewAdaptedImplementedCatalog } from "./composer";
+import type { ContextImplementation, RuntimeContext } from "./context";
+import type { ModelBackedImplementedItem } from "./implementation";
+import type { DefaultSlots } from "./composer";
+import type { ViewAdapter } from "./adapter";
 
 export function defineAdapter<TView>(adapter: ViewAdapter<TView>): ViewAdapter<TView> {
   return adapter;

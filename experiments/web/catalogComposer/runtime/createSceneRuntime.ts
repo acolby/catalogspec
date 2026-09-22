@@ -1,10 +1,10 @@
-import type { ApiClient } from "../src/api";
-import type { RuntimeCoordinator } from "../src/coordinator";
-import type { CatalogImplementation, SceneSnapshot, ThemeTokens } from "../src/shared/types";
-import { createItemModel, type ItemModel } from "./model";
-import type { ContextImplementation, ContextImplementations, RuntimeContext } from "./context";
-import { createViewComposer, type ViewAdaptedImplementedCatalog } from "./composeView";
-import type { ActionHandler, ComposerRuntimeContext } from "./types";
+import type { ApiClient } from "../../src/api";
+import type { RuntimeCoordinator } from "../../src/coordinator";
+import type { CatalogImplementation, SceneSnapshot, ThemeTokens } from "../../src/shared/types";
+import { createItemModel, type ItemModel } from "../model";
+import type { ContextImplementation, ContextImplementations, RuntimeContext } from "../context";
+import { createViewComposer, type ViewAdaptedImplementedCatalog } from "../composer";
+import type { ActionHandler, ComposerRuntimeContext } from "../composer";
 
 type ContextBackedImplementation<TItem = unknown> = CatalogImplementation<TItem> & {
   context?: ContextImplementations;
@@ -18,19 +18,24 @@ type ContextModelRecord = {
   tickUnsubscribe?: () => void;
 };
 
-export type CreateSceneMounterOptions = Record<string, never>;
-
-export type SceneMounterOptions<TImplementation extends ContextBackedImplementation> = {
+export type CreateSceneRuntimeOptions<TImplementation extends ContextBackedImplementation> = {
   root: Element;
   coordinator: RuntimeCoordinator;
   api: ApiClient<TImplementation>;
 };
 
-export function createSceneMounter<TImplementation extends ContextBackedImplementation & ViewAdaptedImplementedCatalog<TView>, TView>(
-  _options: CreateSceneMounterOptions = {},
-) {
-  return function mountScene({ root, coordinator, api }: SceneMounterOptions<TImplementation>): () => void {
-    let version = 0;
+export type SceneRuntime = {
+  start(): () => void;
+};
+
+export function createSceneRuntime<TImplementation extends ContextBackedImplementation & ViewAdaptedImplementedCatalog<TView>, TView>({
+  root,
+  coordinator,
+  api,
+}: CreateSceneRuntimeOptions<TImplementation>): SceneRuntime {
+  return {
+    start() {
+      let version = 0;
     let currentScene = coordinator.getScene();
     const contextModels = new Map<string, ContextModelRecord>();
     const viewComposer = createViewComposer<TView>();
@@ -158,7 +163,6 @@ export function createSceneMounter<TImplementation extends ContextBackedImplemen
         };
       }
       return scene.context?.[name]?.state ?? {};
-      return {};
     }
 
     function registerTick(callback: (frame: { now: number; deltaMs: number }) => void): () => void {
@@ -203,20 +207,21 @@ export function createSceneMounter<TImplementation extends ContextBackedImplemen
       composeAndRenderCurrentScene();
     });
 
-    return () => {
-      unsubscribeSceneChange();
-      for (const record of contextModels.values()) {
-        record.tickUnsubscribe?.();
-        record.cleanup?.();
-        record.unsubscribe();
-      }
-      contextModels.clear();
-      for (const cleanup of mountedItemCleanups.values()) cleanup();
-      mountedItemCleanups.clear();
-      viewComposer.dispose();
-      tickCallbacks.clear();
-      stopTickerIfIdle();
-    };
+      return () => {
+        unsubscribeSceneChange();
+        for (const record of contextModels.values()) {
+          record.tickUnsubscribe?.();
+          record.cleanup?.();
+          record.unsubscribe();
+        }
+        contextModels.clear();
+        for (const cleanup of mountedItemCleanups.values()) cleanup();
+        mountedItemCleanups.clear();
+        viewComposer.dispose();
+        tickCallbacks.clear();
+        stopTickerIfIdle();
+      };
+    },
   };
 }
 

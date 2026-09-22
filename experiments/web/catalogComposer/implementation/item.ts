@@ -1,11 +1,9 @@
-import type { ItemModelDefinition, ReadonlyDeep } from "./model";
-import type { RuntimeContext } from "./context";
-import type { ImplementedItemInput } from "./types";
+import type { ItemModelDefinition, ReadonlyDeep } from "../model";
+import type { RuntimeContext } from "../context";
+import type { ImplementedItemInput } from "../composer/types";
+import type { LifecycleFrame } from "../runtime/lifecycle";
 
-export type LifecycleFrame = {
-  now: number;
-  deltaMs: number;
-};
+export type { LifecycleFrame };
 
 export type ImplementedItemLifecycleInput<
   TProps extends Record<string, unknown>,

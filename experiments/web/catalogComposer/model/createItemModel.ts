@@ -1,3 +1,5 @@
+import { clone } from "../utils";
+
 export type ReadonlyDeep<T> = T extends (...args: any[]) => any
   ? T
   : T extends readonly (infer Item)[]
@@ -61,7 +63,3 @@ export function createItemModel<State extends object, Actions extends Record<str
   };
 }
 
-function clone<T>(value: T): T {
-  if (typeof structuredClone === "function") return structuredClone(value);
-  return JSON.parse(JSON.stringify(value)) as T;
-}

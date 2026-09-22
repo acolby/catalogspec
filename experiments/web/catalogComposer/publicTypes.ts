@@ -1,8 +1,8 @@
-import type { ContextLifecycle, RuntimeContextValue } from "./context";
-import type { ImplementedItemLifecycle, ImplementedItemView } from "./implementedItem";
+import type { ContextLifecycle, RuntimeContext, RuntimeContextValue } from "./context";
+import type { ImplementedItemLifecycle, ImplementedItemView } from "./implementation";
 import type { ItemModelDefinition, ReadonlyDeep } from "./model";
-import type { RuntimeContext } from "./context";
-import type { DefaultSlots, ViewAdapter } from "./types";
+import type { DefaultSlots } from "./composer";
+import type { ViewAdapter } from "./adapter";
 
 export type ComposeItemView<
   TView,

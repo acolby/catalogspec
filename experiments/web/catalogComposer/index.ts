@@ -1,5 +1,5 @@
 export { defineAdapter, defineCatalog, defineContext, defineItem } from "./define";
-export { createSceneMounter as createCatalogMounter } from "./createSceneMounter";
+export { createSceneRuntime } from "./runtime";
 
 export type {
   ComposeContextLifecycle,

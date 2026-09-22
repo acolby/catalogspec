@@ -1,5 +1,5 @@
 import { api } from "../api";
-import { createCatalogMounter, type ViewAdapter } from "../../catalogComposer";
+import { createSceneRuntime, type ViewAdapter } from "../../catalogComposer";
 import { createRuntimeCoordinator } from "./runtime";
 
 export type MountSceneOptions = {
@@ -10,14 +10,13 @@ export type MountSceneOptions = {
 type RuntimeImplementation = NonNullable<Awaited<ReturnType<typeof api.resolveImplementation>>>;
 type RuntimeView = RuntimeImplementation extends { adapter: ViewAdapter<infer TView> } ? TView : never;
 
-const mountResolvedScene = createCatalogMounter<RuntimeImplementation, RuntimeView>();
-
 export async function mountScene({ root, sceneId }: MountSceneOptions): Promise<void> {
   const coordinator = await createRuntimeCoordinator({ sceneId });
-
-  mountResolvedScene({
+  const runtime = createSceneRuntime<RuntimeImplementation, RuntimeView>({
     root,
     coordinator,
     api,
   });
+
+  runtime.start();
 }

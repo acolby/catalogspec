@@ -1,7 +1,9 @@
-import { createItemModel } from "./model";
-import type { SceneItemInstance } from "../src/shared/types";
-import { type ModelBackedImplementedItem } from "./implementedItem";
-import type { ImplementedCatalog, ComposerRuntimeContext, ViewAdapter } from "./types";
+import { createItemModel } from "../model";
+import type { SceneItemInstance } from "../../src/shared/types";
+import { type ModelBackedImplementedItem } from "../implementation/item";
+import type { ImplementedCatalog } from "../implementation/catalog";
+import type { ComposerRuntimeContext } from "./types";
+import type { ViewAdapter } from "../adapter";
 
 type GenericImplementedItem<TView> = ModelBackedImplementedItem<TView, any, any, any, any, any>;
 export type GenericImplementedCatalog<TView> = ImplementedCatalog<GenericImplementedItem<TView>, any>;
