@@ -4,11 +4,8 @@ import type {
   ComposerRuntimeContext,
   GenericImplementedCatalog,
   GenericImplementedItem,
-  ViewAdaptedImplementedCatalog,
   ViewAdapter,
 } from "../contracts";
-
-export type { GenericImplementedCatalog, ViewAdaptedImplementedCatalog };
 
 type ModelRecord = {
   model: ReturnType<typeof createItemModel<any, any>>;

@@ -6,11 +6,9 @@ import type {
   ContextImplementation,
   ContextImplementations,
   RuntimeContext,
+  ViewAdaptedImplementedCatalog,
 } from "../contracts";
-import {
-  createViewComposer,
-  type ViewAdaptedImplementedCatalog,
-} from "../composer";
+import { createViewComposer } from "../composer";
 import type {
   CatalogImplementation,
   SceneSnapshot,

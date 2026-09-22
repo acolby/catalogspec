@@ -9,4 +9,5 @@ export type {
   ModelDefinition,
   ReadonlyDeep,
   ViewAdapter,
+  ViewAdapterBoundaryInput,
 } from "./contracts";

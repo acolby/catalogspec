@@ -1,16 +1,10 @@
 import { render, type ComponentChildren } from "preact";
 import { defineAdapter } from "../../catalogComposer";
 
-export type ImplementationView = ComponentChildren;
 
-export const adapter = defineAdapter<ImplementationView>({
-  boundary(input) {
-    return (
-      <Boundary
-        key={input.key}
-        input={input}
-      />
-    );
+export const adapter = defineAdapter<ComponentChildren>({
+  boundary({ key, render }) {
+    return <SlotBoundary key={key} render={render} />;
   },
 
   mount(root, view) {
@@ -18,10 +12,6 @@ export const adapter = defineAdapter<ImplementationView>({
   },
 });
 
-type BoundaryProps = {
-  input: Parameters<typeof adapter.boundary>[0];
-};
-
-function Boundary({ input }: BoundaryProps) {
-  return <>{input.render()}</>;
+function SlotBoundary({ render }: { render(): ComponentChildren | readonly ComponentChildren[] | undefined }) {
+  return <>{render()}</>;
 }
