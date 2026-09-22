@@ -130,6 +130,7 @@ catalogComposer/
   ARCHITECTURE.md   internal architecture and data flow
 
   contracts/        implementation-facing define helpers and type contracts
+    preact/         Preact-bound adapter and contract helpers
   composer/         scene item tree -> framework-native view
   model/            state/action model primitive
   runtime/          scene runtime orchestration

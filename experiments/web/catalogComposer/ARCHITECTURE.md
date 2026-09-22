@@ -14,6 +14,7 @@ The design goal is low-entropy implementation code: explicit data flow, minimal 
 ```txt
 catalogComposer/
   contracts/  implementation-facing define helpers and type contracts
+    preact/   Preact-bound adapter and contract helpers
   composer/   scene item tree -> framework-native view
   model/      state/action model primitive
   runtime/    scene runtime orchestration
@@ -37,7 +38,9 @@ It contains:
 - model definition aliases
 - composer runtime input contracts
 
-This directory should contain no scene traversal, DOM work, transport logic, API access, or runtime state management. It is the contract vocabulary for the rest of the system.
+The neutral contract files should contain no scene traversal, DOM work, transport logic, API access, or runtime state management. They are the contract vocabulary for the rest of the system.
+
+Framework-specific contract modules, such as `contracts/preact/`, may bind the neutral contracts to a framework view type and provide a standard adapter. Those modules depend outward on the framework; the core composer/runtime do not depend on them.
 
 ### `composer/`
 

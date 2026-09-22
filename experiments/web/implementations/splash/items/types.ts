@@ -1,31 +1,31 @@
-import { defineItem } from "../../../catalogComposer";
-import type {
-  ComposeItemLifecycle,
-  ComposeItemView,
-  ModelDefinition,
-} from "../../../catalogComposer";
-import type { ImplementationView } from "../adapter";
+import { defineItem, type ItemSlot } from "../../../catalogComposer/contracts/preact";
 import type { Context } from "../contexts";
 
-export type ItemSlot = ImplementationView;
+export type { ItemSlot };
 
-export const defineSplashItem = defineItem<ImplementationView, Context>();
+export const defineViewItem = defineItem<Context>();
+
+type ViewItem<
+  TProps extends Record<string, unknown>,
+  TState extends object,
+  TActions extends Record<string, (...args: any[]) => any>,
+  TSlots,
+> = Parameters<typeof defineViewItem<TProps, TState, TActions, TSlots>>[0];
 
 export type ItemModel<
   TState extends object,
   TActions extends Record<string, (...args: any[]) => any>,
-> = ModelDefinition<TState, TActions>;
+> = ViewItem<Record<string, unknown>, TState, TActions, Record<string, never>>["model"];
 
 export type ItemLifecycle<
   TProps extends Record<string, unknown>,
   TState extends object,
   TActions extends Record<string, (...args: any[]) => any>,
-> = ComposeItemLifecycle<TProps, TState, TActions, Context>;
+> = ViewItem<TProps, TState, TActions, Record<string, never>>["lifecycle"];
 
 export type ItemView<
   TProps extends Record<string, unknown>,
   TState extends object,
   TActions extends Record<string, (...args: any[]) => any>,
   TSlots,
-> = ComposeItemView<ImplementationView, TProps, TState, TActions, TSlots, Context>;
-
+> = ViewItem<TProps, TState, TActions, TSlots>["view"];
