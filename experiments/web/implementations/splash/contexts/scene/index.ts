@@ -1,10 +1,11 @@
+import { defineContext } from "../../../../catalogComposer";
 import { lifecycle } from "./lifecycle";
 import { model } from "./model";
-import type { Implementation } from "./types";
+import type { Actions, State } from "./types";
 
-export const scene = {
+export const scene = defineContext<State, Actions>({
   model,
   lifecycle,
-} satisfies Implementation;
+});
 
 export type { Actions, State, Value } from "./types";

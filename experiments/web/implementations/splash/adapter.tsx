@@ -1,9 +1,9 @@
 import { render, type ComponentChildren } from "preact";
-import type { ViewAdapter, ViewAdapterBoundaryInput } from "../../catalogComposer";
+import { defineAdapter } from "../../catalogComposer";
 
 export type ImplementationView = ComponentChildren;
 
-export const adapter: ViewAdapter<ImplementationView> = {
+export const adapter = defineAdapter<ImplementationView>({
   boundary(input) {
     return (
       <Boundary
@@ -16,8 +16,12 @@ export const adapter: ViewAdapter<ImplementationView> = {
   mount(root, view) {
     render(view, root);
   },
+});
+
+type BoundaryProps = {
+  input: Parameters<typeof adapter.boundary>[0];
 };
 
-function Boundary({ input }: { input: ViewAdapterBoundaryInput<ImplementationView> }) {
+function Boundary({ input }: BoundaryProps) {
   return <>{input.render()}</>;
 }

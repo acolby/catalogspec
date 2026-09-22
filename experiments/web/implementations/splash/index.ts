@@ -1,10 +1,10 @@
-import type { ComposeCatalog } from "../../catalogComposer";
+import { defineCatalog } from "../../catalogComposer";
 import { adapter, type ImplementationView } from "./adapter";
 import { context } from "./contexts";
 import { catalog, themes } from "./generated";
 import { items } from "./items";
 
-export const implementedCatalog: ComposeCatalog<ImplementationView> = {
+export const implementedCatalog = defineCatalog<ImplementationView>({
   catalog: {
     id: catalog.id,
     version: catalog.version,
@@ -13,4 +13,4 @@ export const implementedCatalog: ComposeCatalog<ImplementationView> = {
   items,
   themes,
   adapter,
-};
+});

@@ -9,6 +9,8 @@ The web experiment separates two layers:
 - **web/environment layer**: owns DOM root setup, scene fetching, implementation resolution, catalog/theme checks, and runtime context construction.
 - **view adapter layer**: supplied by each implementation; owns only framework-specific boundary creation and host mounting.
 
+The public interface is intentionally small: implementations use `defineCatalog`, `defineAdapter`, `defineItem`, and `defineContext`; the web runtime uses `createCatalogMounter`.
+
 The required implementation-provided view adapter has two framework-specific primitives:
 
 - **boundary**: create an embeddable framework-native view boundary, such as a Preact child, React node, or Lit template fragment.
@@ -127,13 +129,15 @@ Framework/native boundary creation and mount primitives supplied on the resolved
 For Preact this is effectively:
 
 ```tsx
-boundary({ key, render }) {
-  return <Boundary key={key} render={render} />;
-}
+defineAdapter({
+  boundary({ key, render }) {
+    return <Boundary key={key} render={render} />;
+  },
 
-mount(root, view) {
-  render(view, root);
-}
+  mount(root, view) {
+    render(view, root);
+  },
+});
 ```
 
 `boundary` creates an embeddable view value for slots and future item boundaries. `mount` takes the framework view value returned by `composeView` and commits it into the DOM root.
