@@ -1,6 +1,8 @@
-import type { View } from "./types";
+import { controller } from "./controller";
+import { defineItem } from "../types";
+import type { Slots } from "./types";
 
-export const view: View = ({ props, slots, context }) => {
+export const implemented = defineItem({ controller })<Slots>(({ props, slots, context }) => {
   const direction = props.direction ?? "vertical";
   const align = props.align ?? "stretch";
   return (
@@ -16,7 +18,7 @@ export const view: View = ({ props, slots, context }) => {
       {slots.children}
     </div>
   );
-};
+});
 
 function alignItems(align: string) {
   if (align === "start") return "flex-start";

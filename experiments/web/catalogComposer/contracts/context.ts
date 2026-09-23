@@ -11,6 +11,11 @@ export type RuntimeContextValue<
 
 export type RuntimeContext = Record<string, RuntimeContextValue<any, any>>;
 
+export type ComposeContextValue<
+  TState = Record<string, unknown>,
+  TActions extends Record<string, (...args: any[]) => any> = Record<string, (...args: any[]) => any>,
+> = RuntimeContextValue<TState, TActions>;
+
 export type ContextLifecycleInput<
   TState extends object,
   TActions extends Record<string, (...args: any[]) => any>,

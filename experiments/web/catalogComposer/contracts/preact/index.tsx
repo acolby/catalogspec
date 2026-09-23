@@ -1,12 +1,8 @@
 import { render as mountPreact, type ComponentChildren } from "preact";
-import { defineAdapter, defineCatalog as defineBaseCatalog, defineItem as defineBaseItem } from "../define";
+import { defineAdapter, defineCatalog as defineBaseCatalog } from "../define";
 import type { ViewAdaptedImplementedCatalog } from "../catalog";
 import type { DefaultSlots } from "../composer";
-import type {
-  ComposeItemLifecycle,
-  ComposeItemView,
-  ModelDefinition,
-} from "../public";
+import type { ImplementedItemController, ImplementedItemView, ModelBackedImplementedItem } from "../item";
 
 export type View = ComponentChildren;
 export type ItemSlot = View;
@@ -30,29 +26,47 @@ export function defineCatalog(catalog: ViewAdaptedImplementedCatalog<View>): Vie
   return defineBaseCatalog<View>(catalog);
 }
 
+type ControllerProps<TController> = TController extends ImplementedItemController<infer TProps, any, any, any> ? TProps : never;
+type ControllerState<TController> = TController extends ImplementedItemController<any, infer TState, any, any> ? TState : never;
+type ControllerActions<TController> = TController extends ImplementedItemController<any, any, infer TActions, any> ? TActions : never;
+type ControllerContext<TController> = TController extends ImplementedItemController<any, any, any, infer TContext> ? TContext : never;
+
 export function defineItem<TContext>() {
-  return defineBaseItem<View, TContext>();
+  return function defineTypedItem<
+    TController extends ImplementedItemController<any, any, any, TContext>,
+  >({ controller }: { controller: TController }) {
+    return function defineItemView<TSlots = DefaultSlots<View>>(
+      view: ImplementedItemView<
+        View,
+        ControllerProps<TController>,
+        ControllerState<TController>,
+        ControllerActions<TController>,
+        TSlots,
+        ControllerContext<TController>
+      >,
+    ): ModelBackedImplementedItem<
+      View,
+      ControllerProps<TController>,
+      ControllerState<TController>,
+      ControllerActions<TController>,
+      TSlots,
+      ControllerContext<TController>
+    > {
+      return {
+        ...controller,
+        view,
+      } as ModelBackedImplementedItem<
+        View,
+        ControllerProps<TController>,
+        ControllerState<TController>,
+        ControllerActions<TController>,
+        TSlots,
+        ControllerContext<TController>
+      >;
+    };
+  };
 }
 
-export type ItemModel<
-  TState extends object,
-  TActions extends Record<string, (...args: any[]) => any>,
-> = ModelDefinition<TState, TActions>;
-
-export type ItemLifecycle<
-  TProps extends Record<string, unknown>,
-  TState extends object,
-  TActions extends Record<string, (...args: any[]) => any>,
-  TContext,
-> = ComposeItemLifecycle<TProps, TState, TActions, TContext>;
-
-export type ItemView<
-  TProps extends Record<string, unknown>,
-  TState extends object,
-  TActions extends Record<string, (...args: any[]) => any>,
-  TSlots = DefaultSlots<View>,
-  TContext = unknown,
-> = ComposeItemView<View, TProps, TState, TActions, TSlots, TContext>;
 
 function SlotBoundary({
   render,

@@ -1,6 +1,8 @@
-import type { Theme, View } from "./types";
+import { controller } from "./controller";
+import { defineItem } from "../types";
+import type { Slots, Theme } from "./types";
 
-export const view: View = ({ props, emit, context }) => {
+export const implemented = defineItem({ controller })<Slots>(({ props, emit, context }) => {
   const theme = context.theme.state.tokens;
   const variant = props.variant ?? "primary";
   const styles = variantStyle(variant, theme);
@@ -24,7 +26,7 @@ export const view: View = ({ props, emit, context }) => {
       {props.label}
     </button>
   );
-};
+});
 
 function variantStyle(variant: string, theme?: Theme) {
   if (variant === "secondary") {

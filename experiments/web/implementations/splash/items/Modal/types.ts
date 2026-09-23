@@ -1,4 +1,4 @@
-import type { ItemLifecycle, ItemModel, ItemSlot, ItemView } from "../types";
+import type { ItemSlot } from "../types";
 import type { ModalProps, ThemeTokens } from "../../generated";
 
 export type Props = ModalProps;
@@ -13,6 +13,3 @@ export type Actions = {
 export type Slots = {
   content?: ItemSlot;
 };
-export type Model = ItemModel<State, Actions>;
-export type Lifecycle = ItemLifecycle<Props, State, Actions>;
-export type View = ItemView<Props, State, Actions, Slots>;

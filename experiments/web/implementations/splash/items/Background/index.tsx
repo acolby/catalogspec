@@ -1,6 +1,8 @@
-import type { Props, State, Theme, View } from "./types";
+import { controller } from "./controller";
+import { defineItem } from "../types";
+import type { Props, State, Theme, Slots } from "./types";
 
-export const view: View = ({ props, state, context }) => {
+export const implemented = defineItem({ controller })<Slots>(({ props, state, context }) => {
   return (
     <div
       aria-hidden="true"
@@ -11,7 +13,7 @@ export const view: View = ({ props, state, context }) => {
       }}
     />
   );
-};
+});
 
 function backgroundStyle(props: Props, state: Readonly<State>, theme?: Theme) {
   const phase = state.phase ?? 0;

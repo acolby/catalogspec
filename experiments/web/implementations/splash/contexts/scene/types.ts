@@ -1,5 +1,4 @@
-import type { ComposeContextLifecycle, ComposeContextValue } from "../../../../catalogComposer";
-import type { ModelDefinition, ReadonlyDeep } from "../../../../catalogComposer";
+import type { ComposeContextValue, ReadonlyDeep } from "../../../../catalogComposer";
 
 export type State = {
   loggedIn: boolean;
@@ -12,6 +11,4 @@ export type Actions = {
   openUrl?(input: { url: string; target: "self" | "blank" }): void;
 };
 
-export type Model = ModelDefinition<State, Actions>;
-export type Lifecycle = ComposeContextLifecycle<State, Actions>;
 export type Value = ComposeContextValue<ReadonlyDeep<State>, Actions>;

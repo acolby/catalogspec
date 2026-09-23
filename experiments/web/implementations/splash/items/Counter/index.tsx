@@ -1,6 +1,8 @@
-import type { View } from "./types";
+import { controller } from "./controller";
+import { defineItem } from "../types";
+import type { Slots } from "./types";
 
-export const view: View = ({ props, state, actions, context }) => {
+export const implemented = defineItem({ controller })<Slots>(({ props, state, actions, context }) => {
   const theme = context.theme.state.tokens;
 
   return (
@@ -45,4 +47,4 @@ export const view: View = ({ props, state, actions, context }) => {
       </button>
     </div>
   );
-};
+});

@@ -32,6 +32,16 @@ export type ImplementedItemView<
   TContext = RuntimeContext,
 > = (input: ImplementedItemInput<TView, TProps, ReadonlyDeep<TState>, TActions, TSlots, TContext>) => TView;
 
+export type ImplementedItemController<
+  TProps extends Record<string, unknown>,
+  TState extends object,
+  TActions extends Record<string, (...args: any[]) => any>,
+  TContext = RuntimeContext,
+> = {
+  model: ItemModelDefinition<TState, TActions>;
+  lifecycle: ImplementedItemLifecycle<TProps, TState, TActions, TContext>;
+};
+
 export type ModelBackedImplementedItem<
   TView,
   TProps extends Record<string, unknown>,
@@ -39,9 +49,7 @@ export type ModelBackedImplementedItem<
   TActions extends Record<string, (...args: any[]) => any>,
   TSlots = Record<string, TView | undefined>,
   TContext = RuntimeContext,
-> = {
-  model: ItemModelDefinition<TState, TActions>;
-  lifecycle: ImplementedItemLifecycle<TProps, TState, TActions, TContext>;
+> = ImplementedItemController<TProps, TState, TActions, TContext> & {
   view: ImplementedItemView<TView, TProps, TState, TActions, TSlots, TContext>;
 };
 

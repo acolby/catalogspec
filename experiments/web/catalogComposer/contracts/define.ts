@@ -1,7 +1,6 @@
 import type { ViewAdaptedImplementedCatalog } from "./catalog";
 import type { ContextImplementation, RuntimeContext } from "./context";
-import type { ModelBackedImplementedItem } from "./item";
-import type { DefaultSlots } from "./composer";
+import type { ImplementedItemController } from "./item";
 import type { ViewAdapter } from "./adapter";
 
 export function defineAdapter<TView>(adapter: ViewAdapter<TView>): ViewAdapter<TView> {
@@ -19,15 +18,15 @@ export function defineContext<
   return context;
 }
 
-export function defineItem<TView, TContext = RuntimeContext>() {
-  return function defineTypedItem<
+export function defineItemController<TContext = RuntimeContext>() {
+  return function defineTypedController<
     TProps extends Record<string, unknown>,
     TState extends object,
     TActions extends Record<string, (...args: any[]) => any>,
-    TSlots = DefaultSlots<TView>,
   >(
-    item: ModelBackedImplementedItem<TView, TProps, TState, TActions, TSlots, TContext>,
-  ): ModelBackedImplementedItem<TView, TProps, TState, TActions, TSlots, TContext> {
-    return item;
+    controller: ImplementedItemController<TProps, TState, TActions, TContext>,
+  ): ImplementedItemController<TProps, TState, TActions, TContext> {
+    return controller;
   };
 }
+

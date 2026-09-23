@@ -1,4 +1,4 @@
-import type { ItemLifecycle, ItemModel, ItemSlot, ItemView } from "../types";
+import type { ItemSlot } from "../types";
 import type { HeroProps, ThemeTokens } from "../../generated";
 
 export type Props = HeroProps;
@@ -10,6 +10,3 @@ export type Slots = {
   actions?: ItemSlot;
   content?: ItemSlot;
 };
-export type Model = ItemModel<State, Actions>;
-export type Lifecycle = ItemLifecycle<Props, State, Actions>;
-export type View = ItemView<Props, State, Actions, Slots>;

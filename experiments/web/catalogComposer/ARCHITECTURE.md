@@ -31,16 +31,16 @@ Most implementation-facing type complexity is intentionally consolidated into `c
 
 It contains:
 
-- `defineAdapter`, `defineCatalog`, `defineContext`, `defineItem`
+- `defineAdapter`, `defineCatalog`, `defineContext`, `defineItemController`, `defineItem`
 - framework adapter contracts
 - implemented catalog/item/context contracts
-- item view and lifecycle contracts
+- item controller, view, and lifecycle contracts
 - model definition aliases
 - composer runtime input contracts
 
 The neutral contract files should contain no scene traversal, DOM work, transport logic, API access, or runtime state management. They are the contract vocabulary for the rest of the system.
 
-Framework-specific contract modules, such as `contracts/preact/`, may bind the neutral contracts to a framework view type and provide a standard adapter. Those modules depend outward on the framework; the core composer/runtime do not depend on them.
+Framework-specific contract modules, such as `contracts/preact/`, may bind the neutral contracts to a framework view type and provide a standard adapter. In the Preact module, `defineItem` is a view factory: it receives `{ controller }`, then types the view from that controller. Those modules depend outward on the framework; the core composer/runtime do not depend on them.
 
 ### `composer/`
 
@@ -182,4 +182,4 @@ With that extraction:
 - Context model identity is keyed by catalog id/version, scene id, and context name.
 - Scene item state is initial state, not an automatic patch source after model creation.
 - Slot outlets are adapter-native values, not pre-composed child arrays.
-- Implementations consume only the public `catalogComposer` entrypoint.
+- Implementations consume the public `catalogComposer` entrypoint for neutral behavior contracts and `catalogComposer/contracts/preact` for Preact-bound view contracts.

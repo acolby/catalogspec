@@ -1,6 +1,8 @@
-import type { View } from "./types";
+import { controller } from "./controller";
+import { defineItem } from "../types";
+import type { Slots } from "./types";
 
-export const view: View = ({ props, slots, context }) => {
+export const implemented = defineItem({ controller })<Slots>(({ props, slots, context }) => {
   const theme = context.theme.state.tokens;
   const align = props.align ?? "center";
   const isCenter = align === "center";
@@ -44,7 +46,7 @@ export const view: View = ({ props, slots, context }) => {
       </div>
     </section>
   );
-};
+});
 
 function alignText(align: string) {
   if (align === "start") return "left";

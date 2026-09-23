@@ -1,7 +1,9 @@
+import { controller } from "./controller";
+import { defineItem } from "../types";
 import { catalog, type ThemeName } from "../../generated";
-import type { View } from "./types";
+import type { Slots } from "./types";
 
-export const view: View = ({ props, emit, context }) => {
+export const implemented = defineItem({ controller })<Slots>(({ props, emit, context }) => {
   const theme = context.theme.state.tokens;
   const themeState = context.theme.state;
   const currentTheme = themeState.name ?? catalog.themes.default;
@@ -31,7 +33,7 @@ export const view: View = ({ props, emit, context }) => {
       </select>
     </label>
   );
-};
+});
 
 function labelForTheme(themeName: string): string {
   return themeName.slice(0, 1).toUpperCase() + themeName.slice(1);
