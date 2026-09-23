@@ -1,11 +1,11 @@
-import { defineItemController } from "../types";
-import type { Actions, Props, State } from "./types";
+import { Item_ThemePicker } from "../../generated";
 
-export const controller = defineItemController<Props, State, Actions>({
-  model: {
-    actions() {
-      return {};
-    },
+export const controller = Item_ThemePicker.$controller({
+  select({ props, state, context }) {
+    return { props, state, context };
+  },
+  actions() {
+    return {};
   },
   lifecycle: {},
 });

@@ -1,9 +1,8 @@
 import { controller } from "./controller";
-import { defineItem } from "../types";
-import type { Slots } from "./types";
+import { Item_BetaSignupForm } from "../../generated";
 
-export const implemented = defineItem({ controller })<Slots>(({ props, state, actions, emit, context }) => {
-  const theme = context.theme.state.tokens;
+const item = Item_BetaSignupForm.$view({ controller })(({ selected, actions, emit }) => {
+  const theme = selected.context.theme.state.tokens;
 
   return (
     <form
@@ -11,15 +10,15 @@ export const implemented = defineItem({ controller })<Slots>(({ props, state, ac
       onSubmit={(event) => {
         event.preventDefault();
         actions.submit();
-        emit("submitted", { email: state.email });
+        emit("submitted", { email: selected.state.email });
       }}
     >
       <div style={{ display: "grid", gap: theme?.space?.sm ?? "0.5rem" }}>
-        <h3 style={{ margin: 0, fontFamily: theme?.font?.heading }}>{props.title}</h3>
-        {props.description && <p style={{ margin: 0, color: theme?.color?.mutedText }}>{props.description}</p>}
+        <h3 style={{ margin: 0, fontFamily: theme?.font?.heading }}>{selected.props.title}</h3>
+        {selected.props.description && <p style={{ margin: 0, color: theme?.color?.mutedText }}>{selected.props.description}</p>}
       </div>
 
-      {state.submitted ? (
+      {selected.state.submitted ? (
         <div
           role="status"
           style={{
@@ -29,15 +28,15 @@ export const implemented = defineItem({ controller })<Slots>(({ props, state, ac
             color: theme?.color?.text ?? "inherit",
           }}
         >
-          {props.successMessage ?? "You're on the list."}
+          {selected.props.successMessage ?? "You're on the list."}
         </div>
       ) : (
         <div style={{ display: "flex", gap: theme?.space?.sm ?? "0.5rem", flexWrap: "wrap" }}>
           <input
             type="email"
             required
-            value={state.email}
-            placeholder={props.emailPlaceholder ?? "you@example.com"}
+            value={selected.state.email}
+            placeholder={selected.props.emailPlaceholder ?? "you@example.com"}
             style={{
               flex: "1 1 220px",
               padding: "0.85rem 1rem",
@@ -50,10 +49,12 @@ export const implemented = defineItem({ controller })<Slots>(({ props, state, ac
             onInput={(event) => actions.updateEmail({ email: event.currentTarget.value })}
           />
           <button type="submit" class="cta" style={{ borderRadius: theme?.radius?.pill ?? "999px" }}>
-            {props.submitLabel ?? "Request access"}
+            {selected.props.submitLabel ?? "Request access"}
           </button>
         </div>
       )}
     </form>
   );
 });
+
+export default item;

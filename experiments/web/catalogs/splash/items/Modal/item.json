@@ -25,7 +25,7 @@
   "slots": {
     "content": {
       "description": "Modal body content. Usually contains a form or focused interaction.",
-      "items": ["BetaSignupForm"]
+      "items": ["BetaSignupForm", "SnakeGame"]
     }
   },
   "actions": {

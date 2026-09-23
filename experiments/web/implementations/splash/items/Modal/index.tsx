@@ -1,9 +1,8 @@
 import { controller } from "./controller";
-import { defineItem } from "../types";
-import type { Slots } from "./types";
+import { Item_Modal } from "../../generated";
 
-export const implemented = defineItem({ controller })<Slots>(({ props, state, actions, emit, slots, context }) => {
-  const theme = context.theme.state.tokens;
+const item = Item_Modal.$view({ controller })(({ selected, actions, emit, slots }) => {
+  const theme = selected.context.theme.state.tokens;
 
   return (
     <>
@@ -21,10 +20,10 @@ export const implemented = defineItem({ controller })<Slots>(({ props, state, ac
           emit("opened");
         }}
       >
-        {props.triggerLabel}
+        {selected.props.triggerLabel}
       </button>
 
-      {state.open && (
+      {selected.state.open && (
         <div
           role="presentation"
           style={{
@@ -45,7 +44,7 @@ export const implemented = defineItem({ controller })<Slots>(({ props, state, ac
           <section
             role="dialog"
             aria-modal="true"
-            aria-label={props.title}
+            aria-label={selected.props.title}
             style={{
               width: "min(520px, 100%)",
               borderRadius: theme?.radius?.lg ?? "1rem",
@@ -58,7 +57,7 @@ export const implemented = defineItem({ controller })<Slots>(({ props, state, ac
             onClick={(event) => event.stopPropagation()}
           >
             <div style={{ display: "flex", justifyContent: "space-between", gap: theme?.space?.md ?? "1rem", alignItems: "start" }}>
-              <h2 style={{ margin: 0, fontFamily: theme?.font?.heading }}>{props.title}</h2>
+              <h2 style={{ margin: 0, fontFamily: theme?.font?.heading }}>{selected.props.title}</h2>
               <button
                 type="button"
                 aria-label="Close modal"
@@ -79,3 +78,5 @@ export const implemented = defineItem({ controller })<Slots>(({ props, state, ac
     </>
   );
 });
+
+export default item;

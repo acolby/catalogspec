@@ -17,6 +17,7 @@ export type ItemModel<State extends object, Actions extends Record<string, (...a
 export type CreateItemActions<State extends object, Actions extends Record<string, (...args: any[]) => any>> = (state: State) => Actions;
 
 export type ItemModelDefinition<State extends object, Actions extends Record<string, (...args: any[]) => any>> = {
+  state?: State;
   actions: CreateItemActions<State, Actions>;
 };
 

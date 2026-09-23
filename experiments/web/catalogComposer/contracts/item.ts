@@ -1,6 +1,6 @@
 import type { ItemModelDefinition, ReadonlyDeep } from "../model";
 import type { RuntimeContext } from "./context";
-import type { ImplementedItemInput } from "./composer";
+import type { ImplementedItemContext, ImplementedItemInput } from "./composer";
 import type { LifecycleFrame } from "./lifecycle";
 
 export type { LifecycleFrame };
@@ -23,23 +23,52 @@ export type ImplementedItemLifecycle<
   tick?(input: ImplementedItemLifecycleInput<TProps, TState, TActions, TContext>, frame: LifecycleFrame): void;
 };
 
+export type ImplementedItemSelectInput<
+  TProps extends Record<string, unknown>,
+  TState extends object,
+  TContext = RuntimeContext,
+> = {
+  props: TProps;
+  state: ReadonlyDeep<TState>;
+  context: TContext;
+};
+
+export type ImplementedItemViewInput<
+  TView,
+  TActions extends Record<string, (...args: any[]) => any>,
+  TSelected,
+  TSlots = Record<string, TView | undefined>,
+  TContext = RuntimeContext,
+> = {
+  item: {
+    id: string;
+    name: string;
+  };
+  emit: ImplementedItemContext<TContext>["emit"];
+  selected: TSelected;
+  actions: TActions;
+  slots: TSlots;
+};
+
 export type ImplementedItemView<
   TView,
   TProps extends Record<string, unknown>,
   TState extends object,
   TActions extends Record<string, (...args: any[]) => any>,
+  TSelected,
   TSlots = Record<string, TView | undefined>,
   TContext = RuntimeContext,
-> = (input: ImplementedItemInput<TView, TProps, ReadonlyDeep<TState>, TActions, TSlots, TContext>) => TView;
+> = (input: ImplementedItemViewInput<TView, TActions, TSelected, TSlots, TContext>) => TView;
 
 export type ImplementedItemController<
   TProps extends Record<string, unknown>,
   TState extends object,
   TActions extends Record<string, (...args: any[]) => any>,
   TContext = RuntimeContext,
-> = {
-  model: ItemModelDefinition<TState, TActions>;
-  lifecycle: ImplementedItemLifecycle<TProps, TState, TActions, TContext>;
+  TSelected = ImplementedItemSelectInput<TProps, TState, TContext>,
+> = ItemModelDefinition<TState, TActions> & {
+  select?: (input: ImplementedItemSelectInput<TProps, TState, TContext>) => TSelected;
+  lifecycle?: ImplementedItemLifecycle<TProps, TState, TActions, TContext>;
 };
 
 export type ModelBackedImplementedItem<
@@ -47,12 +76,13 @@ export type ModelBackedImplementedItem<
   TProps extends Record<string, unknown>,
   TState extends object,
   TActions extends Record<string, (...args: any[]) => any>,
-  TSlots = Record<string, TView | undefined>,
   TContext = RuntimeContext,
-> = ImplementedItemController<TProps, TState, TActions, TContext> & {
-  view: ImplementedItemView<TView, TProps, TState, TActions, TSlots, TContext>;
+  TSelected = ImplementedItemSelectInput<TProps, TState, TContext>,
+  TSlots = Record<string, TView | undefined>,
+> = ImplementedItemController<TProps, TState, TActions, TContext, TSelected> & {
+  view: ImplementedItemView<TView, TProps, TState, TActions, TSelected, TSlots, TContext>;
 };
 
 export function isModelBackedImplementedItem(value: unknown): value is ModelBackedImplementedItem<any, any, any, any, any, any> {
-  return !!value && typeof value === "object" && "model" in value && "view" in value;
+  return !!value && typeof value === "object" && "actions" in value && "view" in value;
 }

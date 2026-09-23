@@ -1,19 +1,15 @@
-import { defineContext } from "../../../../catalogComposer";
-import { themes } from "../../generated";
-import type { Actions, State } from "./types";
+import { Context_Theme, themes } from "../../generated";
 
-export const theme = defineContext<State, Actions>({
-  model: {
-    actions(state) {
-      return {
-        setTheme({ name }) {
-          state.name = name;
-          state.tokens = themes[name];
-        },
-      };
-    },
+const context = Context_Theme.$context({
+  actions(state) {
+    return {
+      setTheme({ name }) {
+        state.name = name;
+        state.tokens = themes[name];
+      },
+    };
   },
   lifecycle: {},
 });
 
-export type { Actions, State, Value } from "./types";
+export default context;

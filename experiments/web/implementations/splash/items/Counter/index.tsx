@@ -1,9 +1,8 @@
 import { controller } from "./controller";
-import { defineItem } from "../types";
-import type { Slots } from "./types";
+import { Item_Counter } from "../../generated";
 
-export const implemented = defineItem({ controller })<Slots>(({ props, state, actions, context }) => {
-  const theme = context.theme.state.tokens;
+const item = Item_Counter.$view({ controller })(({ selected, actions }) => {
+  const theme = selected.context.theme.state.tokens;
 
   return (
     <div
@@ -19,10 +18,10 @@ export const implemented = defineItem({ controller })<Slots>(({ props, state, ac
       }}
     >
       <span style={{ color: theme?.color?.mutedText }}>
-        {props.label ?? "Counter"}
+        {selected.props.label ?? "Counter"}
       </span>
       <strong style={{ minWidth: 32, textAlign: "center" }}>
-        {state.count}
+        {selected.state.count}
       </strong>
       <button
         type="button"
@@ -48,3 +47,5 @@ export const implemented = defineItem({ controller })<Slots>(({ props, state, ac
     </div>
   );
 });
+
+export default item;

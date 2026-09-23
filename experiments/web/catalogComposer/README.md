@@ -55,22 +55,23 @@ export const implementedCatalog = defineCatalog({
 
 Each item has a controller and a view.
 
-`controller.ts` owns model and lifecycle behavior:
+`controller.ts` owns default state, actions, and lifecycle behavior:
 
 ```ts
 export const controller = defineItemController<Props, State, Actions>({
-  model: {
-    actions(state) {
-      return {
-        increment() {
-          state.count += 1;
-        },
-      };
-    },
+  state: Counter.defaultState,
+  actions(state) {
+    return {
+      increment() {
+        state.count += 1;
+      },
+    };
   },
   lifecycle: {},
 });
 ```
+
+The runtime merges implementation defaults with scene snapshot state when creating the model.
 
 `index.tsx` owns the framework view. The view factory takes an options object with `controller`, so props, state, actions, and context are inferred from the controller while leaving room for future options:
 

@@ -1,10 +1,9 @@
 import { controller } from "./controller";
-import { defineItem } from "../types";
-import type { Slots } from "./types";
+import { Item_Hero } from "../../generated";
 
-export const implemented = defineItem({ controller })<Slots>(({ props, slots, context }) => {
-  const theme = context.theme.state.tokens;
-  const align = props.align ?? "center";
+const item = Item_Hero.$view({ controller })(({ selected, slots }) => {
+  const theme = selected.context.theme.state.tokens;
+  const align = selected.props.align ?? "center";
   const isCenter = align === "center";
 
   return (
@@ -12,7 +11,7 @@ export const implemented = defineItem({ controller })<Slots>(({ props, slots, co
       style={{
         position: "relative",
         overflow: "hidden",
-        minHeight: props.size === "full" ? "72vh" : props.size === "compact" ? "360px" : "520px",
+        minHeight: selected.props.size === "full" ? "72vh" : selected.props.size === "compact" ? "360px" : "520px",
         borderRadius: theme?.radius?.lg ?? "24px",
         background: theme?.color?.background ?? "#f8fafc",
         color: theme?.color?.text ?? "#0f172a",
@@ -27,18 +26,18 @@ export const implemented = defineItem({ controller })<Slots>(({ props, slots, co
           zIndex: 1,
           width: "min(980px, 100%)",
           margin: isCenter ? "0 auto" : undefined,
-          padding: props.size === "compact" ? "56px" : "88px clamp(28px, 7vw, 96px)",
+          padding: selected.props.size === "compact" ? "56px" : "88px clamp(28px, 7vw, 96px)",
           textAlign: alignText(align),
           boxSizing: "border-box",
         }}
       >
-        {props.eyebrow && <div class="hero-eyebrow">{props.eyebrow}</div>}
+        {selected.props.eyebrow && <div class="hero-eyebrow">{selected.props.eyebrow}</div>}
         <h1 class="hero-headline" style={{ fontFamily: theme?.font?.heading, maxWidth: isCenter ? "none" : 860 }}>
-          {props.headline}
+          {selected.props.headline}
         </h1>
-        {props.subheadline && (
+        {selected.props.subheadline && (
           <p class="hero-subheadline" style={{ color: theme?.color?.mutedText, margin: isCenter ? "24px auto 0" : "24px 0 0" }}>
-            {props.subheadline}
+            {selected.props.subheadline}
           </p>
         )}
         {slots.actions && <div style={{ display: "flex", flexWrap: "wrap", justifyContent: justify(align), gap: 12, marginTop: 34 }}>{slots.actions}</div>}
@@ -59,3 +58,5 @@ function justify(align: string) {
   if (align === "end") return "flex-end";
   return "center";
 }
+
+export default item;

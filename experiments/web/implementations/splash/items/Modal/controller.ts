@@ -1,18 +1,18 @@
-import { defineItemController } from "../types";
-import type { Actions, Props, State } from "./types";
+import { Item_Modal } from "../../generated";
 
-export const controller = defineItemController<Props, State, Actions>({
-  model: {
-    actions(state) {
-      return {
-        open() {
-          state.open = true;
-        },
-        close() {
-          state.open = false;
-        },
-      };
-    },
+export const controller = Item_Modal.$controller({
+  select({ props, state, context }) {
+    return { props, state, context };
+  },
+  actions(state) {
+    return {
+      open() {
+        state.open = true;
+      },
+      close() {
+        state.open = false;
+      },
+    };
   },
   lifecycle: {},
 });

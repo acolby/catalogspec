@@ -1,12 +1,11 @@
 import { controller } from "./controller";
-import { defineItem } from "../types";
-import type { Slots } from "./types";
+import { Item_AuthButton } from "../../generated";
 
-export const implemented = defineItem({ controller })<Slots>(({ props, emit, context }) => {
-  const theme = context.theme.state.tokens;
-  const auth = context.scene.state;
+const item = Item_AuthButton.$view({ controller })(({ selected, emit }) => {
+  const theme = selected.context.theme.state.tokens;
+  const auth = selected.context.scene.state;
   const loggedIn = auth.loggedIn === true;
-  const username = auth.username ?? props.username ?? "Aaron";
+  const username = auth.username ?? selected.props.username ?? "Aaron";
 
   return (
     <div style={{ display: "inline-flex", alignItems: "center", gap: theme?.space?.sm ?? "0.5rem", flexWrap: "wrap" }}>
@@ -23,16 +22,18 @@ export const implemented = defineItem({ controller })<Slots>(({ props, emit, con
         onClick={() => {
           if (loggedIn) {
             emit("logoutRequested");
-            context.scene.actions.logout();
+            selected.context.scene.actions.logout();
           } else {
-            const nextUsername = props.username ?? "Aaron";
+            const nextUsername = selected.props.username ?? "Aaron";
             emit("loginRequested", { username: nextUsername });
-            context.scene.actions.login({ username: nextUsername });
+            selected.context.scene.actions.login({ username: nextUsername });
           }
         }}
       >
-        {loggedIn ? props.logoutLabel ?? "Log out" : props.loginLabel ?? "Log in"}
+        {loggedIn ? selected.props.logoutLabel ?? "Log out" : selected.props.loginLabel ?? "Log in"}
       </button>
     </div>
   );
 });
+
+export default item;

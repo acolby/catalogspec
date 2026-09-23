@@ -7,7 +7,7 @@ export type ImplementedCatalog<TImplementedItem, TContext extends ContextImpleme
   context?: TContext;
 };
 
-export type GenericImplementedItem<TView> = ModelBackedImplementedItem<TView, any, any, any, any, any>;
+export type GenericImplementedItem<TView> = ModelBackedImplementedItem<TView, any, any, any, any, any, any>;
 
 export type GenericImplementedCatalog<TView> = ImplementedCatalog<GenericImplementedItem<TView>, any>;
 

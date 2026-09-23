@@ -171,8 +171,8 @@ export function createSceneRuntime<
         existing?.unsubscribe();
 
         const model = createItemModel(
-          initialContextState(name, scene, implementation),
-          contextImplementation.model,
+          initialContextState(name, scene, implementation, contextImplementation),
+          contextImplementation,
         );
         const unsubscribe = model.subscribe((state, previous) => {
           coordinator.handleEvent({
@@ -186,10 +186,10 @@ export function createSceneRuntime<
           actions: model.actions(),
         });
         const cleanup =
-          contextImplementation.lifecycle.mount?.(lifecycleInput());
-        const tickUnsubscribe = contextImplementation.lifecycle.tick
+          contextImplementation.lifecycle?.mount?.(lifecycleInput());
+        const tickUnsubscribe = contextImplementation.lifecycle?.tick
           ? registerTick((frame) =>
-              contextImplementation.lifecycle.tick?.(lifecycleInput(), frame),
+              contextImplementation.lifecycle?.tick?.(lifecycleInput(), frame),
             )
           : undefined;
 
@@ -208,28 +208,25 @@ export function createSceneRuntime<
         name: string,
         scene: SceneSnapshot,
         implementation: TImplementation,
+        contextImplementation: ContextImplementation<any, any>,
       ): Record<string, unknown> {
-        if (name === "scene") {
-          return scene.context?.scene?.state ?? {};
-        }
+        const state = {
+          ...(contextImplementation.state ?? {}),
+          ...(scene.context?.[name]?.state ?? {}),
+        };
+
         if (name === "theme") {
           const fallbackThemeName = "light";
-          const contextThemeName = scene.context?.theme?.state?.name;
-          const themeName =
-            typeof contextThemeName === "string"
-              ? contextThemeName
-              : fallbackThemeName;
-          const tokens =
-            implementation.themes?.[themeName] ??
-            implementation.themes?.[fallbackThemeName] ??
-            implementation.themes?.light;
+          const themeName = typeof state.name === "string" ? state.name : fallbackThemeName;
           return {
+            ...state,
             name: themeName,
-            tokens,
+            tokens: implementation.themes?.[themeName] ?? implementation.themes?.[fallbackThemeName] ?? implementation.themes?.light,
             available: Object.keys(implementation.themes ?? {}),
           };
         }
-        return scene.context?.[name]?.state ?? {};
+
+        return state;
       }
 
       function registerTick(

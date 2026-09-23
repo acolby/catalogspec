@@ -92,5 +92,5 @@
     "default": "light",
     "available": ["light", "dark"]
   },
-  "items": ["Hero", "CallToAction", "Background", "Stack", "Counter", "Modal", "BetaSignupForm", "AuthButton", "ThemePicker"]
+  "items": ["Hero", "CallToAction", "Background", "Stack", "Counter", "Modal", "BetaSignupForm", "AuthButton", "ThemePicker", "SnakeGame"]
 }

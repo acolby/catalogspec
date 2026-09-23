@@ -1,10 +1,9 @@
 import { controller } from "./controller";
-import { defineItem } from "../types";
-import type { Slots, Theme } from "./types";
+import { Item_CallToAction, type ThemeTokens } from "../../generated";
 
-export const implemented = defineItem({ controller })<Slots>(({ props, emit, context }) => {
-  const theme = context.theme.state.tokens;
-  const variant = props.variant ?? "primary";
+const item = Item_CallToAction.$view({ controller })(({ selected, emit }) => {
+  const theme = selected.context.theme.state.tokens;
+  const variant = selected.props.variant ?? "primary";
   const styles = variantStyle(variant, theme);
 
   return (
@@ -19,16 +18,16 @@ export const implemented = defineItem({ controller })<Slots>(({ props, emit, con
         boxShadow: variant === "primary" ? "0 12px 30px rgba(15,23,42,.18)" : "none",
       }}
       onClick={() => {
-        emit("activated", { label: props.label, url: props.url });
-        if (props.url) context.scene.actions.openUrl?.({ url: props.url, target: props.target ?? "self" });
+        emit("activated", { label: selected.props.label, url: selected.props.url });
+        if (selected.props.url) selected.context.scene.actions.openUrl?.({ url: selected.props.url, target: selected.props.target ?? "self" });
       }}
     >
-      {props.label}
+      {selected.props.label}
     </button>
   );
 });
 
-function variantStyle(variant: string, theme?: Theme) {
+function variantStyle(variant: string, theme?: ThemeTokens) {
   if (variant === "secondary") {
     return { background: theme?.color?.surface ?? "#fff", color: theme?.color?.text ?? "#111", border: "1px solid rgba(148,163,184,.35)" };
   }
@@ -37,3 +36,5 @@ function variantStyle(variant: string, theme?: Theme) {
   }
   return { background: theme?.color?.accent ?? "#2563eb", color: theme?.color?.accentText ?? "#fff", border: "1px solid transparent" };
 }
+
+export default item;

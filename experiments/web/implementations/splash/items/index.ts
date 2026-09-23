@@ -1,12 +1,13 @@
-import { implemented as AuthButton } from "./AuthButton";
-import { implemented as Background } from "./Background";
-import { implemented as BetaSignupForm } from "./BetaSignupForm";
-import { implemented as CallToAction } from "./CallToAction";
-import { implemented as Counter } from "./Counter";
-import { implemented as Hero } from "./Hero";
-import { implemented as Modal } from "./Modal";
-import { implemented as Stack } from "./Stack";
-import { implemented as ThemePicker } from "./ThemePicker";
+import AuthButton from "./AuthButton";
+import Background from "./Background";
+import BetaSignupForm from "./BetaSignupForm";
+import CallToAction from "./CallToAction";
+import Counter from "./Counter";
+import Hero from "./Hero";
+import Modal from "./Modal";
+import SnakeGame from "./SnakeGame";
+import Stack from "./Stack";
+import ThemePicker from "./ThemePicker";
 
 export const items = {
   AuthButton,
@@ -16,6 +17,7 @@ export const items = {
   Counter,
   Hero,
   Modal,
+  SnakeGame,
   Stack,
   ThemePicker,
 };

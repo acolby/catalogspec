@@ -1,19 +1,17 @@
 import { controller } from "./controller";
-import { defineItem } from "../types";
-import { catalog, type ThemeName } from "../../generated";
-import type { Slots } from "./types";
+import { catalog, Item_ThemePicker, type ThemeName } from "../../generated";
 
-export const implemented = defineItem({ controller })<Slots>(({ props, emit, context }) => {
-  const theme = context.theme.state.tokens;
-  const themeState = context.theme.state;
+const item = Item_ThemePicker.$view({ controller })(({ selected, emit }) => {
+  const theme = selected.context.theme.state.tokens;
+  const themeState = selected.context.theme.state;
   const currentTheme = themeState.name ?? catalog.themes.default;
   
   return (
     <label style={{ display: "inline-flex", alignItems: "center", gap: theme?.space?.sm ?? "0.5rem", color: theme?.color?.mutedText }}>
-      <span>{props.label ?? "Theme"}</span>
+      <span>{selected.props.label ?? "Theme"}</span>
       <select
         value={currentTheme}
-        aria-label={props.label ?? "Theme"}
+        aria-label={selected.props.label ?? "Theme"}
         style={{
           borderRadius: theme?.radius?.pill ?? "999px",
           border: "1px solid rgba(148,163,184,.35)",
@@ -24,7 +22,7 @@ export const implemented = defineItem({ controller })<Slots>(({ props, emit, con
         onChange={(event) => {
           const nextTheme = event.currentTarget.value as ThemeName;
           emit("themeChangeRequested", { theme: nextTheme });
-          context.theme.actions.setTheme({ name: nextTheme });
+          selected.context.theme.actions.setTheme({ name: nextTheme });
         }}
       >
         {catalog.themes.available.map((themeName) => (
@@ -38,3 +36,5 @@ export const implemented = defineItem({ controller })<Slots>(({ props, emit, con
 function labelForTheme(themeName: string): string {
   return themeName.slice(0, 1).toUpperCase() + themeName.slice(1);
 }
+
+export default item;

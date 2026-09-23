@@ -1,7 +1,5 @@
-import { scene } from "./scene";
-import { theme } from "./theme";
-
-export type { Context } from "./types";
+import scene from "./scene";
+import theme from "./theme";
 
 export const context = {
   scene,

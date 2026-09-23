@@ -1,21 +1,20 @@
 import { controller } from "./controller";
-import { defineItem } from "../types";
-import type { Props, State, Theme, Slots } from "./types";
+import { Item_Background, type ThemeTokens } from "../../generated";
 
-export const implemented = defineItem({ controller })<Slots>(({ props, state, context }) => {
+const item = Item_Background.$view({ controller })(({ selected }) => {
   return (
     <div
       aria-hidden="true"
       style={{
         position: "absolute",
         inset: 0,
-        ...backgroundStyle(props, state, context.theme.state.tokens),
+        ...backgroundStyle(selected.props, selected.state, selected.context.theme.state.tokens),
       }}
     />
   );
 });
 
-function backgroundStyle(props: Props, state: Readonly<State>, theme?: Theme) {
+function backgroundStyle(props: Item_Background.Props, state: Readonly<Item_Background.State>, theme?: ThemeTokens) {
   const phase = state.phase ?? 0;
   const x = 50 + Math.cos(phase * Math.PI * 2) * 26;
   const y = 38 + Math.sin(phase * Math.PI * 2) * 22;
@@ -85,3 +84,5 @@ function colorWithAlpha(color: string, alpha: number): string {
   const b = Number.parseInt(color.slice(5, 7), 16);
   return `rgba(${r},${g},${b},${alpha})`;
 }
+
+export default item;

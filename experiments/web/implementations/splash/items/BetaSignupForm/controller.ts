@@ -1,19 +1,19 @@
-import { defineItemController } from "../types";
-import type { Actions, Props, State } from "./types";
+import { Item_BetaSignupForm } from "../../generated";
 
-export const controller = defineItemController<Props, State, Actions>({
-  model: {
-    actions(state) {
-      return {
-        updateEmail({ email }) {
-          state.email = email;
-          state.submitted = false;
-        },
-        submit() {
-          state.submitted = true;
-        },
-      };
-    },
+export const controller = Item_BetaSignupForm.$controller({
+  select({ props, state, context }) {
+    return { props, state, context };
+  },
+  actions(state) {
+    return {
+      updateEmail({ email }) {
+        state.email = email;
+        state.submitted = false;
+      },
+      submit() {
+        state.submitted = true;
+      },
+    };
   },
   lifecycle: {},
 });

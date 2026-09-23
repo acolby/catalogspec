@@ -1,16 +1,15 @@
 import { controller } from "./controller";
-import { defineItem } from "../types";
-import type { Slots } from "./types";
+import { Item_Stack } from "../../generated";
 
-export const implemented = defineItem({ controller })<Slots>(({ props, slots, context }) => {
-  const direction = props.direction ?? "vertical";
-  const align = props.align ?? "stretch";
+const item = Item_Stack.$view({ controller })(({ selected, slots }) => {
+  const direction = selected.props.direction ?? "vertical";
+  const align = selected.props.align ?? "stretch";
   return (
     <div
       style={{
         display: "flex",
         flexDirection: direction === "horizontal" ? "row" : "column",
-        gap: context.theme.state.tokens?.space?.[props.gap ?? "md"] ?? "16px",
+        gap: selected.context.theme.state.tokens?.space?.[selected.props.gap ?? "md"] ?? "16px",
         alignItems: alignItems(align),
         minHeight: "100%",
       }}
@@ -26,3 +25,5 @@ function alignItems(align: string) {
   if (align === "center") return "center";
   return "stretch";
 }
+
+export default item;

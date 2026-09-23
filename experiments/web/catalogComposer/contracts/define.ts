@@ -23,9 +23,10 @@ export function defineItemController<TContext = RuntimeContext>() {
     TProps extends Record<string, unknown>,
     TState extends object,
     TActions extends Record<string, (...args: any[]) => any>,
+    TSelected = { props: TProps; state: TState; context: TContext },
   >(
-    controller: ImplementedItemController<TProps, TState, TActions, TContext>,
-  ): ImplementedItemController<TProps, TState, TActions, TContext> {
+    controller: ImplementedItemController<TProps, TState, TActions, TContext, TSelected>,
+  ): ImplementedItemController<TProps, TState, TActions, TContext, TSelected> {
     return controller;
   };
 }

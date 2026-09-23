@@ -136,6 +136,31 @@
               }
             ]
           }
+        },
+        {
+          "id": "launch-hero-snake-modal",
+          "item": "Modal",
+          "props": {
+            "triggerLabel": "Open game",
+            "title": "Snake"
+          },
+          "state": {
+            "open": false
+          },
+          "slots": {
+            "content": [
+              {
+                "id": "launch-hero-snake-game",
+                "item": "SnakeGame",
+                "props": {
+                  "title": "Catalog Snake",
+                  "size": 12
+                },
+                "state": {},
+                "slots": {}
+              }
+            ]
+          }
         }
       ]
     }

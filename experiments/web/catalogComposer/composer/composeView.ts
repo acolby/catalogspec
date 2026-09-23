@@ -45,13 +45,19 @@ export function createViewComposer<TView>(): ViewComposer<TView> {
     const model = getItemModel(instance, implementedItem, runtime);
     mountItem(instance, implementedItem, model, runtime);
 
+    const props = instance.props ?? {};
+    const state = model.state();
+    const selected = implementedItem.select?.({ props, state, context: runtime.context }) ?? {
+      props,
+      state,
+      context: runtime.context,
+    };
+
     return implementedItem.view({
       item: { id: instance.id, name: instance.item },
-      props: instance.props ?? {},
+      selected,
       slots,
       emit: (event: string, props?: Record<string, unknown>) => runtime.emit({ name: event, source: instance, props }),
-      context: runtime.context,
-      state: model.state(),
       actions: model.actions(),
     });
   }
@@ -83,8 +89,11 @@ export function createViewComposer<TView>(): ViewComposer<TView> {
     if (existing) return existing.model;
 
     const model = createItemModel(
-      instance.state ?? {},
-      implementedItem.model,
+      {
+        ...(implementedItem.state ?? {}),
+        ...(instance.state ?? {}),
+      },
+      implementedItem,
     );
     const unsubscribe = model.subscribe((state, previous) => {
       runtime.emit({ name: "stateChanged", source: instance, props: { state, previous } });
