@@ -143,6 +143,7 @@ export function createSceneRuntime<
             implementation,
             contextImplementation,
           );
+          model.setActionInput({ context });
           context[name] = {
             state: model.state(),
             actions: createContextActions({
@@ -181,6 +182,7 @@ export function createSceneRuntime<
           });
           composeAndRenderCurrentScene();
         });
+        model.setActionInput({ context: {} });
         const lifecycleInput = () => ({
           state: model.state(),
           actions: model.actions(),

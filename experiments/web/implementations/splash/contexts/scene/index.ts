@@ -1,7 +1,7 @@
 import { Context_Scene } from "../../generated";
 
 const context = Context_Scene.$context({
-  actions(state) {
+  actions({ state }) {
     return {
       login({ username }) {
         state.loggedIn = true;

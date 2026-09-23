@@ -43,9 +43,10 @@ export function createViewComposer<TView>(): ViewComposer<TView> {
     }
 
     const model = getItemModel(instance, implementedItem, runtime);
+    const props = instance.props ?? {};
+    model.setActionInput({ props, context: runtime.context });
     mountItem(instance, implementedItem, model, runtime);
 
-    const props = instance.props ?? {};
     const state = model.state();
     const selected = implementedItem.select?.({ props, state, context: runtime.context }) ?? {
       props,
@@ -149,9 +150,11 @@ export function composeView<TView>(
 }
 
 function lifecycleInput(instance: SceneItemInstance, model: ReturnType<typeof createItemModel<any, any>>, runtime: ComposerRuntimeContext) {
+  const props = instance.props ?? {};
+  model.setActionInput({ props, context: runtime.context });
   return {
     item: { id: instance.id, name: instance.item },
-    props: instance.props ?? {},
+    props,
     state: model.state(),
     actions: model.actions(),
     emit: (event: string, props?: Record<string, unknown>) => runtime.emit({ name: event, source: instance, props }),

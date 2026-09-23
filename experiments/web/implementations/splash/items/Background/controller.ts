@@ -4,7 +4,7 @@ export const controller = Item_Background.$controller({
   select({ props, state, context }) {
     return { props, state, context };
   },
-  actions(state) {
+  actions({ state }) {
     return {
       advance({ deltaMs }) {
         state.elapsedMs += deltaMs;

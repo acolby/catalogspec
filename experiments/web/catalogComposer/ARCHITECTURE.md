@@ -60,7 +60,7 @@ It currently also creates and stores item models. That works for the experiment,
 
 `model/createItemModel.ts` is the current state/action primitive.
 
-A model definition provides an `actions(state)` factory. Actions mutate a cloned draft and commit that draft after the action returns. Subscribers receive the next and previous readonly states.
+A model definition provides an `actions({ state, context, ...input })` factory. Actions mutate a cloned draft and commit that draft after the action returns. Subscribers receive the next and previous readonly states.
 
 Current policy:
 

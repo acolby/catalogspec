@@ -4,7 +4,7 @@ export const controller = Item_Counter.$controller({
   select({ props, state, context }) {
     return { props, state, context };
   },
-  actions(state) {
+  actions({ state }) {
     return {
       increment() {
         state.count += 1;

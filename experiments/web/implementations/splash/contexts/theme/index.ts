@@ -1,7 +1,7 @@
 import { Context_Theme, themes } from "../../generated";
 
 const context = Context_Theme.$context({
-  actions(state) {
+  actions({ state }) {
     return {
       setTheme({ name }) {
         state.name = name;

@@ -33,7 +33,7 @@ export type ContextLifecycle<
 export type ContextImplementation<
   TState extends object,
   TActions extends Record<string, (...args: any[]) => any>,
-> = ItemModelDefinition<TState, TActions> & {
+> = ItemModelDefinition<TState, TActions, { context: RuntimeContext }> & {
   lifecycle?: ContextLifecycle<TState, TActions>;
 };
 

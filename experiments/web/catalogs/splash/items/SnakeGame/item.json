@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "title": "Snake Game",
+  "description": "Small stateful snake game used to pressure-test generated item contracts and resumable scene state.",
+  "kind": "component",
+  "props": {
+    "title": {
+      "type": "string",
+      "description": "Game title shown above the board.",
+      "default": "Snake"
+    },
+    "size": {
+      "type": "number",
+      "description": "Square board size in cells.",
+      "default": 12
+    }
+  },
+  "state": {
+    "snake": {
+      "type": "array",
+      "description": "Ordered snake body cells from head to tail.",
+      "default": [{ "x": 5, "y": 5 }, { "x": 4, "y": 5 }, { "x": 3, "y": 5 }]
+    },
+    "food": {
+      "type": "object",
+      "description": "Current food cell.",
+      "default": { "x": 8, "y": 5 }
+    },
+    "direction": {
+      "type": "string",
+      "description": "Current movement direction.",
+      "enum": ["up", "down", "left", "right"],
+      "default": "right"
+    },
+    "pendingDirection": {
+      "type": "string",
+      "description": "Direction selected for the next step.",
+      "enum": ["up", "down", "left", "right"],
+      "default": "right"
+    },
+    "score": {
+      "type": "number",
+      "description": "Current score.",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "description": "Game status.",
+      "enum": ["ready", "playing", "lost"],
+      "default": "ready"
+    },
+    "elapsedMs": {
+      "type": "number",
+      "description": "Accumulated time since the last automatic movement step.",
+      "default": 0
+    }
+  },
+  "slots": {},
+  "actions": {
+    "setDirection": {
+      "title": "Set Direction",
+      "description": "Queues a direction for the next movement step.",
+      "props": {
+        "direction": {
+          "type": "string",
+          "required": true,
+          "enum": ["up", "down", "left", "right"]
+        }
+      }
+    },
+    "step": {
+      "title": "Step",
+      "description": "Advances the game simulation.",
+      "props": {
+        "deltaMs": {
+          "type": "number",
+          "required": true
+        },
+        "size": {
+          "type": "number",
+          "required": true
+        }
+      }
+    },
+    "restart": {
+      "title": "Restart",
+      "description": "Resets the game to its default state.",
+      "props": {}
+    }
+  },
+  "events": {
+    "lost": {
+      "title": "Lost",
+      "description": "Emitted when the snake collides with a wall or itself.",
+      "props": {
+        "score": { "type": "number", "required": true }
+      }
+    }
+  }
+}

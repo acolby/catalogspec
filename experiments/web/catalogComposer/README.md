@@ -60,7 +60,7 @@ Each item has a controller and a view.
 ```ts
 export const controller = defineItemController<Props, State, Actions>({
   state: Counter.defaultState,
-  actions(state) {
+  actions({ state, context }) {
     return {
       increment() {
         state.count += 1;

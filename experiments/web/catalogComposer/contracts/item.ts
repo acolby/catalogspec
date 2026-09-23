@@ -66,7 +66,7 @@ export type ImplementedItemController<
   TActions extends Record<string, (...args: any[]) => any>,
   TContext = RuntimeContext,
   TSelected = ImplementedItemSelectInput<TProps, TState, TContext>,
-> = ItemModelDefinition<TState, TActions> & {
+> = ItemModelDefinition<TState, TActions, { props: TProps; context: TContext }> & {
   select?: (input: ImplementedItemSelectInput<TProps, TState, TContext>) => TSelected;
   lifecycle?: ImplementedItemLifecycle<TProps, TState, TActions, TContext>;
 };
